@@ -1,0 +1,55 @@
+{
+  "name": "@gct256/ts-utils",
+  "version": "1.0.0",
+  "description": "my utils.",
+  "main": "index",
+  "typings": "types/index.d.ts",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "build": "rollup -c",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gct256/ts-utils.git"
+  },
+  "author": "gct256+github@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gct256/ts-utils/issues"
+  },
+  "homepage": "https://github.com/gct256/ts-utils#readme",
+  "devDependencies": {
+    "@types/jest": "^23.3.1",
+    "jest": "^23.4.2",
+    "jest-canvas-mock": "^1.1.0",
+    "rollup": "^0.64.1",
+    "rollup-plugin-typescript2": "^0.16.1",
+    "ts-jest": "^23.0.1",
+    "tslint": "^5.11.0",
+    "tslint-microsoft-contrib": "^5.1.0",
+    "typescript": "^2.9.2"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "testPathIgnorePatterns": [
+      "\\.rpt2_cache"
+    ],
+    "setupFiles": [
+      "jest-canvas-mock"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "testURL": "http://localhost/"
+  }
+}
