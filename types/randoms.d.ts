@@ -30,4 +30,5 @@ export declare namespace randoms {
      * @return value.
      */
     function randFloatRange(min: number, max: number, generator?: RandomGenerator): number;
+    function shuffle<T>(array: T[], generator?: RandomGenerator): T[];
 }

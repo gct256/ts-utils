@@ -155,6 +155,22 @@ var randoms;
         return (generator() / 0xffffffff) * diff + m0;
     }
     randoms.randFloatRange = randFloatRange;
+    function shuffle(array, generator) {
+        if (generator === void 0) { generator = defaultRandomGenerator; }
+        var result = array.slice();
+        var length = result.length;
+        if (length < 2)
+            return result;
+        while (length > 0) {
+            length -= 1;
+            var i = Math.floor(randIntRange(0, length, generator));
+            var tmp = result[length];
+            result[length] = result[i];
+            result[i] = tmp;
+        }
+        return result;
+    }
+    randoms.shuffle = shuffle;
 })(randoms || (randoms = {}));
 
 var web;
