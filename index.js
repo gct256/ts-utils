@@ -176,6 +176,23 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 (function (web) {
     /**
+     * Get CanvasRenderingContext2D from canvas element.
+     *
+     * @param canvas canvas element.
+     * @param width context width.
+     * @param height context height.
+     * @returns context.
+     */
+    function getContext2D(canvas, width, height) {
+        var ct = canvas.getContext('2d');
+        if (ct === null)
+            throw new Error('cannot get context 2d');
+        canvas.width = width;
+        canvas.height = height;
+        return ct;
+    }
+    web.getContext2D = getContext2D;
+    /**
      * Create CanvasRenderingContext2D with size.
      *
      * @param width context width.
@@ -184,12 +201,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
      */
     function createContext2D(width, height) {
         var cv = document.createElement('canvas');
-        var ct = cv.getContext('2d');
-        if (ct === null)
-            throw new Error('cannot create context 2d');
-        cv.width = width;
-        cv.height = height;
-        return ct;
+        return getContext2D(cv, width, height);
     }
     web.createContext2D = createContext2D;
     /**

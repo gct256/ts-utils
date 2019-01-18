@@ -1,5 +1,14 @@
 export declare namespace web {
     /**
+     * Get CanvasRenderingContext2D from canvas element.
+     *
+     * @param canvas canvas element.
+     * @param width context width.
+     * @param height context height.
+     * @returns context.
+     */
+    function getContext2D(canvas: HTMLCanvasElement, width: number, height: number): CanvasRenderingContext2D;
+    /**
      * Create CanvasRenderingContext2D with size.
      *
      * @param width context width.
