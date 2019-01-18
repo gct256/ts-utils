@@ -187,8 +187,12 @@ Object.defineProperty(exports, '__esModule', { value: true });
         var ct = canvas.getContext('2d');
         if (ct === null)
             throw new Error('cannot get context 2d');
-        canvas.width = width;
-        canvas.height = height;
+        if (typeof width === 'number') {
+            canvas.width = Math.max(exports.numbers.ceil(width, 1), 1);
+        }
+        if (typeof height === 'number') {
+            canvas.height = Math.max(exports.numbers.ceil(height, 1), 1);
+        }
         return ct;
     }
     web.getContext2D = getContext2D;

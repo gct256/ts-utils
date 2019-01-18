@@ -174,7 +174,7 @@ var randoms;
 })(randoms || (randoms = {}));
 
 var web;
-(function (web) {
+(function (web$$1) {
     /**
      * Get CanvasRenderingContext2D from canvas element.
      *
@@ -187,11 +187,15 @@ var web;
         var ct = canvas.getContext('2d');
         if (ct === null)
             throw new Error('cannot get context 2d');
-        canvas.width = width;
-        canvas.height = height;
+        if (typeof width === 'number') {
+            canvas.width = Math.max(numbers.ceil(width, 1), 1);
+        }
+        if (typeof height === 'number') {
+            canvas.height = Math.max(numbers.ceil(height, 1), 1);
+        }
         return ct;
     }
-    web.getContext2D = getContext2D;
+    web$$1.getContext2D = getContext2D;
     /**
      * Create CanvasRenderingContext2D with size.
      *
@@ -203,7 +207,7 @@ var web;
         var cv = document.createElement('canvas');
         return getContext2D(cv, width, height);
     }
-    web.createContext2D = createContext2D;
+    web$$1.createContext2D = createContext2D;
     /**
      * wrapper for document.getElementById.
      *
@@ -216,7 +220,7 @@ var web;
             throw new Error("element not found: id=" + id);
         return e;
     }
-    web.getElement = getElement;
+    web$$1.getElement = getElement;
     /**
      * wrapper for window.requestAnimationFrame.
      *
@@ -238,7 +242,7 @@ var web;
         }
         raf(loop);
     }
-    web.animate = animate;
+    web$$1.animate = animate;
 })(web || (web = {}));
 
 export { funcs, numbers, randoms, web };

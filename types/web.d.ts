@@ -7,7 +7,7 @@ export declare namespace web {
      * @param height context height.
      * @returns context.
      */
-    function getContext2D(canvas: HTMLCanvasElement, width: number, height: number): CanvasRenderingContext2D;
+    function getContext2D(canvas: HTMLCanvasElement, width?: number, height?: number): CanvasRenderingContext2D;
     /**
      * Create CanvasRenderingContext2D with size.
      *
