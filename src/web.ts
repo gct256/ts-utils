@@ -1,5 +1,27 @@
 export namespace web {
   /**
+   * Get CanvasRenderingContext2D from canvas element.
+   *
+   * @param canvas canvas element.
+   * @param width context width.
+   * @param height context height.
+   * @returns context.
+   */
+  export function getContext2D(
+    canvas: HTMLCanvasElement,
+    width: number,
+    height: number
+  ): CanvasRenderingContext2D {
+    const ct: CanvasRenderingContext2D | null = canvas.getContext('2d');
+    if (ct === null) throw new Error('cannot get context 2d');
+
+    canvas.width = width;
+    canvas.height = height;
+
+    return ct;
+  }
+
+  /**
    * Create CanvasRenderingContext2D with size.
    *
    * @param width context width.
@@ -11,13 +33,8 @@ export namespace web {
     height: number
   ): CanvasRenderingContext2D {
     const cv: HTMLCanvasElement = document.createElement('canvas');
-    const ct: CanvasRenderingContext2D | null = cv.getContext('2d');
-    if (ct === null) throw new Error('cannot create context 2d');
 
-    cv.width = width;
-    cv.height = height;
-
-    return ct;
+    return getContext2D(cv, width, height);
   }
 
   /**

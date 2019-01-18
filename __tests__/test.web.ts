@@ -1,6 +1,13 @@
 import { web } from '../src/web';
 
 describe('web', () => {
+  test('getContext2D', () => {
+    const canvas: HTMLCanvasElement = document.createElement('canvas');
+    expect(web.getContext2D(canvas, 12, 34)).toBeInstanceOf(Object);
+    expect(web.getContext2D(canvas, 12, 34).canvas.width).toBe(12);
+    expect(web.getContext2D(canvas, 12, 34).canvas.height).toBe(34);
+  });
+
   test('createContext2D', () => {
     expect(web.createContext2D(12, 34)).toBeInstanceOf(Object);
     expect(web.createContext2D(12, 34).canvas.width).toBe(12);
