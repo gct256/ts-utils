@@ -1,3 +1,5 @@
+import { numbers } from '.';
+
 export namespace web {
   /**
    * Get CanvasRenderingContext2D from canvas element.
@@ -9,14 +11,19 @@ export namespace web {
    */
   export function getContext2D(
     canvas: HTMLCanvasElement,
-    width: number,
-    height: number
+    width?: number,
+    height?: number
   ): CanvasRenderingContext2D {
     const ct: CanvasRenderingContext2D | null = canvas.getContext('2d');
     if (ct === null) throw new Error('cannot get context 2d');
 
-    canvas.width = width;
-    canvas.height = height;
+    if (typeof width === 'number') {
+      canvas.width = Math.max(numbers.ceil(width, 1), 1);
+    }
+
+    if (typeof height === 'number') {
+      canvas.height = Math.max(numbers.ceil(height, 1), 1);
+    }
 
     return ct;
   }

@@ -6,12 +6,42 @@ describe('web', () => {
     expect(web.getContext2D(canvas, 12, 34)).toBeInstanceOf(Object);
     expect(web.getContext2D(canvas, 12, 34).canvas.width).toBe(12);
     expect(web.getContext2D(canvas, 12, 34).canvas.height).toBe(34);
+
+    canvas.width = 56;
+    canvas.height = 78;
+    expect(web.getContext2D(canvas).canvas.width).toBe(56);
+    expect(web.getContext2D(canvas).canvas.height).toBe(78);
+
+    expect(web.getContext2D(canvas, 12.1, 34.1).canvas.width).toBe(13);
+    expect(web.getContext2D(canvas, 12.1, 34.1).canvas.height).toBe(35);
+
+    expect(web.getContext2D(canvas, 12.9, 34.9).canvas.width).toBe(13);
+    expect(web.getContext2D(canvas, 12.9, 34.9).canvas.height).toBe(35);
+
+    expect(web.getContext2D(canvas, 0, 0).canvas.width).toBe(1);
+    expect(web.getContext2D(canvas, 0, 0).canvas.height).toBe(1);
+
+    expect(web.getContext2D(canvas, -42, -42).canvas.width).toBe(1);
+    expect(web.getContext2D(canvas, -42, -42).canvas.height).toBe(1);
   });
 
   test('createContext2D', () => {
     expect(web.createContext2D(12, 34)).toBeInstanceOf(Object);
+
     expect(web.createContext2D(12, 34).canvas.width).toBe(12);
     expect(web.createContext2D(12, 34).canvas.height).toBe(34);
+
+    expect(web.createContext2D(12.1, 34.1).canvas.width).toBe(13);
+    expect(web.createContext2D(12.1, 34.1).canvas.height).toBe(35);
+
+    expect(web.createContext2D(12.9, 34.9).canvas.width).toBe(13);
+    expect(web.createContext2D(12.9, 34.9).canvas.height).toBe(35);
+
+    expect(web.createContext2D(0, 0).canvas.width).toBe(1);
+    expect(web.createContext2D(0, 0).canvas.height).toBe(1);
+
+    expect(web.createContext2D(-42, -42).canvas.width).toBe(1);
+    expect(web.createContext2D(-42, -42).canvas.height).toBe(1);
   });
 
   test('getElement', () => {
