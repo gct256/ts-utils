@@ -13,6 +13,7 @@ var funcs;
     funcs.noop = noop;
 })(funcs || (funcs = {}));
 
+// tslint:disable: no-unsafe-any
 var numbers;
 (function (numbers) {
     /**
@@ -37,7 +38,7 @@ var numbers;
     }
     numbers.modulo = modulo;
     /**
-     * Wrapper for Math.floor with fallback to default value.
+     * Return adjusted value between min value and max value.
      *
      * @param a target value.
      * @param defaultValue default value.
@@ -174,7 +175,7 @@ var randoms;
 })(randoms || (randoms = {}));
 
 var web;
-(function (web$$1) {
+(function (web) {
     /**
      * Get CanvasRenderingContext2D from canvas element.
      *
@@ -195,7 +196,7 @@ var web;
         }
         return ct;
     }
-    web$$1.getContext2D = getContext2D;
+    web.getContext2D = getContext2D;
     /**
      * Create CanvasRenderingContext2D with size.
      *
@@ -207,7 +208,7 @@ var web;
         var cv = document.createElement('canvas');
         return getContext2D(cv, width, height);
     }
-    web$$1.createContext2D = createContext2D;
+    web.createContext2D = createContext2D;
     /**
      * wrapper for document.getElementById.
      *
@@ -220,7 +221,7 @@ var web;
             throw new Error("element not found: id=" + id);
         return e;
     }
-    web$$1.getElement = getElement;
+    web.getElement = getElement;
     /**
      * wrapper for window.requestAnimationFrame.
      *
@@ -242,7 +243,7 @@ var web;
         }
         raf(loop);
     }
-    web$$1.animate = animate;
+    web.animate = animate;
 })(web || (web = {}));
 
 export { funcs, numbers, randoms, web };

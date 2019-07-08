@@ -16,6 +16,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
     funcs.noop = noop;
 })(exports.funcs || (exports.funcs = {}));
 
+// tslint:disable: no-unsafe-any
 (function (numbers) {
     /**
      * Calculate the remainder like Python.
@@ -39,7 +40,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
     }
     numbers.modulo = modulo;
     /**
-     * Wrapper for Math.floor with fallback to default value.
+     * Return adjusted value between min value and max value.
      *
      * @param a target value.
      * @param defaultValue default value.
