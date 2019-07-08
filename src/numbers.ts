@@ -20,7 +20,7 @@ export namespace numbers {
   }
 
   /**
-   * Wrapper for Math.floor with fallback to default value.
+   * Return adjusted value between min value and max value.
    *
    * @param a target value.
    * @param defaultValue default value.
