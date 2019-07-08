@@ -21,15 +21,15 @@
   },
   "homepage": "https://github.com/gct256/ts-utils#readme",
   "devDependencies": {
-    "@types/jest": "^23.3.1",
-    "jest": "^23.4.2",
-    "jest-canvas-mock": "^1.1.0",
-    "rollup": "^0.64.1",
-    "rollup-plugin-typescript2": "^0.16.1",
-    "ts-jest": "^23.0.1",
+    "@types/jest": "^24.0.15",
+    "jest": "^24.8.0",
+    "jest-canvas-mock": "^2.1.0",
+    "rollup": "^1.16.6",
+    "rollup-plugin-typescript2": "^0.21.2",
+    "ts-jest": "^24.0.2",
     "tslint": "^5.11.0",
-    "tslint-microsoft-contrib": "^5.1.0",
-    "typescript": "^2.9.2"
+    "tslint-microsoft-contrib": "^6.2.0",
+    "typescript": "^3.5.2"
   },
   "jest": {
     "transform": {
