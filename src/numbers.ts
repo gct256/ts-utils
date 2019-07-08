@@ -1,3 +1,5 @@
+// tslint:disable: no-unsafe-any
+
 export namespace numbers {
   /**
    * Calculate the remainder like Python.
