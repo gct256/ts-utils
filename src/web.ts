@@ -1,4 +1,4 @@
-import { numbers } from '.';
+import { numbers } from './numbers';
 
 type FrameRequestCallback = (time: number) => void;
 export type Raf = (callback: FrameRequestCallback) => number;
