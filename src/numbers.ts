@@ -25,7 +25,7 @@ export const numbers = {
    * @param defaultValue default value.
    */
   clamp(a: number, min: number, max: number): number {
-    if (!Number.isFinite(a) || !Number.isFinite(min) || !Number.isFinite(max)) {
+    if (Number.isNaN(a) || Number.isNaN(min) || Number.isNaN(max)) {
       return NaN;
     }
 

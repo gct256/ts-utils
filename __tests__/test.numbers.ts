@@ -10,6 +10,18 @@ describe('numbers', () => {
       expect(numbers.modulo(NaN, NaN)).toBe(NaN);
     });
 
+    test('Infinity', () => {
+      expect(numbers.modulo(Infinity, 3)).toBeNaN();
+      expect(numbers.modulo(3, Infinity)).toBeNaN();
+      expect(numbers.modulo(Infinity, Infinity)).toBeNaN();
+    });
+
+    test('-Infinity', () => {
+      expect(numbers.modulo(-Infinity, 3)).toBeNaN();
+      expect(numbers.modulo(3, -Infinity)).toBeNaN();
+      expect(numbers.modulo(-Infinity, -Infinity)).toBeNaN();
+    });
+
     test('integer', () => {
       expect(numbers.modulo(0, 0)).toBe(NaN);
       expect(numbers.modulo(-1, 0)).toBe(NaN);
@@ -82,6 +94,15 @@ describe('numbers', () => {
     expect(numbers.clamp(NaN, -4.2, 4.2)).toBe(NaN);
     expect(numbers.clamp(0, NaN, 4.2)).toBe(NaN);
     expect(numbers.clamp(0, -4.2, NaN)).toBe(NaN);
+
+    expect(numbers.clamp(Infinity, -4.2, 4.2)).toBe(4.2);
+    expect(numbers.clamp(-Infinity, -4.2, 4.2)).toBe(-4.2);
+
+    expect(numbers.clamp(9.9, -Infinity, 4.2)).toBe(4.2);
+    expect(numbers.clamp(-9.9, -Infinity, 4.2)).toBe(-9.9);
+
+    expect(numbers.clamp(9.9, -4.2, Infinity)).toBe(9.9);
+    expect(numbers.clamp(-9.9, -4.2, Infinity)).toBe(-4.2);
   });
 
   test('floor', () => {
@@ -92,6 +113,12 @@ describe('numbers', () => {
 
     expect(numbers.floor(NaN)).toBe(0);
     expect(numbers.floor(NaN, -4.2)).toBe(-4.2);
+
+    expect(numbers.floor(Infinity)).toBe(0);
+    expect(numbers.floor(Infinity, -4.2)).toBe(-4.2);
+
+    expect(numbers.floor(-Infinity)).toBe(0);
+    expect(numbers.floor(-Infinity, -4.2)).toBe(-4.2);
   });
 
   test('round', () => {
@@ -102,6 +129,12 @@ describe('numbers', () => {
 
     expect(numbers.round(NaN)).toBe(0);
     expect(numbers.round(NaN, -4.2)).toBe(-4.2);
+
+    expect(numbers.round(Infinity)).toBe(0);
+    expect(numbers.round(Infinity, -4.2)).toBe(-4.2);
+
+    expect(numbers.round(-Infinity)).toBe(0);
+    expect(numbers.round(-Infinity, -4.2)).toBe(-4.2);
   });
 
   test('ceil', () => {
@@ -112,5 +145,11 @@ describe('numbers', () => {
 
     expect(numbers.ceil(NaN)).toBe(0);
     expect(numbers.ceil(NaN, -4.2)).toBe(-4.2);
+
+    expect(numbers.ceil(Infinity)).toBe(0);
+    expect(numbers.ceil(Infinity, -4.2)).toBe(-4.2);
+
+    expect(numbers.ceil(-Infinity)).toBe(0);
+    expect(numbers.ceil(-Infinity, -4.2)).toBe(-4.2);
   });
 });
