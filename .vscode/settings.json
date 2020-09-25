@@ -1,22 +1,4 @@
 {
-  //
-  "editor.detectIndentation": false,
-  "editor.formatOnSave": true,
-  "editor.insertSpaces": true,
-  "editor.renderControlCharacters": true,
-  "editor.renderWhitespace": "boundary",
-  "editor.rulers": [80, 120],
-  "editor.tabSize": 2,
-  "editor.trimAutoWhitespace": true,
-  "editor.useTabStops": true,
-  "editor.wordWrap": "on",
-  "editor.wordWrapColumn": 80,
-  "editor.wrappingIndent": "none",
-  //
-  "files.autoGuessEncoding": true,
-  "files.autoSave": "off",
-  "files.encoding": "utf8",
-  "files.eol": "\n",
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
@@ -25,26 +7,32 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "**/node_modules": true,
-    "dist/**/*.js": true,
-    ".rpt2_cache": true
+    "index.js": true,
+    "index.mjs": true,
+    "types": true
   },
-  "files.insertFinalNewline": true,
+
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true,
+
+  "editor.trimAutoWhitespace": true,
   "files.trimFinalNewlines": true,
   "files.trimTrailingWhitespace": true,
-  //
-  "javascript.validate.enable": false,
-  //
+  "files.insertFinalNewline": true,
+
+  "files.eol": "\n",
+
+  "files.autoGuessEncoding": false,
+  "files.encoding": "utf8",
+
   "typescript.validate.enable": true,
-  //
-  "eslint.enable": false,
-  "eslint.autoFixOnSave": false,
-  //
-  "prettier.eslintIntegration": false,
-  //
-  "flow.enabled": false,
-  "flow.runOnAllFiles": false,
-  "flow.runOnEdit": true,
-  "flow.stopFlowOnExit": true,
-  //
-  "tslint.enable": true
+
+  "eslint.enable": true,
+
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+
+  "prettier.disableLanguages": []
 }
