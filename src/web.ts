@@ -1,7 +1,7 @@
 import { numbers } from '.';
 
 type FrameRequestCallback = (time: number) => void;
-type Raf = (callback: FrameRequestCallback) => number;
+export type Raf = (callback: FrameRequestCallback) => number;
 
 export const web = {
   /**

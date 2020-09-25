@@ -1,8 +1,9 @@
-import { web } from '../src/web';
+import { web, Raf } from '../src/web';
 
 describe('web', () => {
   test('getContext2D', () => {
     const canvas: HTMLCanvasElement = document.createElement('canvas');
+
     expect(web.getContext2D(canvas, 12, 34)).toBeInstanceOf(Object);
     expect(web.getContext2D(canvas, 12, 34).canvas.width).toBe(12);
     expect(web.getContext2D(canvas, 12, 34).canvas.height).toBe(34);
@@ -52,19 +53,21 @@ describe('web', () => {
 
   describe('animate', () => {
     test('default', () => {
-      let count1: number = 0;
-      let count2: number = 0;
-      function raf(callback: FrameRequestCallback): number {
+      let count1 = 0;
+      let count2 = 0;
+
+      const raf: Raf = (callback) => {
         count1 += 1;
         callback(0);
 
         return 0;
-      }
+      };
 
-      function handler(): boolean {
+      const handler = (): boolean => {
         count2 += 1;
+
         return count2 < 10;
-      }
+      };
 
       web.animate(handler, 0, raf);
       expect(count1).toBe(10);
@@ -72,19 +75,21 @@ describe('web', () => {
     });
 
     test('with interval', () => {
-      let count1: number = 0;
-      let count2: number = 0;
-      function raf(callback: FrameRequestCallback): number {
+      let count1 = 0;
+      let count2 = 0;
+
+      const raf: Raf = (callback) => {
         count1 += 1;
         callback(0);
 
         return 0;
-      }
+      };
 
-      function handler(): boolean {
+      const handler = (): boolean => {
         count2 += 1;
+
         return count2 < 10;
-      }
+      };
 
       web.animate(handler, 5, raf);
       expect(count1).toBe(60);

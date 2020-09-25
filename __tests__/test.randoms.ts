@@ -1,17 +1,9 @@
 import { randoms } from '../src/randoms';
 
 describe('randoms', () => {
-  function min(): number {
-    return 0;
-  }
-
-  function mid(): number {
-    return 0x80000000;
-  }
-
-  function max(): number {
-    return 0xffffffff;
-  }
+  const min = (): number => 0;
+  const mid = (): number => 0x80000000;
+  const max = (): number => 0xffffffff;
 
   test('random', () => {
     expect(randoms.random(min)).toBe(0);
@@ -61,6 +53,7 @@ describe('randoms', () => {
 
   test('shuffle', () => {
     const array: number[] = [5, 1, 3, 2, 0, 4];
+
     expect(randoms.shuffle(array, min)).not.toEqual(array);
     expect(randoms.shuffle(array, max)).toEqual(array);
 
