@@ -1,8 +1,8 @@
-export namespace funcs {
+export const funcs = {
   /**
    * Empty function.
    */
-  export function noop(..._: any[]): void {
+  noop(..._: unknown[]): void {
     //
   }
-}
+};

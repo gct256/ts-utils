@@ -56,7 +56,7 @@ rules:
   no-param-reassign:
     - error
     - props: true
-      ignorePropertyModificationsFor: []
+      ignorePropertyModificationsFor: [canvas]
 
   # import extension
   import/extensions:
@@ -83,6 +83,8 @@ rules:
     - allowExpressions: true
 
   # use "_" prefix for unused variable
+  no-unused-vars:
+    - off
   '@typescript-eslint/no-unused-vars':
     - error
     - argsIgnorePattern: '^_'
