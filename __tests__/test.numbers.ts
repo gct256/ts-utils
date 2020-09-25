@@ -57,28 +57,28 @@ describe('numbers', () => {
       expect(numbers.modulo(1.1, 0)).toBe(NaN);
 
       expect(numbers.modulo(0, 3.21)).toBe(0);
-      expect(numbers.modulo(0.01, 3.21)).toBe(0.01);
-      expect(numbers.modulo(3.2, 3.21)).toBe(3.2);
+      expect(numbers.modulo(0.01, 3.21)).toBe(0.01 % 3.21);
+      expect(numbers.modulo(3.2, 3.21)).toBe(3.2 % 3.21);
       expect(numbers.modulo(3.21, 3.21)).toBe(0);
-      expect(numbers.modulo(3.22, 3.21)).toBe(0.010000000000000231);
+      expect(numbers.modulo(3.22, 3.21)).toBe(3.22 % 3.21);
 
       expect(numbers.modulo(-0, 3.21)).toBe(0);
-      expect(numbers.modulo(-0.01, 3.21)).toBe(3.2);
-      expect(numbers.modulo(-3.2, 3.21)).toBe(0.009999999999999787);
+      expect(numbers.modulo(-0.01, 3.21)).toBe((-0.01 % 3.21) + 3.21);
+      expect(numbers.modulo(-3.2, 3.21)).toBe((-3.2 % 3.21) + 3.21);
       expect(numbers.modulo(-3.21, 3.21)).toBe(0);
-      expect(numbers.modulo(-3.22, 3.21)).toBe(3.1999999999999997);
+      expect(numbers.modulo(-3.22, 3.21)).toBe((-3.22 % 3.21) + 3.21);
 
       expect(numbers.modulo(0, -3.21)).toBe(0);
-      expect(numbers.modulo(0.01, -3.21)).toBe(-3.2);
-      expect(numbers.modulo(3.2, -3.21)).toBe(-0.009999999999999787);
+      expect(numbers.modulo(0.01, -3.21)).toBe((0.01 % -3.21) - 3.21);
+      expect(numbers.modulo(3.2, -3.21)).toBe((3.2 % -3.21) - 3.21);
       expect(numbers.modulo(3.21, -3.21)).toBe(0);
-      expect(numbers.modulo(3.22, -3.21)).toBe(-3.1999999999999997);
+      expect(numbers.modulo(3.22, -3.21)).toBe((3.22 % -3.21) - 3.21);
 
       expect(numbers.modulo(-0, -3.21)).toBe(0);
-      expect(numbers.modulo(-0.01, -3.21)).toBe(-0.01);
-      expect(numbers.modulo(-3.2, -3.21)).toBe(-3.2);
+      expect(numbers.modulo(-0.01, -3.21)).toBe(-0.01 % -3.21);
+      expect(numbers.modulo(-3.2, -3.21)).toBe(-3.2 % -3.21);
       expect(numbers.modulo(-3.21, -3.21)).toBe(0);
-      expect(numbers.modulo(-3.22, -3.21)).toBe(-0.010000000000000231);
+      expect(numbers.modulo(-3.22, -3.21)).toBe(-3.22 % -3.21);
     });
   });
 
