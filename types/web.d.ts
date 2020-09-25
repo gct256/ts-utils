@@ -1,4 +1,6 @@
-export declare namespace web {
+declare type FrameRequestCallback = (time: number) => void;
+export declare type Raf = (callback: FrameRequestCallback) => number;
+export declare const web: {
     /**
      * Get CanvasRenderingContext2D from canvas element.
      *
@@ -7,7 +9,7 @@ export declare namespace web {
      * @param height context height.
      * @returns context.
      */
-    function getContext2D(canvas: HTMLCanvasElement, width?: number, height?: number): CanvasRenderingContext2D;
+    getContext2D(canvas: HTMLCanvasElement, width?: number | undefined, height?: number | undefined): CanvasRenderingContext2D;
     /**
      * Create CanvasRenderingContext2D with size.
      *
@@ -15,20 +17,20 @@ export declare namespace web {
      * @param height context height.
      * @returns context.
      */
-    function createContext2D(width: number, height: number): CanvasRenderingContext2D;
+    createContext2D(width: number, height: number): CanvasRenderingContext2D;
     /**
      * wrapper for document.getElementById.
      *
      * @param id element's id.
      * @return element.
      */
-    function getElement(id: string): HTMLElement;
-    type Raf = (callback: FrameRequestCallback) => number;
+    getElement(id: string): HTMLElement;
     /**
      * wrapper for window.requestAnimationFrame.
      *
      * @param handler animation handler.
      * @param interval interval frame.
      */
-    function animate(handler: (time?: number) => boolean, interval?: number, raf?: Raf): void;
-}
+    animate(handler: (time?: number | undefined) => boolean, interval?: number, raf?: Raf): void;
+};
+export {};

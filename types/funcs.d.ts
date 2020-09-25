@@ -1,6 +1,6 @@
-export declare namespace funcs {
+export declare const funcs: {
     /**
      * Empty function.
      */
-    function noop(..._: any[]): void;
-}
+    noop(..._: unknown[]): void;
+};

@@ -1,4 +1,4 @@
-export declare namespace numbers {
+export declare const numbers: {
     /**
      * Calculate the remainder like Python.
      *
@@ -6,33 +6,33 @@ export declare namespace numbers {
      * @param b divisor. If it is 0 the result will always be NaN.
      * @returns result.
      */
-    function modulo(a: any, b: any): number;
+    modulo(a: number, b: number): number;
     /**
      * Return adjusted value between min value and max value.
      *
      * @param a target value.
      * @param defaultValue default value.
      */
-    function clamp(a: any, min: number, max: number): number;
+    clamp(a: number, min: number, max: number): number;
     /**
      * Wrapper for Math.floor with fallback to default value.
      *
      * @param a target value.
      * @param defaultValue default value.
      */
-    function floor(a: any, defaultValue?: number): number;
+    floor(a: number, defaultValue?: number): number;
     /**
      * Wrapper for Math.ceil with fallback to default value.
      *
      * @param a target value.
      * @param defaultValue default value.
      */
-    function ceil(a: any, defaultValue?: number): number;
+    ceil(a: number, defaultValue?: number): number;
     /**
      * Wrapper for Math.round with fallback to default value.
      *
      * @param a target value.
      * @param defaultValue default value.
      */
-    function round(a: any, defaultValue?: number): number;
-}
+    round(a: number, defaultValue?: number): number;
+};

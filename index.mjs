@@ -1,21 +1,17 @@
-var funcs;
-(function (funcs) {
+var funcs = {
     /**
      * Empty function.
      */
-    function noop() {
+    noop: function () {
         var _ = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             _[_i] = arguments[_i];
         }
         //
     }
-    funcs.noop = noop;
-})(funcs || (funcs = {}));
+};
 
-// tslint:disable: no-unsafe-any
-var numbers;
-(function (numbers) {
+var numbers = {
     /**
      * Calculate the remainder like Python.
      *
@@ -23,159 +19,161 @@ var numbers;
      * @param b divisor. If it is 0 the result will always be NaN.
      * @returns result.
      */
-    function modulo(a, b) {
-        if (!Number.isFinite(+a) || !Number.isFinite(+b))
+    modulo: function (a, b) {
+        if (!Number.isFinite(a) || !Number.isFinite(b))
             return NaN;
-        var c = +a;
-        var d = +b;
-        if (d === 0)
+        if (b === 0)
             return NaN;
-        if (c === 0 || c === d || -c === d)
+        if (a === 0 || a === b || -a === b)
             return 0;
-        if ((c > 0 && d > 0) || (c < 0 && d < 0))
-            return c % d;
-        return (c % d) + d;
-    }
-    numbers.modulo = modulo;
+        if ((a > 0 && b > 0) || (a < 0 && b < 0))
+            return a % b;
+        return (a % b) + b;
+    },
     /**
      * Return adjusted value between min value and max value.
      *
      * @param a target value.
      * @param defaultValue default value.
      */
-    function clamp(a, min, max) {
-        if (!Number.isFinite(+a) ||
-            !Number.isFinite(+min) ||
-            !Number.isFinite(+max)) {
+    clamp: function (a, min, max) {
+        if (Number.isNaN(a) || Number.isNaN(min) || Number.isNaN(max)) {
             return NaN;
         }
-        var b = +a;
-        var mi = +min;
-        var ma = +max;
-        return b < mi ? mi : b > ma ? ma : b;
-    }
-    numbers.clamp = clamp;
+        // eslint-disable-next-line no-nested-ternary
+        return a < min ? min : a > max ? max : a;
+    },
     /**
      * Wrapper for Math.floor with fallback to default value.
      *
      * @param a target value.
      * @param defaultValue default value.
      */
-    function floor(a, defaultValue) {
+    floor: function (a, defaultValue) {
         if (defaultValue === void 0) { defaultValue = 0; }
-        return Number.isFinite(+a) ? Math.floor(a) : defaultValue;
-    }
-    numbers.floor = floor;
+        return Number.isFinite(a) ? Math.floor(a) : defaultValue;
+    },
     /**
      * Wrapper for Math.ceil with fallback to default value.
      *
      * @param a target value.
      * @param defaultValue default value.
      */
-    function ceil(a, defaultValue) {
+    ceil: function (a, defaultValue) {
         if (defaultValue === void 0) { defaultValue = 0; }
         return Number.isFinite(+a) ? Math.ceil(a) : defaultValue;
-    }
-    numbers.ceil = ceil;
+    },
     /**
      * Wrapper for Math.round with fallback to default value.
      *
      * @param a target value.
      * @param defaultValue default value.
      */
-    function round(a, defaultValue) {
+    round: function (a, defaultValue) {
         if (defaultValue === void 0) { defaultValue = 0; }
         return Number.isFinite(+a) ? Math.round(a) : defaultValue;
     }
-    numbers.round = round;
-})(numbers || (numbers = {}));
+};
 
-var randoms;
-(function (randoms) {
-    function defaultRandomGenerator() {
-        // tslint:disable-next-line:insecure-random
-        return Math.floor(Math.random() * 0x100000000);
-        // return [0, 0xffffffff]
-    }
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+PERFORMANCE OF THIS SOFTWARE.
+***************************************************************************** */
+
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+}
+
+var defaultRandomGenerator = function () {
+    return Math.floor(Math.random() * 0x100000000);
+};
+var randoms = {
     /**
      * generate random value in range [0, 1)
      *
      * @return value.
      */
-    function random(generator) {
+    random: function (generator) {
         if (generator === void 0) { generator = defaultRandomGenerator; }
         return generator() / 0x100000000;
-    }
-    randoms.random = random;
+    },
     /**
      * generate interger random value in range [0, max]
      *
      * @return value.
      */
-    function randInt(max, generator) {
+    randInt: function (max, generator) {
         if (max === void 0) { max = 0xffffffff; }
         if (generator === void 0) { generator = defaultRandomGenerator; }
         var value = (generator() / 0xffffffff) * max;
         return value > 0 ? Math.floor(value) : Math.ceil(value);
-    }
-    randoms.randInt = randInt;
+    },
     /**
      * generate interger random value in range [min, max]
      *
      * @return value.
      */
-    function randIntRange(min, max, generator) {
+    randIntRange: function (min, max, generator) {
         if (generator === void 0) { generator = defaultRandomGenerator; }
         var m0 = min < max ? min : max;
         var m1 = min < max ? max : min;
         var diff = m1 - m0;
         return Math.floor((generator() / 0xffffffff) * diff) + m0;
-    }
-    randoms.randIntRange = randIntRange;
+    },
     /**
      * generate float random value in range [0, max]
      *
      * @return value.
      */
-    function randFloat(max, generator) {
+    randFloat: function (max, generator) {
         if (max === void 0) { max = 1; }
         if (generator === void 0) { generator = defaultRandomGenerator; }
         return (generator() / 0xffffffff) * max;
-    }
-    randoms.randFloat = randFloat;
+    },
     /**
      * generate float random value in range [min, max]
      *
      * @return value.
      */
-    function randFloatRange(min, max, generator) {
+    randFloatRange: function (min, max, generator) {
         if (generator === void 0) { generator = defaultRandomGenerator; }
         var m0 = min < max ? min : max;
         var m1 = min < max ? max : min;
         var diff = m1 - m0;
         return (generator() / 0xffffffff) * diff + m0;
-    }
-    randoms.randFloatRange = randFloatRange;
-    function shuffle(array, generator) {
+    },
+    shuffle: function (array, generator) {
         if (generator === void 0) { generator = defaultRandomGenerator; }
-        var result = array.slice();
+        var result = __spreadArrays(array);
         var length = result.length;
         if (length < 2)
             return result;
         while (length > 0) {
             length -= 1;
-            var i = Math.floor(randIntRange(0, length, generator));
+            var i = Math.floor(randoms.randIntRange(0, length, generator));
             var tmp = result[length];
             result[length] = result[i];
             result[i] = tmp;
         }
         return result;
     }
-    randoms.shuffle = shuffle;
-})(randoms || (randoms = {}));
+};
 
-var web;
-(function (web) {
+var web = {
     /**
      * Get CanvasRenderingContext2D from canvas element.
      *
@@ -184,7 +182,7 @@ var web;
      * @param height context height.
      * @returns context.
      */
-    function getContext2D(canvas, width, height) {
+    getContext2D: function (canvas, width, height) {
         var ct = canvas.getContext('2d');
         if (ct === null)
             throw new Error('cannot get context 2d');
@@ -195,8 +193,7 @@ var web;
             canvas.height = Math.max(numbers.ceil(height, 1), 1);
         }
         return ct;
-    }
-    web.getContext2D = getContext2D;
+    },
     /**
      * Create CanvasRenderingContext2D with size.
      *
@@ -204,35 +201,33 @@ var web;
      * @param height context height.
      * @returns context.
      */
-    function createContext2D(width, height) {
+    createContext2D: function (width, height) {
         var cv = document.createElement('canvas');
-        return getContext2D(cv, width, height);
-    }
-    web.createContext2D = createContext2D;
+        return web.getContext2D(cv, width, height);
+    },
     /**
      * wrapper for document.getElementById.
      *
      * @param id element's id.
      * @return element.
      */
-    function getElement(id) {
+    getElement: function (id) {
         var e = document.getElementById(id);
         if (e === null)
             throw new Error("element not found: id=" + id);
         return e;
-    }
-    web.getElement = getElement;
+    },
     /**
      * wrapper for window.requestAnimationFrame.
      *
      * @param handler animation handler.
      * @param interval interval frame.
      */
-    function animate(handler, interval, raf) {
+    animate: function (handler, interval, raf) {
         if (interval === void 0) { interval = 0; }
         if (raf === void 0) { raf = window.requestAnimationFrame; }
         var count = 0;
-        function loop() {
+        var loop = function () {
             count += 1;
             if (count > interval) {
                 if (handler() === false)
@@ -240,10 +235,9 @@ var web;
                 count = 0;
             }
             raf(loop);
-        }
+        };
         raf(loop);
     }
-    web.animate = animate;
-})(web || (web = {}));
+};
 
 export { funcs, numbers, randoms, web };
