@@ -1,0 +1,100 @@
+root: true
+
+env:
+  browser: true
+
+extends:
+  - plugin:@typescript-eslint/recommended
+  - airbnb-base
+  - plugin:prettier/recommended
+  - prettier/@typescript-eslint
+
+parser: '@typescript-eslint/parser'
+
+parserOptions:
+  ecmaFeatures:
+    jsx: true
+  sourceType: module
+
+settings:
+  import/resolver:
+    node:
+      extensions:
+        - .js
+        - .ts
+
+plugins:
+  - '@typescript-eslint'
+
+rules:
+  # use only console.debug, console.warn, console.error
+  no-console:
+    - error
+    - allow: [debug, warn, error]
+
+  # line spacing
+  padding-line-between-statements:
+    - error
+    - { blankLine: always, prev: '*', next: return }
+    - { blankLine: any, prev: export, next: export }
+    - { blankLine: always, prev: '*', next: if }
+    - { blankLine: always, prev: '*', next: const }
+    - { blankLine: always, prev: const, next: '*' }
+    - { blankLine: any, prev: const, next: const }
+    - { blankLine: always, prev: '*', next: default }
+  lines-between-class-members:
+    - error
+    - always
+    - exceptAfterSingleLine: true
+
+  # function style
+  func-style:
+    - error
+    - expression
+
+  # allow props reassign by variable name
+  no-param-reassign:
+    - error
+    - props: true
+      ignorePropertyModificationsFor: []
+
+  # import extension
+  import/extensions:
+    - error
+    - never
+
+  # avoid default export
+  import/prefer-default-export:
+    - off
+  import/no-default-export:
+    - error
+
+  # import order formatting
+  import/order:
+    - error
+    - newlines-between: always
+      alphabetize:
+        order: asc
+        caseInsensitive: true
+
+  # required return type
+  '@typescript-eslint/explicit-function-return-type':
+    - error
+    - allowExpressions: true
+
+  # use "_" prefix for unused variable
+  '@typescript-eslint/no-unused-vars':
+    - error
+    - argsIgnorePattern: '^_'
+
+  # overwrite no-use-before-define
+  no-use-before-define:
+    - off
+
+  '@typescript-eslint/no-use-before-define':
+    - error
+    - functions: true
+      classes: true
+      variables: true
+      enums: true
+      typedefs: true
