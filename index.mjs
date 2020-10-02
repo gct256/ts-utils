@@ -26,9 +26,8 @@ var numbers = {
             return NaN;
         if (a === 0 || a === b || -a === b)
             return 0;
-        if ((a > 0 && b > 0) || (a < 0 && b < 0))
-            return a % b;
-        return (a % b) + b;
+        var c = (a > 0 && b > 0) || (a < 0 && b < 0) ? a % b : (a % b) + b;
+        return c === b || c === 0 ? 0 : c;
     },
     /**
      * Return adjusted value between min value and max value.
