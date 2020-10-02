@@ -32,24 +32,32 @@ describe('numbers', () => {
       expect(numbers.modulo(2, 3)).toBe(2);
       expect(numbers.modulo(3, 3)).toBe(0);
       expect(numbers.modulo(4, 3)).toBe(1);
+      expect(numbers.modulo(5, 3)).toBe(2);
+      expect(numbers.modulo(6, 3)).toBe(0);
 
       expect(numbers.modulo(-0, 3)).toBe(0);
       expect(numbers.modulo(-1, 3)).toBe(2);
       expect(numbers.modulo(-2, 3)).toBe(1);
       expect(numbers.modulo(-3, 3)).toBe(0);
       expect(numbers.modulo(-4, 3)).toBe(2);
+      expect(numbers.modulo(-5, 3)).toBe(1);
+      expect(numbers.modulo(-6, 3)).toBe(0);
 
       expect(numbers.modulo(0, -3)).toBe(0);
       expect(numbers.modulo(1, -3)).toBe(-2);
       expect(numbers.modulo(2, -3)).toBe(-1);
       expect(numbers.modulo(3, -3)).toBe(0);
       expect(numbers.modulo(4, -3)).toBe(-2);
+      expect(numbers.modulo(5, -3)).toBe(-1);
+      expect(numbers.modulo(6, -3)).toBe(0);
 
       expect(numbers.modulo(-0, -3)).toBe(0);
       expect(numbers.modulo(-1, -3)).toBe(-1);
       expect(numbers.modulo(-2, -3)).toBe(-2);
       expect(numbers.modulo(-3, -3)).toBe(0);
       expect(numbers.modulo(-4, -3)).toBe(-1);
+      expect(numbers.modulo(-5, -3)).toBe(-2);
+      expect(numbers.modulo(-6, -3)).toBe(0);
     });
 
     test('float', () => {
@@ -61,24 +69,36 @@ describe('numbers', () => {
       expect(numbers.modulo(3.2, 3.21)).toBe(3.2 % 3.21);
       expect(numbers.modulo(3.21, 3.21)).toBe(0);
       expect(numbers.modulo(3.22, 3.21)).toBe(3.22 % 3.21);
+      expect(numbers.modulo(6.41, 3.21)).toBe(6.41 % 3.21);
+      expect(numbers.modulo(6.42, 3.21)).toBe(0);
+      expect(numbers.modulo(6.43, 3.21)).toBe(6.43 % 3.21);
 
       expect(numbers.modulo(-0, 3.21)).toBe(0);
       expect(numbers.modulo(-0.01, 3.21)).toBe((-0.01 % 3.21) + 3.21);
       expect(numbers.modulo(-3.2, 3.21)).toBe((-3.2 % 3.21) + 3.21);
       expect(numbers.modulo(-3.21, 3.21)).toBe(0);
       expect(numbers.modulo(-3.22, 3.21)).toBe((-3.22 % 3.21) + 3.21);
+      expect(numbers.modulo(-6.41, 3.21)).toBe((-6.41 % 3.21) + 3.21);
+      expect(numbers.modulo(-6.42, 3.21)).toBe(0);
+      expect(numbers.modulo(-6.43, 3.21)).toBe((-6.43 % 3.21) + 3.21);
 
       expect(numbers.modulo(0, -3.21)).toBe(0);
       expect(numbers.modulo(0.01, -3.21)).toBe((0.01 % -3.21) - 3.21);
       expect(numbers.modulo(3.2, -3.21)).toBe((3.2 % -3.21) - 3.21);
       expect(numbers.modulo(3.21, -3.21)).toBe(0);
       expect(numbers.modulo(3.22, -3.21)).toBe((3.22 % -3.21) - 3.21);
+      expect(numbers.modulo(6.41, -3.21)).toBe((6.41 % -3.21) - 3.21);
+      expect(numbers.modulo(6.42, -3.21)).toBe(0);
+      expect(numbers.modulo(6.43, -3.21)).toBe((6.43 % -3.21) - 3.21);
 
       expect(numbers.modulo(-0, -3.21)).toBe(0);
       expect(numbers.modulo(-0.01, -3.21)).toBe(-0.01 % -3.21);
       expect(numbers.modulo(-3.2, -3.21)).toBe(-3.2 % -3.21);
       expect(numbers.modulo(-3.21, -3.21)).toBe(0);
       expect(numbers.modulo(-3.22, -3.21)).toBe(-3.22 % -3.21);
+      expect(numbers.modulo(-6.41, -3.21)).toBe(-6.41 % -3.21);
+      expect(numbers.modulo(-6.42, -3.21)).toBe(0);
+      expect(numbers.modulo(-6.43, -3.21)).toBe(-6.43 % -3.21);
     });
   });
 
