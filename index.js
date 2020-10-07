@@ -2,6 +2,81 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+/** Utility for value comparison. */
+var compare = {
+    /**
+     * Compare data using.
+     *
+     * @param a - Data.
+     * @param b - Another data.
+     */
+    data: function (a, b) {
+        if (a < b)
+            return -1;
+        return a > b ? 1 : 0;
+    },
+    /**
+     * Compare numbers.
+     *
+     * @param a - Number.
+     * @param b - Another number.
+     */
+    number: function (a, b) {
+        if (Number.isNaN(a)) {
+            return Number.isNaN(b) ? 0 : -1;
+        }
+        return Number.isNaN(b) ? 1 : compare.data(a, b);
+    },
+    /**
+     * Compare numbers with precision.
+     *
+     * @param a - Number.
+     * @param b - Another number.
+     * @param precision - Precision.
+     */
+    float: function (a, b, precision) {
+        if (precision === void 0) { precision = 8; }
+        if (Number.isNaN(a)) {
+            return Number.isNaN(b) ? 0 : -1;
+        }
+        if (Number.isNaN(b))
+            return 1;
+        if (a === b)
+            return 0;
+        if (Math.abs(a - b) <= Math.pow(10, -precision))
+            return 0;
+        return a < b ? -1 : 1;
+    },
+    /**
+     * Compare validatable objects.
+     * If invalid both, return NaN.
+     *
+     * @param a - Validatable object.
+     * @param b - Another validatable object.
+     */
+    validatable: function (a, b) {
+        if (!a.isValid()) {
+            return b.isValid() ? -1 : NaN;
+        }
+        return b.isValid() ? 0 : 1;
+    },
+    /**
+     * Return the first non-zero value of the comparator's results.
+     * If the result is NaN, return 0.
+     *
+     * @param compareResults - Comparator's results.
+     */
+    groups: function () {
+        var _a;
+        var compareResults = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            compareResults[_i] = arguments[_i];
+        }
+        var result = (_a = compareResults.find(function (x) { return Number.isNaN(x) || (Number.isFinite(x) && x !== 0); })) !== null && _a !== void 0 ? _a : 0;
+        return Number.isNaN(result) ? 0 : result;
+    }
+};
+
 var funcs = {
     /**
      * Empty function.
@@ -243,6 +318,7 @@ var web = {
     }
 };
 
+exports.compare = compare;
 exports.funcs = funcs;
 exports.numbers = numbers;
 exports.randoms = randoms;
