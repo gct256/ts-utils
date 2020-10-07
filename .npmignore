@@ -1,4 +1,4 @@
-__tests__/
+test/
 .rpt2_cache/
 .vscode/
 coverage/
@@ -12,3 +12,4 @@ yarn.lock
 .eslintignore
 .prettierrc.json
 .eslintrc.yml
+test/**/*.md
