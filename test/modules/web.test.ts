@@ -1,4 +1,4 @@
-import { web, Raf } from '../src/web';
+import { web, Raf } from '../../src/modules/web';
 
 describe('web', () => {
   test('getContext2D', () => {

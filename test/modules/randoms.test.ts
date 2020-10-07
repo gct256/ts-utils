@@ -1,4 +1,4 @@
-import { randoms } from '../src/randoms';
+import { randoms } from '../../src/modules/randoms';
 
 describe('randoms', () => {
   const min = (): number => 0;

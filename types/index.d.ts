@@ -1,5 +1,5 @@
-import { funcs } from './funcs';
-import { numbers } from './numbers';
-import { randoms } from './randoms';
-import { web } from './web';
+import { funcs } from './modules/funcs';
+import { numbers } from './modules/numbers';
+import { randoms } from './modules/randoms';
+import { web } from './modules/web';
 export { funcs, numbers, randoms, web };

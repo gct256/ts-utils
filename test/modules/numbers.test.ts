@@ -1,4 +1,4 @@
-import { numbers } from '../src/numbers';
+import { numbers } from '../../src/modules/numbers';
 
 // value based on python 3.6.4.
 

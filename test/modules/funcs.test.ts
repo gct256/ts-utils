@@ -1,4 +1,4 @@
-import { funcs } from '../src/funcs';
+import { funcs } from '../../src/modules/funcs';
 
 describe('funcs', () => {
   test('noop', () => {
