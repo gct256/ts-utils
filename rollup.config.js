@@ -9,7 +9,7 @@ const config = {
           declaration: true,
           declarationDir: './types'
         },
-        include: ['./src/index.ts']
+        include: ['./src/index.ts', './src/types']
       },
       useTsconfigDeclarationDir: true
     })
