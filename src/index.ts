@@ -1,4 +1,5 @@
 import { Angle } from './classes/Angle';
+import { BaseObject } from './classes/BaseObject';
 import { Point } from './classes/Point';
 import { Rectangle } from './classes/Rectangle';
 import { RGBA } from './classes/RGBA';
@@ -16,4 +17,4 @@ import { SizeData } from './types/SizeData';
 
 export { compare, funcs, numbers, randoms, web };
 export { AngleData, PointData, RectangleData, RGBAData, SizeData };
-export { Angle, Point, Rectangle, RGBA, Size };
+export { Angle, BaseObject, Point, Rectangle, RGBA, Size };
