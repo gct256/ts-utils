@@ -981,4 +981,4 @@ const web = {
     }
 };
 
-export { Angle, Point, RGBA, Rectangle, Size, compare, funcs, numbers, randoms, web };
+export { Angle, BaseObject, Point, RGBA, Rectangle, Size, compare, funcs, numbers, randoms, web };

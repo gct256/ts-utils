@@ -986,6 +986,7 @@ const web = {
 };
 
 exports.Angle = Angle;
+exports.BaseObject = BaseObject;
 exports.Point = Point;
 exports.RGBA = RGBA;
 exports.Rectangle = Rectangle;
