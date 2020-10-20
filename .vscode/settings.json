@@ -9,7 +9,8 @@
     "**/node_modules": true,
     "index.js": true,
     "index.mjs": true,
-    "types": true
+    "types": true,
+    "coverage": true
   },
 
   "editor.formatOnSave": true,
@@ -27,8 +28,6 @@
   "files.encoding": "utf8",
 
   "typescript.validate.enable": true,
-
-  "eslint.enable": true,
 
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
