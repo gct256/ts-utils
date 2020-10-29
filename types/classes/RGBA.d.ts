@@ -10,6 +10,7 @@ export declare class RGBA extends BaseObject<RGBAData> implements RGBAData {
     readonly blue: number;
     /** @implements */
     readonly alpha: number;
+    private static BLACK;
     private constructor();
     /**
      * Create an object from an color data.
@@ -51,6 +52,14 @@ export declare class RGBA extends BaseObject<RGBAData> implements RGBAData {
      * @param alpha - Alpha value. 0 <= n <= 1, float.
      */
     static fromRGBAByFloat(red: number, green: number, blue: number, alpha: number): RGBA;
+    /**
+     * Create an object from hex string.
+     *
+     * @param hexString - Hex string.
+     * @param strict - If set ture, throw Error with illegal hex stirng format.
+     * If set false, return black color with illegal hex stirng format.
+     */
+    static fromHexString(hexString: string, strict?: boolean): RGBA;
     /** @override */
     compare(other: RGBAData): number;
     /** @override */

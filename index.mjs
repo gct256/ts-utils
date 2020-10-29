@@ -796,6 +796,28 @@ class RGBA extends BaseObject {
             alpha: getValue(alpha * 255)
         });
     }
+    /**
+     * Create an object from hex string.
+     *
+     * @param hexString - Hex string.
+     * @param strict - If set ture, throw Error with illegal hex stirng format.
+     * If set false, return black color with illegal hex stirng format.
+     */
+    static fromHexString(hexString, strict = false) {
+        const matches = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?$/i.exec(hexString);
+        if (!matches) {
+            if (strict)
+                throw new Error('Illegal hex string');
+            return RGBA.BLACK;
+        }
+        const [, r, g, b, a] = matches;
+        return new RGBA({
+            red: Number.parseInt(r, 16),
+            green: Number.parseInt(g, 16),
+            blue: Number.parseInt(b, 16),
+            alpha: typeof a !== 'string' ? 255 : Number.parseInt(a, 16)
+        });
+    }
     //
     // overrides
     //
@@ -841,6 +863,12 @@ class RGBA extends BaseObject {
             : `#${format(this.red)}${format(this.green)}${format(this.blue)}${format(this.alpha)}`;
     }
 }
+RGBA.BLACK = RGBA.of({
+    red: 0,
+    green: 0,
+    blue: 0,
+    alpha: 255
+});
 
 const funcs = {
     /**
