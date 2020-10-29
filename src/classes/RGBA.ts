@@ -6,6 +6,7 @@ import { BaseObject } from './BaseObject';
 
 const getValue = (x: number): number =>
   Number.isFinite(x) ? numbers.clamp(Math.round(x), 0, 255) : x;
+
 const format = (x: number): string => x.toString(16).padStart(2, '0');
 
 /** RGB-based color object. */
@@ -18,6 +19,13 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
   readonly blue: number;
   /** @implements */
   readonly alpha: number;
+
+  private static BLACK: RGBA = RGBA.of({
+    red: 0,
+    green: 0,
+    blue: 0,
+    alpha: 255
+  });
 
   //
   // constructor (private)
@@ -131,6 +139,34 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
       green: getValue(green * 255),
       blue: getValue(blue * 255),
       alpha: getValue(alpha * 255)
+    });
+  }
+
+  /**
+   * Create an object from hex string.
+   *
+   * @param hexString - Hex string.
+   * @param strict - If set ture, throw Error with illegal hex stirng format.
+   * If set false, return black color with illegal hex stirng format.
+   */
+  static fromHexString(hexString: string, strict = false): RGBA {
+    const matches = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?$/i.exec(
+      hexString
+    );
+
+    if (!matches) {
+      if (strict) throw new Error('Illegal hex string');
+
+      return RGBA.BLACK;
+    }
+
+    const [, r, g, b, a] = matches;
+
+    return new RGBA({
+      red: Number.parseInt(r, 16),
+      green: Number.parseInt(g, 16),
+      blue: Number.parseInt(b, 16),
+      alpha: typeof a !== 'string' ? 255 : Number.parseInt(a, 16)
     });
   }
 

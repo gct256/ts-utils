@@ -174,6 +174,41 @@ describe('static methods', () => {
       });
     });
   });
+
+  describe('fromHexString', () => {
+    test('#rrggbb', () => {
+      expect(RGBA.fromHexString('#1a009f')).toBeInstanceOf(RGBA);
+      expect(RGBA.fromHexString('#1a009f')).toEqual({
+        red: 0x1a,
+        green: 0x00,
+        blue: 0x9f,
+        alpha: 0xff
+      });
+    });
+
+    test('#rrggbbaa', () => {
+      expect(RGBA.fromHexString('#1a009faa')).toBeInstanceOf(RGBA);
+      expect(RGBA.fromHexString('#1a009faa')).toEqual({
+        red: 0x1a,
+        green: 0x00,
+        blue: 0x9f,
+        alpha: 0xaa
+      });
+    });
+
+    test('not strict', () => {
+      expect(RGBA.fromHexString('#1a009fa')).toEqual({
+        red: 0,
+        green: 0,
+        blue: 0,
+        alpha: 255
+      });
+    });
+
+    test('strict', () => {
+      expect(() => RGBA.fromHexString('#1a009fa', true)).toThrow();
+    });
+  });
 });
 
 describe('properties', () => {
