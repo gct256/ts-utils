@@ -194,6 +194,70 @@ describe('static methods', () => {
       Rectangle.fromPointPair({ x: 5.3, y: 7.5 }, { x: 4.2, y: -6.4 })
     ).toEqual(rect);
   });
+
+  describe('union', () => {
+    test('valid (single data)', () => {
+      expect(Rectangle.union(makeTestRect('AB', 'AB'))).toBeInstanceOf(
+        Rectangle
+      );
+      expect(Rectangle.union(makeTestRect('AB', 'AB')).isValid()).toBe(true);
+      expect(Rectangle.union(makeTestRect('AB', 'AB'))).toEqual(
+        makeTestRect('AB', 'AB')
+      );
+    });
+    test('valid (multiple data)', () => {
+      expect(
+        Rectangle.union(
+          makeTestRect('AB', 'AB'),
+          makeTestRect('CD', 'CD'),
+          makeTestRect('FG', 'FG')
+        )
+      ).toBeInstanceOf(Rectangle);
+      expect(
+        Rectangle.union(
+          makeTestRect('AB', 'AB'),
+          makeTestRect('CD', 'CD'),
+          makeTestRect('FG', 'FG')
+        ).isValid()
+      ).toBe(true);
+      expect(
+        Rectangle.union(
+          makeTestRect('AB', 'AB'),
+          makeTestRect('CD', 'CD'),
+          makeTestRect('FG', 'FG')
+        )
+      ).toEqual(makeTestRect('AG', 'AG'));
+    });
+    test('invalid (no data)', () => {
+      expect(Rectangle.union()).toBeInstanceOf(Rectangle);
+      expect(Rectangle.union().isValid()).toBe(false);
+    });
+    test('invalid (include invalid rectangle)', () => {
+      expect(
+        Rectangle.union(
+          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
+        )
+      ).toBeInstanceOf(Rectangle);
+      expect(
+        Rectangle.union(
+          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
+        ).isValid()
+      ).toBe(false);
+
+      expect(
+        Rectangle.union(
+          makeTestRect('AB', 'AB'),
+          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
+        )
+      ).toBeInstanceOf(Rectangle);
+      expect(
+        Rectangle.union(
+          makeTestRect('AB', 'AB'),
+          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
+        ).isValid()
+      ).toBe(false);
+    });
+  });
 });
 
 describe('properties', () => {
