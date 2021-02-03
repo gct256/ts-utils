@@ -139,7 +139,7 @@ export class Rectangle
 
     switch (length) {
       case 0:
-        return Rectangle.of({ left: NaN, right: NaN, top: NaN, bottom: NaN });
+        return Rectangle.INVALID;
 
       case 1:
         return Rectangle.of(rects[0]);
@@ -169,6 +169,44 @@ export class Rectangle
       }
     }
   }
+
+  static intersection(...rects: RectangleData[]): Rectangle {
+    const { length } = rects;
+
+    switch (length) {
+      case 0:
+        return Rectangle.INVALID;
+
+      case 1:
+        return Rectangle.of(rects[0]);
+
+      default: {
+        const rect0 = Rectangle.of(rects[0]);
+
+        if (!rect0.isValid()) return rect0;
+
+        let { left, right, top, bottom } = rect0;
+
+        for (let i = 1; i < length; i += 1) {
+          const r = Rectangle.of(rects[i]);
+
+          if (!r.isValid()) return r;
+
+          if (r.left > left) left = r.left;
+
+          if (right > r.right) right = r.right;
+
+          if (r.top > top) top = r.top;
+
+          if (bottom > r.bottom) bottom = r.bottom;
+        }
+
+        return Rectangle.of({ left, right, top, bottom });
+      }
+    }
+  }
+
+  private static readonly INVALID = Rectangle.fromXYWH(NaN, NaN, NaN, NaN);
 
   //
   // overrides

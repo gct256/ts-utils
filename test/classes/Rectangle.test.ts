@@ -293,6 +293,110 @@ describe('static methods', () => {
       ).toBe(false);
     });
   });
+
+  describe('intersection', () => {
+    test('valid (single data)', () => {
+      expect(Rectangle.intersection(makeTestRect('AB', 'AB'))).toBeInstanceOf(
+        Rectangle
+      );
+      expect(Rectangle.intersection(makeTestRect('AB', 'AB')).isValid()).toBe(
+        true
+      );
+      expect(Rectangle.intersection(makeTestRect('AB', 'AB'))).toEqual(
+        makeTestRect('AB', 'AB')
+      );
+    });
+
+    test('valid (multiple data)', () => {
+      expect(
+        Rectangle.intersection(
+          makeTestRect('AG', 'AG'),
+          makeTestRect('CF', 'CF'),
+          makeTestRect('DE', 'DE')
+        )
+      ).toBeInstanceOf(Rectangle);
+      expect(
+        Rectangle.intersection(
+          makeTestRect('AG', 'AG'),
+          makeTestRect('CF', 'CF'),
+          makeTestRect('DE', 'DE')
+        ).isValid()
+      ).toBe(true);
+      expect(
+        Rectangle.intersection(
+          makeTestRect('AG', 'AG'),
+          makeTestRect('CF', 'CF'),
+          makeTestRect('DE', 'DE')
+        )
+      ).toEqual(makeTestRect('DE', 'DE'));
+
+      expect(
+        Rectangle.intersection(
+          makeTestRect('DE', 'DE'),
+          makeTestRect('CF', 'CF'),
+          makeTestRect('AG', 'AG')
+        )
+      ).toBeInstanceOf(Rectangle);
+      expect(
+        Rectangle.intersection(
+          makeTestRect('DE', 'DE'),
+          makeTestRect('CF', 'CF'),
+          makeTestRect('AG', 'AG')
+        ).isValid()
+      ).toBe(true);
+      expect(
+        Rectangle.intersection(
+          makeTestRect('DE', 'DE'),
+          makeTestRect('CF', 'CF'),
+          makeTestRect('AG', 'AG')
+        )
+      ).toEqual(makeTestRect('DE', 'DE'));
+    });
+
+    test('invalid (no data)', () => {
+      expect(Rectangle.intersection()).toBeInstanceOf(Rectangle);
+      expect(Rectangle.intersection().isValid()).toBe(false);
+    });
+
+    test('invalid (include invalid rectangle)', () => {
+      expect(
+        Rectangle.intersection(
+          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
+        )
+      ).toBeInstanceOf(Rectangle);
+      expect(
+        Rectangle.intersection(
+          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
+        ).isValid()
+      ).toBe(false);
+
+      expect(
+        Rectangle.intersection(
+          makeTestRect('AB', 'AB'),
+          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
+        )
+      ).toBeInstanceOf(Rectangle);
+      expect(
+        Rectangle.intersection(
+          makeTestRect('AB', 'AB'),
+          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
+        ).isValid()
+      ).toBe(false);
+
+      expect(
+        Rectangle.intersection(
+          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
+          makeTestRect('AB', 'AB')
+        )
+      ).toBeInstanceOf(Rectangle);
+      expect(
+        Rectangle.intersection(
+          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
+          makeTestRect('AB', 'AB')
+        ).isValid()
+      ).toBe(false);
+    });
+  });
 });
 
 describe('properties', () => {
