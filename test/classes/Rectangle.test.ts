@@ -227,6 +227,28 @@ describe('static methods', () => {
           makeTestRect('FG', 'FG')
         )
       ).toEqual(makeTestRect('AG', 'AG'));
+
+      expect(
+        Rectangle.union(
+          makeTestRect('FG', 'FG'),
+          makeTestRect('CD', 'CD'),
+          makeTestRect('AB', 'AB')
+        )
+      ).toBeInstanceOf(Rectangle);
+      expect(
+        Rectangle.union(
+          makeTestRect('FG', 'FG'),
+          makeTestRect('CD', 'CD'),
+          makeTestRect('AB', 'AB')
+        ).isValid()
+      ).toBe(true);
+      expect(
+        Rectangle.union(
+          makeTestRect('FG', 'FG'),
+          makeTestRect('CD', 'CD'),
+          makeTestRect('AB', 'AB')
+        )
+      ).toEqual(makeTestRect('AG', 'AG'));
     });
     test('invalid (no data)', () => {
       expect(Rectangle.union()).toBeInstanceOf(Rectangle);
@@ -254,6 +276,19 @@ describe('static methods', () => {
         Rectangle.union(
           makeTestRect('AB', 'AB'),
           Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
+        ).isValid()
+      ).toBe(false);
+
+      expect(
+        Rectangle.union(
+          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
+          makeTestRect('AB', 'AB')
+        )
+      ).toBeInstanceOf(Rectangle);
+      expect(
+        Rectangle.union(
+          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
+          makeTestRect('AB', 'AB')
         ).isValid()
       ).toBe(false);
     });
