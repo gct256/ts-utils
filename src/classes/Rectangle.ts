@@ -134,6 +134,11 @@ export class Rectangle
     return Rectangle.of({ left, right, top, bottom });
   }
 
+  /**
+   * Create a rectangle that contains all the rectangles.
+   *
+   * @param rects - Rectangle data.
+   */
   static union(...rects: RectangleData[]): Rectangle {
     const { length } = rects;
 
@@ -170,6 +175,12 @@ export class Rectangle
     }
   }
 
+  /**
+   * Create a rectangle at the intersection of all rectangles.
+   * If there is no intersection, it returns an invalid rectangle.
+   *
+   * @param rects - Rectangle data.
+   */
   static intersection(...rects: RectangleData[]): Rectangle {
     const { length } = rects;
 
@@ -196,9 +207,13 @@ export class Rectangle
 
           if (right > r.right) right = r.right;
 
+          if (right < left) return Rectangle.INVALID;
+
           if (r.top > top) top = r.top;
 
           if (bottom > r.bottom) bottom = r.bottom;
+
+          if (bottom < top) return Rectangle.INVALID;
         }
 
         return Rectangle.of({ left, right, top, bottom });
@@ -206,6 +221,7 @@ export class Rectangle
     }
   }
 
+  /** Invalid rectangle object. */
   private static readonly INVALID = Rectangle.fromXYWH(NaN, NaN, NaN, NaN);
 
   //

@@ -396,6 +396,34 @@ describe('static methods', () => {
         ).isValid()
       ).toBe(false);
     });
+
+    test('invalid (no intersection)', () => {
+      expect(
+        Rectangle.intersection(
+          makeTestRect('AC', 'AG'),
+          makeTestRect('DF', 'AG')
+        )
+      ).toBeInstanceOf(Rectangle);
+      expect(
+        Rectangle.intersection(
+          makeTestRect('AC', 'AG'),
+          makeTestRect('DF', 'AG')
+        ).isValid()
+      ).toBe(false);
+
+      expect(
+        Rectangle.intersection(
+          makeTestRect('AG', 'AC'),
+          makeTestRect('AG', 'DF')
+        )
+      ).toBeInstanceOf(Rectangle);
+      expect(
+        Rectangle.intersection(
+          makeTestRect('AG', 'AC'),
+          makeTestRect('AG', 'DF')
+        ).isValid()
+      ).toBe(false);
+    });
   });
 });
 
