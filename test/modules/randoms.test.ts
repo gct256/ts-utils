@@ -60,4 +60,16 @@ describe('randoms', () => {
     expect(randoms.shuffle([], min)).toEqual([]);
     expect(randoms.shuffle([1], min)).toEqual([1]);
   });
+
+  test('use defaultRandomGenerator', () => {
+    expect(Number.isFinite(randoms.random())).toBe(true);
+    expect(Number.isInteger(randoms.randInt())).toBe(true);
+    expect(Number.isInteger(randoms.randIntRange(0, 1))).toBe(true);
+    expect(Number.isFinite(randoms.randFloat())).toBe(true);
+    expect(Number.isFinite(randoms.randFloatRange(0, 1))).toBe(true);
+
+    const array: number[] = [5, 1, 3, 2, 0, 4];
+
+    expect(randoms.shuffle(array)).not.toEqual(array);
+  });
 });
