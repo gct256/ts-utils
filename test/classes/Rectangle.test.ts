@@ -353,6 +353,33 @@ describe('static methods', () => {
       ).toEqual(makeTestRect('DE', 'DE'));
     });
 
+    test('valid (empty)', () => {
+      expect(
+        Rectangle.intersection(
+          makeTestRect('AC', 'AC'),
+          makeTestRect('CD', 'CD')
+        )
+      ).toBeInstanceOf(Rectangle);
+      expect(
+        Rectangle.intersection(
+          makeTestRect('AC', 'AC'),
+          makeTestRect('CD', 'CD')
+        ).isValid()
+      ).toBe(true);
+      expect(
+        Rectangle.intersection(
+          makeTestRect('AC', 'AC'),
+          makeTestRect('CD', 'CD')
+        ).isEmpty()
+      ).toBe(true);
+      expect(
+        Rectangle.intersection(
+          makeTestRect('AC', 'AC'),
+          makeTestRect('CD', 'CD')
+        )
+      ).toEqual(makeTestRect('CC', 'CC'));
+    });
+
     test('invalid (no data)', () => {
       expect(Rectangle.intersection()).toBeInstanceOf(Rectangle);
       expect(Rectangle.intersection().isValid()).toBe(false);
