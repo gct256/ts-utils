@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { web, Raf } from '../../src/modules/web';
 
 describe('web', () => {
