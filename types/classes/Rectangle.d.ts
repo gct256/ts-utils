@@ -46,6 +46,21 @@ export declare class Rectangle extends BaseObject<RectangleData> implements Rect
      * @param p1 - Another point.
      */
     static fromPointPair(p0: PointData, p1: PointData): Rectangle;
+    /**
+     * Create a rectangle that contains all the rectangles.
+     *
+     * @param rects - Rectangle data.
+     */
+    static union(...rects: RectangleData[]): Rectangle;
+    /**
+     * Create a rectangle at the intersection of all rectangles.
+     * If there is no intersection, it returns an invalid rectangle.
+     *
+     * @param rects - Rectangle data.
+     */
+    static intersection(...rects: RectangleData[]): Rectangle;
+    /** Invalid rectangle object. */
+    private static readonly INVALID;
     /** @override */
     compare(other: RectangleData): number;
     /** @override */

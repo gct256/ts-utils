@@ -575,6 +575,79 @@ class Rectangle extends BaseObject {
         const [top, bottom] = p0.y < p1.y ? [p0.y, p1.y] : [p1.y, p0.y];
         return Rectangle.of({ left, right, top, bottom });
     }
+    /**
+     * Create a rectangle that contains all the rectangles.
+     *
+     * @param rects - Rectangle data.
+     */
+    static union(...rects) {
+        const { length } = rects;
+        switch (length) {
+            case 0:
+                return Rectangle.INVALID;
+            case 1:
+                return Rectangle.of(rects[0]);
+            default: {
+                const rect0 = Rectangle.of(rects[0]);
+                if (!rect0.isValid())
+                    return rect0;
+                let { left, right, top, bottom } = rect0;
+                for (let i = 1; i < length; i += 1) {
+                    const r = Rectangle.of(rects[i]);
+                    if (!r.isValid())
+                        return r;
+                    if (r.left < left)
+                        left = r.left;
+                    if (right < r.right)
+                        right = r.right;
+                    if (r.top < top)
+                        top = r.top;
+                    if (bottom < r.bottom)
+                        bottom = r.bottom;
+                }
+                return Rectangle.of({ left, right, top, bottom });
+            }
+        }
+    }
+    /**
+     * Create a rectangle at the intersection of all rectangles.
+     * If there is no intersection, it returns an invalid rectangle.
+     *
+     * @param rects - Rectangle data.
+     */
+    static intersection(...rects) {
+        const { length } = rects;
+        switch (length) {
+            case 0:
+                return Rectangle.INVALID;
+            case 1:
+                return Rectangle.of(rects[0]);
+            default: {
+                const rect0 = Rectangle.of(rects[0]);
+                if (!rect0.isValid())
+                    return rect0;
+                let { left, right, top, bottom } = rect0;
+                for (let i = 1; i < length; i += 1) {
+                    const r = Rectangle.of(rects[i]);
+                    if (!r.isValid())
+                        return r;
+                    if (r.left > left)
+                        left = r.left;
+                    if (right > r.right)
+                        right = r.right;
+                    if (right < left)
+                        return Rectangle.INVALID;
+                    if (r.top > top)
+                        top = r.top;
+                    if (bottom > r.bottom)
+                        bottom = r.bottom;
+                    if (bottom < top)
+                        return Rectangle.INVALID;
+                }
+                return Rectangle.of({ left, right, top, bottom });
+            }
+        }
+    }
     //
     // overrides
     //
@@ -701,6 +774,8 @@ class Rectangle extends BaseObject {
     }
 }
 _origin = new WeakMap(), _size = new WeakMap();
+/** Invalid rectangle object. */
+Rectangle.INVALID = Rectangle.fromXYWH(NaN, NaN, NaN, NaN);
 
 const getValue = (x) => Number.isFinite(x) ? numbers.clamp(Math.round(x), 0, 255) : x;
 const format = (x) => x.toString(16).padStart(2, '0');
