@@ -1,19 +1,8 @@
-import typescript from 'rollup-plugin-typescript2';
+import typescript from '@rollup/plugin-typescript';
 
 const config = {
   input: './src/index.ts',
-  plugins: [
-    typescript({
-      tsconfigOverride: {
-        compilerOptions: {
-          declaration: true,
-          declarationDir: './types'
-        },
-        include: ['./src/index.ts', './src/types']
-      },
-      useTsconfigDeclarationDir: true
-    })
-  ]
+  plugins: [typescript({ tsconfig: './tsconfig.json' })]
 };
 
 export default [

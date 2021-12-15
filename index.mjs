@@ -13,19 +13,17 @@ OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */
 
-function __classPrivateFieldGet(receiver, privateMap) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to get private field on non-instance");
-    }
-    return privateMap.get(receiver);
+function __classPrivateFieldGet(receiver, state, kind, f) {
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
+    return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 }
 
-function __classPrivateFieldSet(receiver, privateMap, value) {
-    if (!privateMap.has(receiver)) {
-        throw new TypeError("attempted to set private field on non-instance");
-    }
-    privateMap.set(receiver, value);
-    return value;
+function __classPrivateFieldSet(receiver, state, value, kind, f) {
+    if (kind === "m") throw new TypeError("Private method is not writable");
+    if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
+    if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot write private member to an object whose class did not declare it");
+    return (kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value)), value;
 }
 
 /** Utility for value comparison. */
@@ -168,7 +166,7 @@ class BaseObject {
      */
     constructor(valid) {
         _BaseObject_valid.set(this, void 0);
-        __classPrivateFieldSet(this, _BaseObject_valid, valid);
+        __classPrivateFieldSet(this, _BaseObject_valid, valid, "f");
     }
     /**
      * Return true if other data has the same parameters.
@@ -180,7 +178,7 @@ class BaseObject {
     }
     /** @implements */
     isValid() {
-        return __classPrivateFieldGet(this, _BaseObject_valid);
+        return __classPrivateFieldGet(this, _BaseObject_valid, "f");
     }
 }
 _BaseObject_valid = new WeakMap();
@@ -283,9 +281,9 @@ class Angle extends BaseObject {
         _Angle_tan.set(this, void 0);
         this.radian = this.isValid() ? radian : NaN;
         this.degree = this.isValid() ? degree : NaN;
-        __classPrivateFieldSet(this, _Angle_cos, undefined);
-        __classPrivateFieldSet(this, _Angle_sin, undefined);
-        __classPrivateFieldSet(this, _Angle_tan, undefined);
+        __classPrivateFieldSet(this, _Angle_cos, undefined, "f");
+        __classPrivateFieldSet(this, _Angle_sin, undefined, "f");
+        __classPrivateFieldSet(this, _Angle_tan, undefined, "f");
     }
     //
     // static methods
@@ -404,7 +402,7 @@ class Angle extends BaseObject {
     getCos() {
         var _a;
         // eslint-disable-next-line no-return-assign
-        return (_a = __classPrivateFieldGet(this, _Angle_cos)) !== null && _a !== void 0 ? _a : (__classPrivateFieldSet(this, _Angle_cos, Math.cos(this.radian)));
+        return (_a = __classPrivateFieldGet(this, _Angle_cos, "f")) !== null && _a !== void 0 ? _a : (__classPrivateFieldSet(this, _Angle_cos, Math.cos(this.radian), "f"));
     }
     /**
      * Get sin value.
@@ -412,7 +410,7 @@ class Angle extends BaseObject {
     getSin() {
         var _a;
         // eslint-disable-next-line no-return-assign
-        return (_a = __classPrivateFieldGet(this, _Angle_sin)) !== null && _a !== void 0 ? _a : (__classPrivateFieldSet(this, _Angle_sin, Math.sin(this.radian)));
+        return (_a = __classPrivateFieldGet(this, _Angle_sin, "f")) !== null && _a !== void 0 ? _a : (__classPrivateFieldSet(this, _Angle_sin, Math.sin(this.radian), "f"));
     }
     /**
      * Get tan value.
@@ -420,7 +418,7 @@ class Angle extends BaseObject {
     getTan() {
         var _a;
         // eslint-disable-next-line no-return-assign
-        return (_a = __classPrivateFieldGet(this, _Angle_tan)) !== null && _a !== void 0 ? _a : (__classPrivateFieldSet(this, _Angle_tan, Math.tan(this.radian)));
+        return (_a = __classPrivateFieldGet(this, _Angle_tan, "f")) !== null && _a !== void 0 ? _a : (__classPrivateFieldSet(this, _Angle_tan, Math.tan(this.radian), "f"));
     }
     /**
      * Get point delta.
@@ -535,8 +533,8 @@ class Rectangle extends BaseObject {
         this.height = this.isValid() ? size.height : NaN;
         this.x = this.isValid() ? origin.x : NaN;
         this.y = this.isValid() ? origin.y : NaN;
-        __classPrivateFieldSet(this, _Rectangle_origin, Point.of(origin));
-        __classPrivateFieldSet(this, _Rectangle_size, Size.of(size));
+        __classPrivateFieldSet(this, _Rectangle_origin, Point.of(origin), "f");
+        __classPrivateFieldSet(this, _Rectangle_size, Size.of(size), "f");
     }
     //
     // static methods
@@ -650,11 +648,11 @@ class Rectangle extends BaseObject {
     /** @override */
     compare(other) {
         const rect = Rectangle.of(other);
-        return compare.groups(compare.validatable(this, rect), __classPrivateFieldGet(this, _Rectangle_origin).compare(__classPrivateFieldGet(rect, _Rectangle_origin)), __classPrivateFieldGet(this, _Rectangle_size).compare(__classPrivateFieldGet(rect, _Rectangle_size)));
+        return compare.groups(compare.validatable(this, rect), __classPrivateFieldGet(this, _Rectangle_origin, "f").compare(__classPrivateFieldGet(rect, _Rectangle_origin, "f")), __classPrivateFieldGet(this, _Rectangle_size, "f").compare(__classPrivateFieldGet(rect, _Rectangle_size, "f")));
     }
     /** @override */
     valueOf() {
-        return Object.assign(Object.assign({ left: this.left, right: this.right, top: this.top, bottom: this.bottom }, __classPrivateFieldGet(this, _Rectangle_size).valueOf()), __classPrivateFieldGet(this, _Rectangle_origin).valueOf());
+        return Object.assign(Object.assign({ left: this.left, right: this.right, top: this.top, bottom: this.bottom }, __classPrivateFieldGet(this, _Rectangle_size, "f").valueOf()), __classPrivateFieldGet(this, _Rectangle_origin, "f").valueOf());
     }
     //
     // methods
@@ -663,7 +661,7 @@ class Rectangle extends BaseObject {
      * Return true if empty.
      */
     isEmpty() {
-        return __classPrivateFieldGet(this, _Rectangle_size).isEmpty();
+        return __classPrivateFieldGet(this, _Rectangle_size, "f").isEmpty();
     }
     /**
      * Return true if point in rectangle.
@@ -725,27 +723,27 @@ class Rectangle extends BaseObject {
     }
     moveBy(arg0, arg1 = 0) {
         if (typeof arg0 === 'object') {
-            return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin).moveBy(arg0), __classPrivateFieldGet(this, _Rectangle_size));
+            return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin, "f").moveBy(arg0), __classPrivateFieldGet(this, _Rectangle_size, "f"));
         }
-        return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin).moveBy(arg0, arg1), __classPrivateFieldGet(this, _Rectangle_size));
+        return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin, "f").moveBy(arg0, arg1), __classPrivateFieldGet(this, _Rectangle_size, "f"));
     }
     resizeBy(arg0, arg1 = 0) {
         if (typeof arg0 === 'object') {
             if ('width' in arg0) {
-                return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin), __classPrivateFieldGet(this, _Rectangle_size).resizeBy(arg0));
+                return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin, "f"), __classPrivateFieldGet(this, _Rectangle_size, "f").resizeBy(arg0));
             }
-            return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin), __classPrivateFieldGet(this, _Rectangle_size).resizeBy(arg0));
+            return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin, "f"), __classPrivateFieldGet(this, _Rectangle_size, "f").resizeBy(arg0));
         }
-        return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin), __classPrivateFieldGet(this, _Rectangle_size).resizeBy(arg0, arg1));
+        return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin, "f"), __classPrivateFieldGet(this, _Rectangle_size, "f").resizeBy(arg0, arg1));
     }
     inset(arg0, arg1 = 0) {
         if (typeof arg0 === 'object') {
             if ('width' in arg0) {
-                return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin).moveBy(arg0.width / 2, arg0.height / 2), __classPrivateFieldGet(this, _Rectangle_size).resizeBy(-arg0.width, -arg0.height));
+                return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin, "f").moveBy(arg0.width / 2, arg0.height / 2), __classPrivateFieldGet(this, _Rectangle_size, "f").resizeBy(-arg0.width, -arg0.height));
             }
-            return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin).moveBy(arg0.x / 2, arg0.y / 2), __classPrivateFieldGet(this, _Rectangle_size).resizeBy(-arg0.x, -arg0.y));
+            return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin, "f").moveBy(arg0.x / 2, arg0.y / 2), __classPrivateFieldGet(this, _Rectangle_size, "f").resizeBy(-arg0.x, -arg0.y));
         }
-        return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin).moveBy(arg0 / 2, arg1 / 2), __classPrivateFieldGet(this, _Rectangle_size).resizeBy(-arg0, -arg1));
+        return new Rectangle(__classPrivateFieldGet(this, _Rectangle_origin, "f").moveBy(arg0 / 2, arg1 / 2), __classPrivateFieldGet(this, _Rectangle_size, "f").resizeBy(-arg0, -arg1));
     }
     getPartForPoint({ x, y }) {
         const left = compare.float(x, this.left);

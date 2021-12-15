@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/gct256/ts-utils#readme",
   "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.0",
     "@types/jest": "^27.0.3",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
@@ -34,7 +35,6 @@
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.61.1",
-    "rollup-plugin-typescript2": "^0.30.0",
     "ts-jest": "^27.1.1",
     "tslib": "^2.3.1",
     "typescript": "^4.5.4"

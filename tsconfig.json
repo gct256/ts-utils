@@ -6,8 +6,8 @@
     "lib": ["ESNext", "DOM"],
     "allowJs": false,
     "checkJs": false,
-    "jsx": "react",
-    "sourceMap": true,
+    "jsx": "preserve",
+    "sourceMap": false,
 
     /* Strict Type-Checking Options */
     "strict": true,
@@ -24,7 +24,10 @@
 
     /* Advanced Options */
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+
+    "declaration": true,
+    "declarationDir": "./types"
   },
 
   "exclude": ["node_modules", "types", "test", "tests", "__test__", "__tests__"]
