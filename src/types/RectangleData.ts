@@ -1,7 +1,7 @@
 import { PointData } from './PointData';
 import { SizeData } from './SizeData';
 
-/** Rectanble data type. */
+/** Rectangle data type. */
 export type RectangleData = PointData &
   SizeData & {
     /** X coordinate of the left edge. */

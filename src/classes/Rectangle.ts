@@ -38,7 +38,8 @@ type RectanglePart = typeof RECTANGLE_PARTS[number];
 /** Rectangle object. */
 export class Rectangle
   extends BaseObject<RectangleData>
-  implements RectangleData {
+  implements RectangleData
+{
   /** @implements */
   readonly left: number;
   /** @implements */

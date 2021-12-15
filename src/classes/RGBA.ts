@@ -150,9 +150,10 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
    * If set false, return black color with illegal hex stirng format.
    */
   static fromHexString(hexString: string, strict = false): RGBA {
-    const matches = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?$/i.exec(
-      hexString
-    );
+    const matches =
+      /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?$/i.exec(
+        hexString
+      );
 
     if (!matches) {
       if (strict) throw new Error('Illegal hex string');

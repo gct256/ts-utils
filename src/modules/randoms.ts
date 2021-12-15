@@ -14,7 +14,7 @@ export const randoms = {
   },
 
   /**
-   * generate interger random value in range [0, max]
+   * generate integer random value in range [0, max]
    *
    * @return value.
    */
@@ -28,7 +28,7 @@ export const randoms = {
   },
 
   /**
-   * generate interger random value in range [min, max]
+   * generate integer random value in range [min, max]
    *
    * @return value.
    */
