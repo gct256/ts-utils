@@ -33,5 +33,5 @@
     "source.fixAll.eslint": true
   },
 
-  "prettier.disableLanguages": []
+  "cSpell.words": ["XYWH"]
 }
