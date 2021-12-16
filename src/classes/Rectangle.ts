@@ -254,6 +254,52 @@ export class Rectangle
   }
 
   //
+  // properties
+  //
+
+  /**
+   * Return the point data of origin.
+   */
+  get origin(): PointData {
+    return this.#origin.valueOf();
+  }
+
+  /**
+   * Return the point data of top-left.
+   */
+  get topLeft(): PointData {
+    return this.#origin.valueOf();
+  }
+
+  /**
+   * Return the point data of top-right.
+   */
+  get topRight(): PointData {
+    return { x: this.right, y: this.top };
+  }
+
+  /**
+   * Return the point data of bottom-left.
+   */
+  get bottomLeft(): PointData {
+    return { x: this.left, y: this.bottom };
+  }
+
+  /**
+   * Return the point data of bottom-right.
+   */
+  get bottomRight(): PointData {
+    return { x: this.right, y: this.bottom };
+  }
+
+  /**
+   * Return the size data of the rectangle.
+   */
+  get size(): SizeData {
+    return this.#size.valueOf();
+  }
+
+  //
   // methods
   //
 

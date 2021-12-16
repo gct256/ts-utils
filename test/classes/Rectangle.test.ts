@@ -35,8 +35,8 @@ const TEST_POINT_MAP: { [key: string]: number } = {
   H: 4.4
 };
 
-const makeTestRect = (px: TestPair, py: TestPair): Rectangle => {
-  return Rectangle.fromPointPair(
+const makeTestRect = (px: TestPair, py: TestPair): Rectangle =>
+  Rectangle.fromPointPair(
     {
       x: TEST_POINT_MAP[px.slice(0, 1)],
       y: TEST_POINT_MAP[py.slice(0, 1)]
@@ -46,7 +46,6 @@ const makeTestRect = (px: TestPair, py: TestPair): Rectangle => {
       y: TEST_POINT_MAP[py.slice(1, 2)]
     }
   );
-};
 
 const testRect = <T>(
   callback: (r0: Rectangle, r1: Rectangle) => [boolean, T]
@@ -732,6 +731,45 @@ describe('overrides', () => {
           bottom: -Infinity
         }).isValid()
       ).toBe(false);
+    });
+  });
+});
+
+describe('porperties', () => {
+  test('origin', () => {
+    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).origin).toEqual({
+      x: 4.2,
+      y: -5.3
+    });
+  });
+  test('topLeft', () => {
+    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).topLeft).toEqual({
+      x: 4.2,
+      y: -5.3
+    });
+  });
+  test('topRight', () => {
+    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).topRight).toEqual({
+      x: 4.2 + 6.4,
+      y: -5.3
+    });
+  });
+  test('bottomLeft', () => {
+    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).bottomLeft).toEqual({
+      x: 4.2,
+      y: -5.3 + 7.5
+    });
+  });
+  test('bottomRight', () => {
+    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).bottomRight).toEqual({
+      x: 4.2 + 6.4,
+      y: -5.3 + 7.5
+    });
+  });
+  test('size', () => {
+    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).size).toEqual({
+      width: 6.4,
+      height: 7.5
     });
   });
 });
