@@ -66,6 +66,30 @@ export declare class Rectangle extends BaseObject<RectangleData> implements Rect
     /** @override */
     valueOf(): RectangleData;
     /**
+     * Return the point data of origin.
+     */
+    get origin(): PointData;
+    /**
+     * Return the point data of top-left.
+     */
+    get topLeft(): PointData;
+    /**
+     * Return the point data of top-right.
+     */
+    get topRight(): PointData;
+    /**
+     * Return the point data of bottom-left.
+     */
+    get bottomLeft(): PointData;
+    /**
+     * Return the point data of bottom-right.
+     */
+    get bottomRight(): PointData;
+    /**
+     * Return the size data of the rectangle.
+     */
+    get size(): SizeData;
+    /**
      * Return true if empty.
      */
     isEmpty(): boolean;

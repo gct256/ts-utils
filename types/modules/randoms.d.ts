@@ -7,13 +7,13 @@ export declare const randoms: {
      */
     random(generator?: RandomGenerator): number;
     /**
-     * generate interger random value in range [0, max]
+     * generate integer random value in range [0, max]
      *
      * @return value.
      */
     randInt(max?: number, generator?: RandomGenerator): number;
     /**
-     * generate interger random value in range [min, max]
+     * generate integer random value in range [min, max]
      *
      * @return value.
      */

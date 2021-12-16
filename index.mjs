@@ -655,6 +655,45 @@ class Rectangle extends BaseObject {
         return Object.assign(Object.assign({ left: this.left, right: this.right, top: this.top, bottom: this.bottom }, __classPrivateFieldGet(this, _Rectangle_size, "f").valueOf()), __classPrivateFieldGet(this, _Rectangle_origin, "f").valueOf());
     }
     //
+    // properties
+    //
+    /**
+     * Return the point data of origin.
+     */
+    get origin() {
+        return __classPrivateFieldGet(this, _Rectangle_origin, "f").valueOf();
+    }
+    /**
+     * Return the point data of top-left.
+     */
+    get topLeft() {
+        return __classPrivateFieldGet(this, _Rectangle_origin, "f").valueOf();
+    }
+    /**
+     * Return the point data of top-right.
+     */
+    get topRight() {
+        return { x: this.right, y: this.top };
+    }
+    /**
+     * Return the point data of bottom-left.
+     */
+    get bottomLeft() {
+        return { x: this.left, y: this.bottom };
+    }
+    /**
+     * Return the point data of bottom-right.
+     */
+    get bottomRight() {
+        return { x: this.right, y: this.bottom };
+    }
+    /**
+     * Return the size data of the rectangle.
+     */
+    get size() {
+        return __classPrivateFieldGet(this, _Rectangle_size, "f").valueOf();
+    }
+    //
     // methods
     //
     /**
@@ -963,7 +1002,7 @@ const randoms = {
         return generator() / 0x100000000;
     },
     /**
-     * generate interger random value in range [0, max]
+     * generate integer random value in range [0, max]
      *
      * @return value.
      */
@@ -972,7 +1011,7 @@ const randoms = {
         return value > 0 ? Math.floor(value) : Math.ceil(value);
     },
     /**
-     * generate interger random value in range [min, max]
+     * generate integer random value in range [min, max]
      *
      * @return value.
      */

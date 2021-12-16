@@ -1,6 +1,6 @@
 import { PointData } from './PointData';
 import { SizeData } from './SizeData';
-/** Rectanble data type. */
+/** Rectangle data type. */
 export declare type RectangleData = PointData & SizeData & {
     /** X coordinate of the left edge. */
     readonly left: number;

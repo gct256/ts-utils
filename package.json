@@ -1,6 +1,6 @@
 {
   "name": "@gct256/ts-utils",
-  "version": "2.1.3",
+  "version": "2.2.0",
   "description": "my TypeScript utilities.",
   "main": "index",
   "typings": "types/index.d.ts",
