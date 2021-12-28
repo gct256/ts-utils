@@ -83,5 +83,33 @@ export const web = {
     };
 
     raf(loop);
+  },
+
+  /**
+   * Load image.
+   *
+   * @param src URL of image
+   */
+  loadImage(src: string): Promise<HTMLImageElement> {
+    return new Promise((resolve, reject) => {
+      const image = document.createElement('img');
+
+      const handler: EventListenerObject = {
+        handleEvent(ev: Event): void {
+          image.removeEventListener('load', handler);
+          image.removeEventListener('error', handler);
+
+          if (ev.type === 'load') {
+            resolve(image);
+          } else {
+            reject(new Error('image load failed'));
+          }
+        }
+      };
+
+      image.addEventListener('load', handler, false);
+      image.addEventListener('error', handler, false);
+      image.src = src;
+    });
   }
 };

@@ -32,5 +32,11 @@ export declare const web: {
      * @param interval interval frame.
      */
     animate(handler: (time?: number | undefined) => boolean, interval?: number, raf?: Raf): void;
+    /**
+     * Load image.
+     *
+     * @param src URL of image
+     */
+    loadImage(src: string): Promise<HTMLImageElement>;
 };
 export {};

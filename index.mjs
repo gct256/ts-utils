@@ -1118,6 +1118,31 @@ const web = {
             raf(loop);
         };
         raf(loop);
+    },
+    /**
+     * Load image.
+     *
+     * @param src URL of image
+     */
+    loadImage(src) {
+        return new Promise((resolve, reject) => {
+            const image = document.createElement('img');
+            const handler = {
+                handleEvent(ev) {
+                    image.removeEventListener('load', handler);
+                    image.removeEventListener('error', handler);
+                    if (ev.type === 'load') {
+                        resolve(image);
+                    }
+                    else {
+                        reject(new Error('image load failed'));
+                    }
+                }
+            };
+            image.addEventListener('load', handler, false);
+            image.addEventListener('error', handler, false);
+            image.src = src;
+        });
     }
 };
 
