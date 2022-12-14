@@ -33,5 +33,5 @@
     "source.fixAll.eslint": true
   },
 
-  "cSpell.words": ["XYWH"]
+  "cSpell.words": ["Validatable", "XYWH"]
 }

@@ -146,8 +146,8 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
    * Create an object from hex string.
    *
    * @param hexString - Hex string.
-   * @param strict - If set ture, throw Error with illegal hex stirng format.
-   * If set false, return black color with illegal hex stirng format.
+   * @param strict - If set true, throw Error with illegal hex string format.
+   * If set false, return black color with illegal hex string format.
    */
   static fromHexString(hexString: string, strict = false): RGBA {
     const matches =
