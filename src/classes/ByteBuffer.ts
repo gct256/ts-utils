@@ -49,7 +49,7 @@ export class ByteBuffer<T extends ByteBufferContainer> {
     return new ByteBuffer(data);
   }
 
-  private getPosition(nextOffset = 0): number {
+  private getPosition(nextOffset: number): number {
     const position = checkPosition(this.#position, this.#data.length);
 
     this.#position += nextOffset;

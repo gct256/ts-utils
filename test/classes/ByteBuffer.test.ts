@@ -10,21 +10,35 @@ test('get uint', () => {
   expect(buffer.getUint32LE(0)).toBe(0x98badcfe);
   expect(buffer.getUint32BE(0)).toBe(0xfedcba98);
 
-  expect(() => buffer.getUint8(-1)).toThrowError();
-  expect(() => buffer.getUint16LE(-1)).toThrowError();
-  expect(() => buffer.getUint16BE(-1)).toThrowError();
-  expect(() => buffer.getUint32LE(-1)).toThrowError();
-  expect(() => buffer.getUint32BE(-1)).toThrowError();
+  expect(() => buffer.getUint8(0.2)).toThrow();
+  expect(() => buffer.getUint16LE(0.2)).toThrow();
+  expect(() => buffer.getUint16BE(0.2)).toThrow();
+  expect(() => buffer.getUint32LE(0.2)).toThrow();
+  expect(() => buffer.getUint32BE(0.2)).toThrow();
 
-  expect(() => buffer.getUint8(4)).toThrowError();
-  expect(() => buffer.getUint16LE(3)).toThrowError();
-  expect(() => buffer.getUint16BE(3)).toThrowError();
-  expect(() => buffer.getUint32LE(1)).toThrowError();
-  expect(() => buffer.getUint32BE(1)).toThrowError();
+  expect(() => buffer.getUint8(NaN)).toThrow();
+  expect(() => buffer.getUint16LE(NaN)).toThrow();
+  expect(() => buffer.getUint16BE(NaN)).toThrow();
+  expect(() => buffer.getUint32LE(NaN)).toThrow();
+  expect(() => buffer.getUint32BE(NaN)).toThrow();
+
+  expect(() => buffer.getUint8(-1)).toThrow();
+  expect(() => buffer.getUint16LE(-1)).toThrow();
+  expect(() => buffer.getUint16BE(-1)).toThrow();
+  expect(() => buffer.getUint32LE(-1)).toThrow();
+  expect(() => buffer.getUint32BE(-1)).toThrow();
+
+  expect(() => buffer.getUint8(4)).toThrow();
+  expect(() => buffer.getUint16LE(3)).toThrow();
+  expect(() => buffer.getUint16BE(3)).toThrow();
+  expect(() => buffer.getUint32LE(1)).toThrow();
+  expect(() => buffer.getUint32BE(1)).toThrow();
 });
 
 test('get int', () => {
-  const buffer = ByteBuffer.from([0xfe, 0xdc, 0xba, 0x98]);
+  const buffer = ByteBuffer.from([
+    0xfe, 0xdc, 0xba, 0x98, 0x12, 0x34, 0x56, 0x78
+  ]);
 
   expect(buffer.getInt8(0)).toBe(0xfe - 0x100);
   expect(buffer.getInt16LE(0)).toBe(0xdcfe - 0x10000);
@@ -32,17 +46,23 @@ test('get int', () => {
   expect(buffer.getInt32LE(0)).toBe(0x98badcfe - 0x100000000);
   expect(buffer.getInt32BE(0)).toBe(0xfedcba98 - 0x100000000);
 
-  expect(() => buffer.getInt8(-1)).toThrowError();
-  expect(() => buffer.getInt16LE(-1)).toThrowError();
-  expect(() => buffer.getInt16BE(-1)).toThrowError();
-  expect(() => buffer.getInt32LE(-1)).toThrowError();
-  expect(() => buffer.getInt32BE(-1)).toThrowError();
+  expect(buffer.getInt8(4)).toBe(0x12);
+  expect(buffer.getInt16LE(4)).toBe(0x3412);
+  expect(buffer.getInt16BE(4)).toBe(0x1234);
+  expect(buffer.getInt32LE(4)).toBe(0x78563412);
+  expect(buffer.getInt32BE(4)).toBe(0x12345678);
 
-  expect(() => buffer.getInt8(4)).toThrowError();
-  expect(() => buffer.getInt16LE(3)).toThrowError();
-  expect(() => buffer.getInt16BE(3)).toThrowError();
-  expect(() => buffer.getInt32LE(1)).toThrowError();
-  expect(() => buffer.getInt32BE(1)).toThrowError();
+  expect(() => buffer.getInt8(-1)).toThrow();
+  expect(() => buffer.getInt16LE(-1)).toThrow();
+  expect(() => buffer.getInt16BE(-1)).toThrow();
+  expect(() => buffer.getInt32LE(-1)).toThrow();
+  expect(() => buffer.getInt32BE(-1)).toThrow();
+
+  expect(() => buffer.getInt8(8)).toThrow();
+  expect(() => buffer.getInt16LE(7)).toThrow();
+  expect(() => buffer.getInt16BE(7)).toThrow();
+  expect(() => buffer.getInt32LE(5)).toThrow();
+  expect(() => buffer.getInt32BE(5)).toThrow();
 });
 
 test('set', () => {
@@ -64,17 +84,17 @@ test('set', () => {
 
   const buffer = ByteBuffer.from([0, 1, 2, 3]);
 
-  expect(() => buffer.setInt8(-1, 42)).toThrowError();
-  expect(() => buffer.setInt16LE(-1, 42)).toThrowError();
-  expect(() => buffer.setInt16BE(-1, 42)).toThrowError();
-  expect(() => buffer.setInt32LE(-1, 42)).toThrowError();
-  expect(() => buffer.setInt32BE(-1, 42)).toThrowError();
+  expect(() => buffer.setInt8(-1, 42)).toThrow();
+  expect(() => buffer.setInt16LE(-1, 42)).toThrow();
+  expect(() => buffer.setInt16BE(-1, 42)).toThrow();
+  expect(() => buffer.setInt32LE(-1, 42)).toThrow();
+  expect(() => buffer.setInt32BE(-1, 42)).toThrow();
 
-  expect(() => buffer.setInt8(4, 42)).toThrowError();
-  expect(() => buffer.setInt16LE(3, 42)).toThrowError();
-  expect(() => buffer.setInt16BE(3, 42)).toThrowError();
-  expect(() => buffer.setInt32LE(1, 42)).toThrowError();
-  expect(() => buffer.setInt32BE(1, 42)).toThrowError();
+  expect(() => buffer.setInt8(4, 42)).toThrow();
+  expect(() => buffer.setInt16LE(3, 42)).toThrow();
+  expect(() => buffer.setInt16BE(3, 42)).toThrow();
+  expect(() => buffer.setInt32LE(1, 42)).toThrow();
+  expect(() => buffer.setInt32BE(1, 42)).toThrow();
 
   expect(buffer.toArrayForDebug()).toEqual([0, 1, 2, 3]);
 });
@@ -99,7 +119,7 @@ test('set (negative)', () => {
   expect(buffer.setInt32BE(0, -1).getUint32BE(0)).toBe(0xffffffff);
 });
 
-test('read', () => {
+test('read uint', () => {
   const buffer = ByteBuffer.from([
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d
   ]);
@@ -110,7 +130,7 @@ test('read', () => {
   expect(buffer.readUint32LE()).toBe(0x09080706);
   expect(buffer.readUint32BE()).toBe(0x0a0b0c0d);
 
-  expect(() => buffer.readUint8()).toThrowError();
+  expect(() => buffer.readUint8()).toThrow();
 
   buffer.rewind();
   expect(buffer.readUint8()).toBe(0x01);
@@ -124,6 +144,33 @@ test('read', () => {
   expect(buffer.readUint16LE()).toBe(0x0403);
   expect(buffer.readUint16BE()).toBe(0x0506);
   expect(buffer.readUint32LE()).toBe(0x0a090807);
+});
+
+test('read int', () => {
+  const buffer = ByteBuffer.from([
+    0xff, 0xfe, 0xfd, 0xfc, 0xfb, 0xfa, 0xf9, 0xf8, 0xf7, 0xf6, 0xf5, 0xf4, 0xf3
+  ]);
+
+  expect(buffer.readInt8()).toBe(0xff - 0x100);
+  expect(buffer.readInt16LE()).toBe(0xfdfe - 0x10000);
+  expect(buffer.readInt16BE()).toBe(0xfcfb - 0x10000);
+  expect(buffer.readInt32LE()).toBe(0xf7f8f9fa - 0x100000000);
+  expect(buffer.readInt32BE()).toBe(0xf6f5f4f3 - 0x100000000);
+
+  expect(() => buffer.readInt8()).toThrow();
+
+  buffer.rewind();
+  expect(buffer.readInt8()).toBe(0xff - 0x100);
+  expect(buffer.readInt16LE()).toBe(0xfdfe - 0x10000);
+  expect(buffer.readInt16BE()).toBe(0xfcfb - 0x10000);
+  expect(buffer.readInt32LE()).toBe(0xf7f8f9fa - 0x100000000);
+  expect(buffer.readInt32BE()).toBe(0xf6f5f4f3 - 0x100000000);
+
+  buffer.seekTo(1);
+  expect(buffer.readInt8()).toBe(0xfe - 0x100);
+  expect(buffer.readInt16LE()).toBe(0xfcfd - 0x10000);
+  expect(buffer.readInt16BE()).toBe(0xfbfa - 0x10000);
+  expect(buffer.readInt32LE()).toBe(0xf6f7f8f9 - 0x100000000);
 });
 
 test('write', () => {
@@ -141,7 +188,7 @@ test('write', () => {
     0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d
   ]);
 
-  expect(() => buffer.writeInt8(0x0e)).toThrowError();
+  expect(() => buffer.writeInt8(0x0e)).toThrow();
 
   buffer.rewind();
   buffer.writeInt8(0x02);
@@ -172,11 +219,11 @@ test('seek, position', () => {
   expect(buffer.seekBy(1).position).toBe(3);
   expect(buffer.seekBy(-2).position).toBe(1);
 
-  expect(() => buffer.seekTo(-1)).toThrowError();
-  expect(() => buffer.seekTo(4)).toThrowError();
+  expect(() => buffer.seekTo(-1)).toThrow();
+  expect(() => buffer.seekTo(4)).toThrow();
 
-  expect(() => buffer.seekBy(-2)).toThrowError();
-  expect(() => buffer.seekBy(3)).toThrowError();
+  expect(() => buffer.seekBy(-2)).toThrow();
+  expect(() => buffer.seekBy(3)).toThrow();
 
   expect(buffer.rewind().position).toBe(0);
 });
@@ -191,38 +238,93 @@ test('slice', () => {
   expect(buffer.slice(4, 6).toArrayForDebug()).toEqual([4, 5]);
 });
 
-test('fill', () => {
-  const buffer = ByteBuffer.from([0, 0, 0, 0, 0]);
+test('fillInt8', () => {
+  const buffer = ByteBuffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
   expect(buffer.fillInt8(0x12).toArrayForDebug()).toEqual([
-    0x12, 0x12, 0x12, 0x12, 0x12
+    0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12, 0x12
   ]);
   expect(buffer.fillInt8(0x13, 1).toArrayForDebug()).toEqual([
-    0x12, 0x13, 0x13, 0x13, 0x13
+    0x12, 0x13, 0x13, 0x13, 0x13, 0x13, 0x13, 0x13, 0x13
   ]);
-  expect(buffer.fillInt8(0x14, 1, 4).toArrayForDebug()).toEqual([
-    0x12, 0x14, 0x14, 0x14, 0x13
+  expect(buffer.fillInt8(0x14, 1, 5).toArrayForDebug()).toEqual([
+    0x12, 0x14, 0x14, 0x14, 0x14, 0x13, 0x13, 0x13, 0x13
   ]);
+  expect(buffer.fillInt8(0x15, 5, 1).toArrayForDebug()).toEqual([
+    0x12, 0x14, 0x14, 0x14, 0x14, 0x13, 0x13, 0x13, 0x13
+  ]);
+});
 
-  expect(buffer.fillInt16LE(0x1516, 1).toArrayForDebug()).toEqual([
-    0x12, 0x16, 0x15, 0x16, 0x15
-  ]);
-  expect(() => buffer.fillInt16LE(0x1516)).toThrowError();
+test('fillInt16LE', () => {
+  const buffer = ByteBuffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
-  expect(buffer.fillInt16BE(0x1718, 1).toArrayForDebug()).toEqual([
-    0x12, 0x17, 0x18, 0x17, 0x18
+  expect(buffer.fillInt16LE(0x1234, 1).toArrayForDebug()).toEqual([
+    0x00, 0x34, 0x12, 0x34, 0x12, 0x34, 0x12, 0x34, 0x12
   ]);
-  expect(() => buffer.fillInt16BE(0x1718)).toThrowError();
+  expect(buffer.fillInt16LE(0x5678, 1, 5).toArrayForDebug()).toEqual([
+    0x00, 0x78, 0x56, 0x78, 0x56, 0x34, 0x12, 0x34, 0x12
+  ]);
+  expect(buffer.fillInt16LE(0x9abc, 5, 1).toArrayForDebug()).toEqual([
+    0x00, 0x78, 0x56, 0x78, 0x56, 0x34, 0x12, 0x34, 0x12
+  ]);
+  expect(() => buffer.fillInt16LE(0xdef0)).toThrow();
+  expect(buffer.toArrayForDebug()).toEqual([
+    0x00, 0x78, 0x56, 0x78, 0x56, 0x34, 0x12, 0x34, 0x12
+  ]);
+});
 
-  expect(buffer.fillInt32LE(0x191a1b1c, 1).toArrayForDebug()).toEqual([
-    0x12, 0x1c, 0x1b, 0x1a, 0x19
-  ]);
-  expect(() => buffer.fillInt32LE(0x191a1b1c)).toThrowError();
+test('fillInt16BE', () => {
+  const buffer = ByteBuffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
-  expect(buffer.fillInt32BE(0x1d1e1f20, 1).toArrayForDebug()).toEqual([
-    0x12, 0x1d, 0x1e, 0x1f, 0x20
+  expect(buffer.fillInt16BE(0x1234, 1).toArrayForDebug()).toEqual([
+    0x00, 0x12, 0x34, 0x12, 0x34, 0x12, 0x34, 0x12, 0x34
   ]);
-  expect(() => buffer.fillInt32BE(0x1d1e1f20)).toThrowError();
+  expect(buffer.fillInt16BE(0x5678, 1, 5).toArrayForDebug()).toEqual([
+    0x00, 0x56, 0x78, 0x56, 0x78, 0x12, 0x34, 0x12, 0x34
+  ]);
+  expect(buffer.fillInt16BE(0x9abc, 5, 1).toArrayForDebug()).toEqual([
+    0x00, 0x56, 0x78, 0x56, 0x78, 0x12, 0x34, 0x12, 0x34
+  ]);
+  expect(() => buffer.fillInt16BE(0xdef0)).toThrow();
+  expect(buffer.toArrayForDebug()).toEqual([
+    0x00, 0x56, 0x78, 0x56, 0x78, 0x12, 0x34, 0x12, 0x34
+  ]);
+});
+
+test('fillInt32LE', () => {
+  const buffer = ByteBuffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+
+  expect(buffer.fillInt32LE(0x12345678, 1).toArrayForDebug()).toEqual([
+    0x00, 0x78, 0x56, 0x34, 0x12, 0x78, 0x56, 0x34, 0x12, 0x78, 0x56, 0x34, 0x12
+  ]);
+  expect(buffer.fillInt32LE(0x9abcdef0, 1, 9).toArrayForDebug()).toEqual([
+    0x00, 0xf0, 0xde, 0xbc, 0x9a, 0xf0, 0xde, 0xbc, 0x9a, 0x78, 0x56, 0x34, 0x12
+  ]);
+  expect(buffer.fillInt32LE(0x9abcdef0, 9, 1).toArrayForDebug()).toEqual([
+    0x00, 0xf0, 0xde, 0xbc, 0x9a, 0xf0, 0xde, 0xbc, 0x9a, 0x78, 0x56, 0x34, 0x12
+  ]);
+  expect(() => buffer.fillInt32LE(0x87654321)).toThrow();
+  expect(buffer.toArrayForDebug()).toEqual([
+    0x00, 0xf0, 0xde, 0xbc, 0x9a, 0xf0, 0xde, 0xbc, 0x9a, 0x78, 0x56, 0x34, 0x12
+  ]);
+});
+
+test('fillInt32BE', () => {
+  const buffer = ByteBuffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+
+  expect(buffer.fillInt32BE(0x12345678, 1).toArrayForDebug()).toEqual([
+    0x00, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78
+  ]);
+  expect(buffer.fillInt32BE(0x9abcdef0, 1, 9).toArrayForDebug()).toEqual([
+    0x00, 0x9a, 0xbc, 0xde, 0xf0, 0x9a, 0xbc, 0xde, 0xf0, 0x12, 0x34, 0x56, 0x78
+  ]);
+  expect(buffer.fillInt32BE(0x9abcdef0, 9, 1).toArrayForDebug()).toEqual([
+    0x00, 0x9a, 0xbc, 0xde, 0xf0, 0x9a, 0xbc, 0xde, 0xf0, 0x12, 0x34, 0x56, 0x78
+  ]);
+  expect(() => buffer.fillInt32BE(0x87654321)).toThrow();
+  expect(buffer.toArrayForDebug()).toEqual([
+    0x00, 0x9a, 0xbc, 0xde, 0xf0, 0x9a, 0xbc, 0xde, 0xf0, 0x12, 0x34, 0x56, 0x78
+  ]);
 });
 
 describe('data type', () => {
