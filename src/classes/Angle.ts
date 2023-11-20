@@ -1,10 +1,10 @@
-import { compare } from '../modules/compare';
-import { numbers } from '../modules/numbers';
-import { AngleData } from '../types/AngleData';
-import { PointData } from '../types/PointData';
+import { compare } from "../modules/compare.ts";
+import { numbers } from "../modules/numbers.ts";
+import { AngleData } from "../types/AngleData.ts";
+import { PointData } from "../types/PointData.ts";
 
-import { BaseObject } from './BaseObject';
-import { Point } from './Point';
+import { BaseObject } from "./BaseObject.ts";
+import { Point } from "./Point.ts";
 
 const DEGREE_TO_RADIAN = Math.PI / 180;
 const RADIAN_TO_DEGREE = 180 / Math.PI;
@@ -47,7 +47,7 @@ export class Angle extends BaseObject<AngleData> implements AngleData {
    */
   static of({ radian, degree }: AngleData, strict = false): Angle {
     if (strict && compare.float(radian * RADIAN_TO_DEGREE, degree) !== 0) {
-      throw new Error('radian and degree not match.');
+      throw new Error("radian and degree not match.");
     }
 
     return new Angle({ radian: degree * DEGREE_TO_RADIAN, degree });
@@ -100,7 +100,7 @@ export class Angle extends BaseObject<AngleData> implements AngleData {
 
     return compare.groups(
       compare.validatable(this, angle),
-      compare.float(this.radian, angle.radian)
+      compare.float(this.radian, angle.radian),
     );
   }
 
@@ -108,7 +108,7 @@ export class Angle extends BaseObject<AngleData> implements AngleData {
   valueOf(): AngleData {
     return {
       radian: this.radian,
-      degree: this.degree
+      degree: this.degree,
     };
   }
 
@@ -200,7 +200,7 @@ export class Angle extends BaseObject<AngleData> implements AngleData {
   getPointDelta(size: number): Point {
     return Point.of({
       x: this.getCos() * size,
-      y: this.getSin() * size
+      y: this.getSin() * size,
     });
   }
 }

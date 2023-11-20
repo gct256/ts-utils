@@ -1,7 +1,7 @@
-import { compare } from '../modules/compare';
-import { PointData } from '../types/PointData';
+import { compare } from "../modules/compare.ts";
+import { PointData } from "../types/PointData.ts";
 
-import { BaseObject } from './BaseObject';
+import { BaseObject } from "./BaseObject.ts";
 
 /** Point object. */
 export class Point extends BaseObject<PointData> implements PointData {
@@ -55,7 +55,7 @@ export class Point extends BaseObject<PointData> implements PointData {
     return compare.groups(
       compare.validatable(this, point),
       compare.float(this.x, other.x),
-      compare.float(this.y, other.y)
+      compare.float(this.y, other.y),
     );
   }
 
@@ -63,7 +63,7 @@ export class Point extends BaseObject<PointData> implements PointData {
   valueOf(): PointData {
     return {
       x: this.x,
-      y: this.y
+      y: this.y,
     };
   }
 
@@ -87,16 +87,16 @@ export class Point extends BaseObject<PointData> implements PointData {
   moveBy(xDelta: number, yDelta: number): Point;
 
   moveBy(arg0: PointData | number, arg1 = 0): Point {
-    if (typeof arg0 === 'object') {
+    if (typeof arg0 === "object") {
       return new Point({
         x: this.x + arg0.x,
-        y: this.y + arg0.y
+        y: this.y + arg0.y,
       });
     }
 
     return new Point({
       x: this.x + arg0,
-      y: this.y + arg1
+      y: this.y + arg1,
     });
   }
 

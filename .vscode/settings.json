@@ -14,8 +14,8 @@
   },
 
   "editor.formatOnSave": true,
-  "editor.formatOnPaste": true,
-  "editor.formatOnType": true,
+  "editor.formatOnPaste": false,
+  "editor.formatOnType": false,
 
   "editor.trimAutoWhitespace": true,
   "files.trimFinalNewlines": true,
@@ -28,10 +28,37 @@
   "files.encoding": "utf8",
 
   "typescript.validate.enable": true,
+  "javascript.validate.enable": false,
 
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 
-  "cSpell.words": ["Validatable", "XYWH"]
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+
+  "cSpell.words": ["Validatable", "XYWH"],
+
+  "eslint.enable": false,
+
+  "deno.enable": true,
+  "deno.lint": true,
+  "deno.unstable": false,
+  "editor.inlayHints.enabled": "off"
 }

@@ -1,8 +1,8 @@
-import { compare } from '../modules/compare';
-import { PointData } from '../types/PointData';
-import { SizeData } from '../types/SizeData';
+import { compare } from "../modules/compare.ts";
+import { PointData } from "../types/PointData.ts";
+import { SizeData } from "../types/SizeData.ts";
 
-import { BaseObject } from './BaseObject';
+import { BaseObject } from "./BaseObject.ts";
 
 /** Size object. */
 export class Size extends BaseObject<SizeData> implements SizeData {
@@ -20,7 +20,7 @@ export class Size extends BaseObject<SizeData> implements SizeData {
       Number.isFinite(width) &&
         width >= 0 &&
         Number.isFinite(height) &&
-        height >= 0
+        height >= 0,
     );
 
     this.width = this.isValid() ? width : NaN;
@@ -61,7 +61,7 @@ export class Size extends BaseObject<SizeData> implements SizeData {
     return compare.groups(
       compare.validatable(this, size),
       compare.float(this.width, size.width),
-      compare.float(this.height, size.height)
+      compare.float(this.height, size.height),
     );
   }
 
@@ -69,7 +69,7 @@ export class Size extends BaseObject<SizeData> implements SizeData {
   valueOf(): SizeData {
     return {
       width: this.width,
-      height: this.height
+      height: this.height,
     };
   }
 
@@ -107,23 +107,23 @@ export class Size extends BaseObject<SizeData> implements SizeData {
   resizeBy(widthDelta: number, heightDelta: number): Size;
 
   resizeBy(arg0: SizeData | PointData | number, arg1 = 0): Size {
-    if (typeof arg0 === 'object') {
-      if ('width' in arg0) {
+    if (typeof arg0 === "object") {
+      if ("width" in arg0) {
         return new Size({
           width: this.width + arg0.width,
-          height: this.height + arg0.height
+          height: this.height + arg0.height,
         });
       }
 
       return new Size({
         width: this.width + arg0.x,
-        height: this.height + arg0.y
+        height: this.height + arg0.y,
       });
     }
 
     return new Size({
       width: this.width + arg0,
-      height: this.height + arg1
+      height: this.height + arg1,
     });
   }
 }

@@ -1,0 +1,20 @@
+import { Angle } from "./classes/Angle.ts";
+import { BaseObject } from "./classes/BaseObject.ts";
+import { Point } from "./classes/Point.ts";
+import { Rectangle } from "./classes/Rectangle.ts";
+import { RGBA } from "./classes/RGBA.ts";
+import { Size } from "./classes/Size.ts";
+import { compare } from "./modules/compare.ts";
+import { funcs } from "./modules/funcs.ts";
+import { numbers } from "./modules/numbers.ts";
+import { randoms } from "./modules/randoms.ts";
+import { web } from "./modules/web.ts";
+import { AngleData } from "./types/AngleData.ts";
+import { PointData } from "./types/PointData.ts";
+import { RectangleData } from "./types/RectangleData.ts";
+import { RGBAData } from "./types/RGBAData.ts";
+import { SizeData } from "./types/SizeData.ts";
+
+export { compare, funcs, numbers, randoms, web };
+export { Angle, BaseObject, Point, Rectangle, RGBA, Size };
+export type { AngleData, PointData, RectangleData, RGBAData, SizeData };

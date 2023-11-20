@@ -1,11 +1,11 @@
-import { compare } from '../modules/compare';
-import { PointData } from '../types/PointData';
-import { RectangleData } from '../types/RectangleData';
-import { SizeData } from '../types/SizeData';
+import { compare } from "../modules/compare.ts";
+import { PointData } from "../types/PointData.ts";
+import { RectangleData } from "../types/RectangleData.ts";
+import { SizeData } from "../types/SizeData.ts";
 
-import { BaseObject } from './BaseObject';
-import { Point } from './Point';
-import { Size } from './Size';
+import { BaseObject } from "./BaseObject.ts";
+import { Point } from "./Point.ts";
+import { Size } from "./Size.ts";
 
 /** a < b */
 const isLT = (a: number, b: number): boolean => compare.float(a, b) < 0;
@@ -16,30 +16,28 @@ const isLE = (a: number, b: number): boolean => compare.float(a, b) <= 0;
 /** Rectangle constructor's parameter. */
 type RectangleParameter = Pick<
   RectangleData,
-  'left' | 'right' | 'top' | 'bottom'
+  "left" | "right" | "top" | "bottom"
 >;
 
 const RECTANGLE_PARTS = [
-  'outside',
-  'top-left',
-  'top',
-  'top-right',
-  'left',
-  'inside',
-  'right',
-  'bottom-left',
-  'bottom',
-  'bottom-right'
+  "outside",
+  "top-left",
+  "top",
+  "top-right",
+  "left",
+  "inside",
+  "right",
+  "bottom-left",
+  "bottom",
+  "bottom-right",
 ] as const;
 
 /** Part of rectangle. */
 type RectanglePart = typeof RECTANGLE_PARTS[number];
 
 /** Rectangle object. */
-export class Rectangle
-  extends BaseObject<RectangleData>
-  implements RectangleData
-{
+export class Rectangle extends BaseObject<RectangleData>
+  implements RectangleData {
   /** @implements */
   readonly left: number;
   /** @implements */
@@ -97,11 +95,11 @@ export class Rectangle
     left,
     right,
     top,
-    bottom
+    bottom,
   }: RectangleParameter | RectangleData): Rectangle {
     return new Rectangle(
       Point.fromXY(left, top),
-      Size.fromWH(right - left, bottom - top)
+      Size.fromWH(right - left, bottom - top),
     );
   }
 
@@ -117,7 +115,7 @@ export class Rectangle
     x: number,
     y: number,
     width: number,
-    height: number
+    height: number,
   ): Rectangle {
     return new Rectangle(Point.fromXY(x, y), Size.fromWH(width, height));
   }
@@ -236,7 +234,7 @@ export class Rectangle
     return compare.groups(
       compare.validatable(this, rect),
       this.#origin.compare(rect.#origin),
-      this.#size.compare(rect.#size)
+      this.#size.compare(rect.#size),
     );
   }
 
@@ -249,7 +247,7 @@ export class Rectangle
       bottom: this.bottom,
 
       ...this.#size.valueOf(),
-      ...this.#origin.valueOf()
+      ...this.#origin.valueOf(),
     };
   }
 
@@ -321,7 +319,7 @@ export class Rectangle
 
     const part = this.getPartForPoint(point);
 
-    return excludeEdge ? part === 'inside' : part !== 'outside';
+    return excludeEdge ? part === "inside" : part !== "outside";
   }
 
   /**
@@ -400,7 +398,7 @@ export class Rectangle
   moveBy(xDelta: number, yDelta: number): Rectangle;
 
   moveBy(arg0: PointData | number, arg1 = 0): Rectangle {
-    if (typeof arg0 === 'object') {
+    if (typeof arg0 === "object") {
       return new Rectangle(this.#origin.moveBy(arg0), this.#size);
     }
 
@@ -430,8 +428,8 @@ export class Rectangle
   resizeBy(widthDelta: number, heightDelta: number): Rectangle;
 
   resizeBy(arg0: SizeData | PointData | number, arg1 = 0): Rectangle {
-    if (typeof arg0 === 'object') {
-      if ('width' in arg0) {
+    if (typeof arg0 === "object") {
+      if ("width" in arg0) {
         return new Rectangle(this.#origin, this.#size.resizeBy(arg0));
       }
 
@@ -464,23 +462,23 @@ export class Rectangle
   inset(widthDelta: number, heightDelta: number): Rectangle;
 
   inset(arg0: SizeData | PointData | number, arg1 = 0): Rectangle {
-    if (typeof arg0 === 'object') {
-      if ('width' in arg0) {
+    if (typeof arg0 === "object") {
+      if ("width" in arg0) {
         return new Rectangle(
           this.#origin.moveBy(arg0.width / 2, arg0.height / 2),
-          this.#size.resizeBy(-arg0.width, -arg0.height)
+          this.#size.resizeBy(-arg0.width, -arg0.height),
         );
       }
 
       return new Rectangle(
         this.#origin.moveBy(arg0.x / 2, arg0.y / 2),
-        this.#size.resizeBy(-arg0.x, -arg0.y)
+        this.#size.resizeBy(-arg0.x, -arg0.y),
       );
     }
 
     return new Rectangle(
       this.#origin.moveBy(arg0 / 2, arg1 / 2),
-      this.#size.resizeBy(-arg0, -arg1)
+      this.#size.resizeBy(-arg0, -arg1),
     );
   }
 
@@ -490,22 +488,22 @@ export class Rectangle
     const top = compare.float(y, this.top);
     const bottom = compare.float(y, this.bottom);
 
-    if (left < 0 || right > 0 || top < 0 || bottom > 0) return 'outside';
+    if (left < 0 || right > 0 || top < 0 || bottom > 0) return "outside";
 
     if (left === 0) {
-      if (top === 0) return 'top-left';
+      if (top === 0) return "top-left";
 
-      return bottom === 0 ? 'bottom-left' : 'left';
+      return bottom === 0 ? "bottom-left" : "left";
     }
 
     if (right === 0) {
-      if (top === 0) return 'top-right';
+      if (top === 0) return "top-right";
 
-      return bottom === 0 ? 'bottom-right' : 'right';
+      return bottom === 0 ? "bottom-right" : "right";
     }
 
-    if (top === 0) return 'top';
+    if (top === 0) return "top";
 
-    return bottom === 0 ? 'bottom' : 'inside';
+    return bottom === 0 ? "bottom" : "inside";
   }
 }

@@ -1,4 +1,4 @@
-import { Validatable } from '../modules/compare';
+import { Validatable } from "../modules/compare.ts";
 
 /** Base object. */
 export abstract class BaseObject<T> implements Validatable {

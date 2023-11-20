@@ -1,13 +1,13 @@
-import { compare } from '../modules/compare';
-import { numbers } from '../modules/numbers';
-import { RGBAData } from '../types/RGBAData';
+import { compare } from "../modules/compare.ts";
+import { numbers } from "../modules/numbers.ts";
+import { RGBAData } from "../types/RGBAData.ts";
 
-import { BaseObject } from './BaseObject';
+import { BaseObject } from "./BaseObject.ts";
 
 const getValue = (x: number): number =>
   Number.isFinite(x) ? numbers.clamp(Math.round(x), 0, 255) : x;
 
-const format = (x: number): string => x.toString(16).padStart(2, '0');
+const format = (x: number): string => x.toString(16).padStart(2, "0");
 
 /** RGB-based color object. */
 export class RGBA extends BaseObject<RGBAData> implements RGBAData {
@@ -24,7 +24,7 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
     red: 0,
     green: 0,
     blue: 0,
-    alpha: 255
+    alpha: 255,
   });
 
   //
@@ -44,7 +44,7 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
         blue <= 255 &&
         Number.isInteger(alpha) &&
         alpha >= 0 &&
-        alpha <= 255
+        alpha <= 255,
     );
 
     this.red = this.isValid() ? red : NaN;
@@ -78,7 +78,7 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
       red: getValue(red),
       green: getValue(green),
       blue: getValue(blue),
-      alpha: 255
+      alpha: 255,
     });
   }
 
@@ -94,7 +94,7 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
       red: getValue(red * 255),
       green: getValue(green * 255),
       blue: getValue(blue * 255),
-      alpha: 255
+      alpha: 255,
     });
   }
 
@@ -110,13 +110,13 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
     red: number,
     green: number,
     blue: number,
-    alpha: number
+    alpha: number,
   ): RGBA {
     return new RGBA({
       red: getValue(red),
       green: getValue(green),
       blue: getValue(blue),
-      alpha: getValue(alpha)
+      alpha: getValue(alpha),
     });
   }
 
@@ -132,13 +132,13 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
     red: number,
     green: number,
     blue: number,
-    alpha: number
+    alpha: number,
   ): RGBA {
     return new RGBA({
       red: getValue(red * 255),
       green: getValue(green * 255),
       blue: getValue(blue * 255),
-      alpha: getValue(alpha * 255)
+      alpha: getValue(alpha * 255),
     });
   }
 
@@ -150,13 +150,13 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
    * If set false, return black color with illegal hex string format.
    */
   static fromHexString(hexString: string, strict = false): RGBA {
-    const matches =
-      /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?$/i.exec(
-        hexString
+    const matches = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?$/i
+      .exec(
+        hexString,
       );
 
     if (!matches) {
-      if (strict) throw new Error('Illegal hex string');
+      if (strict) throw new Error("Illegal hex string");
 
       return RGBA.BLACK;
     }
@@ -167,7 +167,7 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
       red: Number.parseInt(r, 16),
       green: Number.parseInt(g, 16),
       blue: Number.parseInt(b, 16),
-      alpha: typeof a !== 'string' ? 255 : Number.parseInt(a, 16)
+      alpha: typeof a !== "string" ? 255 : Number.parseInt(a, 16),
     });
   }
 
@@ -184,7 +184,7 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
       compare.number(this.red, other.red),
       compare.number(this.green, other.green),
       compare.number(this.blue, other.blue),
-      compare.number(this.alpha, other.alpha)
+      compare.number(this.alpha, other.alpha),
     );
   }
 
@@ -194,7 +194,7 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
       red: this.red,
       green: this.green,
       blue: this.blue,
-      alpha: this.alpha
+      alpha: this.alpha,
     };
   }
 
@@ -208,7 +208,7 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
    * @param omitAlpha - If true and alpha is 255, omit alpha parameter.
    */
   toString(omitAlpha = false): string {
-    if (!this.isValid()) return 'rgb(0,0,0)';
+    if (!this.isValid()) return "rgb(0,0,0)";
 
     return omitAlpha && this.alpha === 255
       ? `rgb(${this.red},${this.green},${this.blue})`
@@ -221,12 +221,14 @@ export class RGBA extends BaseObject<RGBAData> implements RGBAData {
    * @param omitAlpha - If true and alpha is 255, omit alpha parameter.
    */
   toHexString(omitAlpha = false): string {
-    if (!this.isValid()) return '#000000';
+    if (!this.isValid()) return "#000000";
 
     return omitAlpha && this.alpha === 255
       ? `#${format(this.red)}${format(this.green)}${format(this.blue)}`
-      : `#${format(this.red)}${format(this.green)}${format(this.blue)}${format(
-          this.alpha
-        )}`;
+      : `#${format(this.red)}${format(this.green)}${format(this.blue)}${
+        format(
+          this.alpha,
+        )
+      }`;
   }
 }

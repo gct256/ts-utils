@@ -1,4 +1,4 @@
-import { numbers } from './numbers';
+import { numbers } from "./numbers.ts";
 
 type FrameRequestCallback = (time: number) => void;
 export type Raf = (callback: FrameRequestCallback) => number;
@@ -15,17 +15,17 @@ export const web = {
   getContext2D(
     canvas: HTMLCanvasElement,
     width?: number,
-    height?: number
+    height?: number,
   ): CanvasRenderingContext2D {
-    const ct: CanvasRenderingContext2D | null = canvas.getContext('2d');
+    const ct: CanvasRenderingContext2D | null = canvas.getContext("2d");
 
-    if (ct === null) throw new Error('cannot get context 2d');
+    if (ct === null) throw new Error("cannot get context 2d");
 
-    if (typeof width === 'number') {
+    if (typeof width === "number") {
       canvas.width = Math.max(numbers.ceil(width, 1), 1);
     }
 
-    if (typeof height === 'number') {
+    if (typeof height === "number") {
       canvas.height = Math.max(numbers.ceil(height, 1), 1);
     }
 
@@ -40,7 +40,7 @@ export const web = {
    * @returns context.
    */
   createContext2D(width: number, height: number): CanvasRenderingContext2D {
-    const cv: HTMLCanvasElement = document.createElement('canvas');
+    const cv: HTMLCanvasElement = document.createElement("canvas");
 
     return web.getContext2D(cv, width, height);
   },
@@ -68,7 +68,7 @@ export const web = {
   animate(
     handler: (time?: number) => boolean,
     interval = 0,
-    raf: Raf = window.requestAnimationFrame
+    raf: Raf = globalThis.requestAnimationFrame,
   ): void {
     let count = 0;
 
@@ -92,24 +92,24 @@ export const web = {
    */
   loadImage(src: string): Promise<HTMLImageElement> {
     return new Promise((resolve, reject) => {
-      const image = document.createElement('img');
+      const image = document.createElement("img");
 
       const handler: EventListenerObject = {
         handleEvent(ev: Event): void {
-          image.removeEventListener('load', handler);
-          image.removeEventListener('error', handler);
+          image.removeEventListener("load", handler);
+          image.removeEventListener("error", handler);
 
-          if (ev.type === 'load') {
+          if (ev.type === "load") {
             resolve(image);
           } else {
-            reject(new Error('image load failed'));
+            reject(new Error("image load failed"));
           }
-        }
+        },
       };
 
-      image.addEventListener('load', handler, false);
-      image.addEventListener('error', handler, false);
+      image.addEventListener("load", handler, false);
+      image.addEventListener("error", handler, false);
       image.src = src;
     });
-  }
+  },
 };
