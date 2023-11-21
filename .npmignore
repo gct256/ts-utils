@@ -1,15 +1,5 @@
-test/
-.rpt2_cache/
 .vscode/
 coverage/
 src/
-prettier.config.js
-rollup.config.js
-tsconfig.json
-tslint.json
-yarn-error.log
-yarn.lock
-.eslintignore
-.prettierrc.json
-.eslintrc.yml
-test/**/*.md
+.prettierignore
+.prettierrc

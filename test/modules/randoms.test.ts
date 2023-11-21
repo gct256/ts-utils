@@ -1,75 +1,81 @@
-import { randoms } from '../../src/modules/randoms';
+import {
+  randFloat,
+  randFloatRange,
+  randInt,
+  randIntRange,
+  random,
+  shuffle,
+} from "../../deno/modules/randoms.ts";
+import { assertEquals, assertNotEquals } from "../test-deps.ts";
 
-describe('randoms', () => {
-  const min = (): number => 0;
-  const mid = (): number => 0x80000000;
-  const max = (): number => 0xffffffff;
+const min = (): number => 0;
+const mid = (): number => 0x80000000;
+const max = (): number => 0xffffffff;
 
-  test('random', () => {
-    expect(randoms.random(min)).toBe(0);
-    expect(randoms.random(mid)).toBe(0.5);
-    expect(randoms.random(max)).toBe(0xffffffff / 0x100000000);
-  });
+Deno.test("random()", () => {
+  assertEquals(random(min), 0);
+  assertEquals(random(mid), 0.5);
+  assertEquals(random(max), 0xffffffff / 0x100000000);
+});
 
-  test('randInt', () => {
-    expect(randoms.randInt(4.2, min)).toBe(0);
-    expect(randoms.randInt(42, mid)).toBe(21);
-    expect(randoms.randInt(42, max)).toBe(42);
+Deno.test("randInt(number)", () => {
+  assertEquals(randInt(4.2, min), 0);
+  assertEquals(randInt(42, mid), 21);
+  assertEquals(randInt(42, max), 42);
 
-    expect(randoms.randInt(-42, min)).toBe(-0);
-    expect(randoms.randInt(-42, mid)).toBe(-21);
-    expect(randoms.randInt(-42, max)).toBe(-42);
-  });
+  assertEquals(randInt(-42, min), -0);
+  assertEquals(randInt(-42, mid), -21);
+  assertEquals(randInt(-42, max), -42);
+});
 
-  test('randIntRange', () => {
-    expect(randoms.randIntRange(-42, 124, min)).toBe(-42);
-    expect(randoms.randIntRange(-42, 124, mid)).toBe(41);
-    expect(randoms.randIntRange(-42, 124, max)).toBe(124);
+Deno.test("randIntRange(number, number)", () => {
+  assertEquals(randIntRange(-42, 124, min), -42);
+  assertEquals(randIntRange(-42, 124, mid), 41);
+  assertEquals(randIntRange(-42, 124, max), 124);
 
-    expect(randoms.randIntRange(124, -42, min)).toBe(-42);
-    expect(randoms.randIntRange(124, -42, mid)).toBe(41);
-    expect(randoms.randIntRange(124, -42, max)).toBe(124);
-  });
+  assertEquals(randIntRange(124, -42, min), -42);
+  assertEquals(randIntRange(124, -42, mid), 41);
+  assertEquals(randIntRange(124, -42, max), 124);
+});
 
-  test('randFloat', () => {
-    expect(randoms.randFloat(4.2, min)).toBe(0);
-    expect(randoms.randFloat(4.2, mid).toFixed(1)).toBe('2.1');
-    expect(randoms.randFloat(4.2, max)).toBe(4.2);
+Deno.test("randFloat(number)", () => {
+  assertEquals(randFloat(4.2, min), 0);
+  assertEquals(randFloat(4.2, mid).toFixed(1), "2.1");
+  assertEquals(randFloat(4.2, max), 4.2);
 
-    expect(randoms.randFloat(-4.2, min)).toBe(-0);
-    expect(randoms.randFloat(-4.2, mid).toFixed(1)).toBe('-2.1');
-    expect(randoms.randFloat(-4.2, max)).toBe(-4.2);
-  });
+  assertEquals(randFloat(-4.2, min), -0);
+  assertEquals(randFloat(-4.2, mid).toFixed(1), "-2.1");
+  assertEquals(randFloat(-4.2, max), -4.2);
+});
 
-  test('randFloatRange', () => {
-    expect(randoms.randFloatRange(-4.2, 12.4, min).toFixed(1)).toBe('-4.2');
-    expect(randoms.randFloatRange(-4.2, 12.4, mid).toFixed(1)).toBe('4.1');
-    expect(randoms.randFloatRange(-4.2, 12.4, max).toFixed(1)).toBe('12.4');
+Deno.test("randFloatRange(number, number)", () => {
+  assertEquals(randFloatRange(-4.2, 12.4, min).toFixed(1), "-4.2");
+  assertEquals(randFloatRange(-4.2, 12.4, mid).toFixed(1), "4.1");
+  assertEquals(randFloatRange(-4.2, 12.4, max).toFixed(1), "12.4");
 
-    expect(randoms.randFloatRange(12.4, -4.2, min).toFixed(1)).toBe('-4.2');
-    expect(randoms.randFloatRange(12.4, -4.2, mid).toFixed(1)).toBe('4.1');
-    expect(randoms.randFloatRange(12.4, -4.2, max).toFixed(1)).toBe('12.4');
-  });
+  assertEquals(randFloatRange(12.4, -4.2, min).toFixed(1), "-4.2");
+  assertEquals(randFloatRange(12.4, -4.2, mid).toFixed(1), "4.1");
+  assertEquals(randFloatRange(12.4, -4.2, max).toFixed(1), "12.4");
+});
 
-  test('shuffle', () => {
-    const array: number[] = [5, 1, 3, 2, 0, 4];
+Deno.test("shuffle(number)", () => {
+  const array: number[] = [5, 1, 3, 2, 0, 4];
 
-    expect(randoms.shuffle(array, min)).not.toEqual(array);
-    expect(randoms.shuffle(array, max)).toEqual(array);
+  assertNotEquals(shuffle(array, min), array);
+  assertEquals(shuffle(array, max), array);
 
-    expect(randoms.shuffle([], min)).toEqual([]);
-    expect(randoms.shuffle([1], min)).toEqual([1]);
-  });
+  assertEquals(shuffle([], min), []);
+  assertEquals(shuffle([1], min), [1]);
+});
 
-  test('use defaultRandomGenerator', () => {
-    expect(Number.isFinite(randoms.random())).toBe(true);
-    expect(Number.isInteger(randoms.randInt())).toBe(true);
-    expect(Number.isInteger(randoms.randIntRange(0, 1))).toBe(true);
-    expect(Number.isFinite(randoms.randFloat())).toBe(true);
-    expect(Number.isFinite(randoms.randFloatRange(0, 1))).toBe(true);
+Deno.test("use(number) defaultRandomGenerator", () => {
+  assertEquals(Number.isFinite(random()), true);
+  assertEquals(Number.isInteger(randInt()), true);
+  assertEquals(Number.isInteger(randIntRange(0, 1)), true);
+  assertEquals(Number.isFinite(randFloat()), true);
+  assertEquals(Number.isFinite(randFloatRange(0, 1)), true);
 
-    const array: number[] = [5, 1, 3, 2, 0, 4];
+  const array: number[] = [5, 1, 3, 2, 0, 4];
 
-    expect(randoms.shuffle(array)).not.toEqual(array);
-  });
+  assertNotEquals(shuffle(array), array);
 });

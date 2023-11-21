@@ -1,381 +1,620 @@
-import { Angle } from '../../src/classes/Angle';
+import { Angle } from "../../deno/classes/Angle.ts";
+import { assertEquals, assertNotStrictEquals, assertObjectMatch, assertThrows } from "../test-deps.ts";
 
 const RAD_42 = 42 * (Math.PI / 180);
 const DEG_42 = 42;
 
-describe('static methods', () => {
-  describe('of', () => {
-    test('normal', () => {
-      expect(Angle.of({ radian: RAD_42, degree: DEG_42 })).toBeInstanceOf(
-        Angle
-      );
-      expect(Angle.of({ radian: RAD_42, degree: DEG_42 })).toEqual({
-        radian: RAD_42,
-        degree: DEG_42
-      });
-    });
-    describe('not match radian and degree', () => {
-      test('not strict (use degree)', () => {
-        expect(Angle.of({ radian: RAD_42, degree: DEG_42 })).toEqual({
-          radian: RAD_42,
-          degree: DEG_42
-        });
-        expect(Angle.of({ radian: 4.2, degree: DEG_42 })).toEqual({
-          radian: RAD_42,
-          degree: DEG_42
-        });
-      });
-      test('strict (throw)', () => {
-        expect(() =>
-          Angle.of({ radian: RAD_42, degree: DEG_42 }, true)
-        ).not.toThrow();
-        expect(() => Angle.of({ radian: RAD_42, degree: 4.2 }, true)).toThrow();
-        expect(() => Angle.of({ radian: 4.2, degree: DEG_42 }, true)).toThrow();
-      });
-    });
-  });
-
-  test('fromRadian', () => {
-    expect(Angle.fromRadian(RAD_42)).toBeInstanceOf(Angle);
-    expect(Angle.fromRadian(RAD_42)).toEqual({
-      radian: RAD_42,
-      degree: DEG_42
-    });
-  });
-
-  test('fromDegree', () => {
-    expect(Angle.fromDegree(DEG_42)).toBeInstanceOf(Angle);
-    expect(Angle.fromDegree(DEG_42)).toEqual({
-      radian: RAD_42,
-      degree: DEG_42
-    });
-  });
-
-  test('formXY', () => {
-    expect(Angle.fromXY(4.2, 5.3)).toBeInstanceOf(Angle);
-    expect(Angle.fromXY(4.2, 5.3).radian).toBe(Math.atan2(5.3, 4.2));
-  });
-
-  test('formPoint', () => {
-    expect(Angle.fromPoint({ x: 4.2, y: 5.3 })).toBeInstanceOf(Angle);
-    expect(Angle.fromPoint({ x: 4.2, y: 5.3 }).radian).toBe(
-      Math.atan2(5.3, 4.2)
-    );
-  });
+Deno.test("Angle.of(AngleData)", () => {
+  assertObjectMatch(
+    Angle.of({ radian: RAD_42, degree: DEG_42 }),
+    { radian: RAD_42, degree: DEG_42 },
+  );
 });
 
-describe('properties', () => {
-  test('valid', () => {
-    const angle = Angle.fromRadian(RAD_42);
-
-    expect(angle.radian).toBe(RAD_42);
-    expect(angle.degree).toBe(DEG_42);
-  });
-
-  test('invalid', () => {
-    const angle = Angle.fromRadian(NaN);
-
-    expect(angle.radian).toBeNaN();
-    expect(angle.degree).toBeNaN();
-  });
+Deno.test("Angle.of(AngleData) - not match radian and degree", () => {
+  assertObjectMatch(
+    Angle.of({ radian: RAD_42, degree: DEG_42 }),
+    { radian: RAD_42, degree: DEG_42 },
+  );
+  assertObjectMatch(
+    Angle.of({ radian: 4.2, degree: DEG_42 }),
+    { radian: RAD_42, degree: DEG_42 },
+  );
 });
 
-describe('overrides', () => {
-  describe('compare', () => {
-    test('same parameter', () => {
-      expect(
-        Angle.fromRadian(RAD_42).compare({ radian: RAD_42, degree: DEG_42 })
-      ).toBe(0);
-    });
-
-    test('different', () => {
-      expect(
-        Angle.fromRadian(RAD_42 + 0.1).compare({
-          radian: RAD_42,
-          degree: DEG_42
-        })
-      ).toBe(1);
-      expect(
-        Angle.fromRadian(RAD_42 - 0.1).compare({
-          radian: RAD_42,
-          degree: DEG_42
-        })
-      ).toBe(-1);
-    });
-
-    test('for invalid', () => {
-      expect(
-        Angle.fromRadian(NaN).compare({ radian: RAD_42, degree: DEG_42 })
-      ).toBe(-1);
-      expect(
-        Angle.fromRadian(RAD_42).compare({ radian: NaN, degree: DEG_42 })
-      ).toBe(1);
-      expect(
-        Angle.fromRadian(NaN).compare({ radian: NaN, degree: DEG_42 })
-      ).toBe(0);
-    });
-  });
-
-  test('valueOf', () => {
-    expect(Angle.fromRadian(RAD_42).valueOf()).toEqual({
-      radian: RAD_42,
-      degree: DEG_42
-    });
-  });
-
-  test('isValid', () => {
-    expect(Angle.fromRadian(RAD_42).isValid()).toBe(true);
-    expect(Angle.fromRadian(NaN).isValid()).toBe(false);
-    expect(Angle.fromRadian(Infinity).isValid()).toBe(false);
-    expect(Angle.fromRadian(-Infinity).isValid()).toBe(false);
-  });
+Deno.test("Angle.of(AngleData) - not match radian and degree (strict)", () => {
+  assertThrows(
+    () => Angle.of({ radian: RAD_42, degree: 4.2 }, true),
+  );
+  assertThrows(
+    () => Angle.of({ radian: 4.2, degree: DEG_42 }, true),
+  );
 });
 
-describe('methods', () => {
-  describe('normalize', () => {
-    test('normal', () => {
-      expect(Angle.fromDegree(-721).normalize().degree).toBe(-1);
-      expect(Angle.fromDegree(-720).normalize().degree).toBe(0);
-      expect(Angle.fromDegree(-719).normalize().degree).toBe(1);
+Deno.test("Angle.fromRadian(number)", () => {
+  assertObjectMatch(
+    Angle.fromRadian(RAD_42),
+    { radian: RAD_42, degree: DEG_42 },
+  );
+});
 
-      expect(Angle.fromDegree(-541).normalize().degree).toBe(179);
-      expect(Angle.fromDegree(-540).normalize().degree).toBe(180);
-      expect(Angle.fromDegree(-539).normalize().degree).toBe(-179);
+Deno.test("Angle.fromDegree(number)", () => {
+  assertObjectMatch(
+    Angle.fromDegree(DEG_42),
+    { radian: RAD_42, degree: DEG_42 },
+  );
+});
 
-      expect(Angle.fromDegree(-361).normalize().degree).toBe(-1);
-      expect(Angle.fromDegree(-360).normalize().degree).toBe(0);
-      expect(Angle.fromDegree(-359).normalize().degree).toBe(1);
+Deno.test("Angle.formXY(number, number)", () => {
+  assertEquals(
+    Angle.fromXY(4.2, 5.3).radian,
+    Math.atan2(5.3, 4.2),
+  );
+});
 
-      expect(Angle.fromDegree(-181).normalize().degree).toBe(179);
-      expect(Angle.fromDegree(-180).normalize().degree).toBe(180);
-      expect(Angle.fromDegree(-179).normalize().degree).toBe(-179);
+Deno.test("Angle.formPoint(PointData)", () => {
+  assertEquals(
+    Angle.fromPoint({ x: 4.2, y: 5.3 }).radian,
+    Math.atan2(5.3, 4.2),
+  );
+});
 
-      expect(Angle.fromDegree(-1).normalize().degree).toBe(-1);
-      expect(Angle.fromDegree(0).normalize().degree).toBe(0);
-      expect(Angle.fromDegree(1).normalize().degree).toBe(1);
+Deno.test("properties (radian, degree)", () => {
+  const angle = Angle.fromRadian(RAD_42);
 
-      expect(Angle.fromDegree(179).normalize().degree).toBe(179);
-      expect(Angle.fromDegree(180).normalize().degree).toBe(180);
-      expect(Angle.fromDegree(181).normalize().degree).toBe(-179);
+  assertEquals(
+    angle.radian,
+    RAD_42,
+  );
+  assertEquals(
+    angle.degree,
+    DEG_42,
+  );
+});
 
-      expect(Angle.fromDegree(359).normalize().degree).toBe(-1);
-      expect(Angle.fromDegree(360).normalize().degree).toBe(0);
-      expect(Angle.fromDegree(361).normalize().degree).toBe(1);
+Deno.test("properties (radian, degree) - invalid", () => {
+  const angle = Angle.fromRadian(NaN);
 
-      expect(Angle.fromDegree(539).normalize().degree).toBe(179);
-      expect(Angle.fromDegree(540).normalize().degree).toBe(180);
-      expect(Angle.fromDegree(541).normalize().degree).toBe(-179);
+  assertEquals(
+    angle.radian,
+    NaN,
+  );
+  assertEquals(
+    angle.degree,
+    NaN,
+  );
+});
 
-      expect(Angle.fromDegree(719).normalize().degree).toBe(-1);
-      expect(Angle.fromDegree(720).normalize().degree).toBe(0);
-      expect(Angle.fromDegree(721).normalize().degree).toBe(1);
-    });
+Deno.test("compare(AngleData)", () => {
+  const other = { radian: RAD_42, degree: DEG_42 };
 
-    test('invalid', () => {
-      expect(Angle.fromDegree(NaN).normalize().isValid()).toBe(false);
-    });
-  });
+  assertEquals(
+    Angle.fromRadian(RAD_42).compare(other),
+    0,
+  );
 
-  describe('normalizeIn360', () => {
-    test('normal', () => {
-      expect(Angle.fromDegree(-721).normalizeIn360().degree).toBe(359);
-      expect(Angle.fromDegree(-720).normalizeIn360().degree).toBe(0);
-      expect(Angle.fromDegree(-719).normalizeIn360().degree).toBe(1);
+  assertEquals(
+    Angle.fromRadian(RAD_42 + 0.1).compare(other),
+    1,
+  );
+  assertEquals(
+    Angle.fromRadian(RAD_42 - 0.1).compare(other),
+    -1,
+  );
+});
 
-      expect(Angle.fromDegree(-361).normalizeIn360().degree).toBe(359);
-      expect(Angle.fromDegree(-360).normalizeIn360().degree).toBe(0);
-      expect(Angle.fromDegree(-359).normalizeIn360().degree).toBe(1);
+Deno.test("compare(AngleData) - invalid", () => {
+  assertEquals(
+    Angle.fromRadian(NaN).compare({ radian: RAD_42, degree: DEG_42 }),
+    -1,
+  );
+  assertEquals(
+    Angle.fromRadian(RAD_42).compare({ radian: NaN, degree: DEG_42 }),
+    1,
+  );
+  assertEquals(
+    Angle.fromRadian(NaN).compare({ radian: NaN, degree: DEG_42 }),
+    0,
+  );
+});
 
-      expect(Angle.fromDegree(-1).normalizeIn360().degree).toBe(359);
-      expect(Angle.fromDegree(0).normalizeIn360().degree).toBe(0);
-      expect(Angle.fromDegree(1).normalizeIn360().degree).toBe(1);
+Deno.test("valueOf()", () => {
+  assertEquals(
+    Angle.fromRadian(RAD_42).valueOf(),
+    { radian: RAD_42, degree: DEG_42 },
+  );
+});
 
-      expect(Angle.fromDegree(359).normalizeIn360().degree).toBe(359);
-      expect(Angle.fromDegree(360).normalizeIn360().degree).toBe(0);
-      expect(Angle.fromDegree(361).normalizeIn360().degree).toBe(1);
+Deno.test("isValid()", () => {
+  assertEquals(
+    Angle.fromRadian(RAD_42).isValid(),
+    true,
+  );
+  assertEquals(
+    Angle.fromRadian(NaN).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromRadian(Infinity).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromRadian(-Infinity).isValid(),
+    false,
+  );
+});
 
-      expect(Angle.fromDegree(719).normalizeIn360().degree).toBe(359);
-      expect(Angle.fromDegree(720).normalizeIn360().degree).toBe(0);
-      expect(Angle.fromDegree(721).normalizeIn360().degree).toBe(1);
-    });
+Deno.test("normalize()", () => {
+  assertEquals(
+    Angle.fromDegree(-721).normalize().degree,
+    -1,
+  );
+  assertEquals(
+    Angle.fromDegree(-720).normalize().degree,
+    0,
+  );
+  assertEquals(
+    Angle.fromDegree(-719).normalize().degree,
+    1,
+  );
 
-    test('invalid', () => {
-      expect(Angle.fromDegree(NaN).normalizeIn360().isValid()).toBe(false);
-    });
-  });
+  assertEquals(
+    Angle.fromDegree(-541).normalize().degree,
+    179,
+  );
+  assertEquals(
+    Angle.fromDegree(-540).normalize().degree,
+    180,
+  );
+  assertEquals(
+    Angle.fromDegree(-539).normalize().degree,
+    -179,
+  );
 
-  describe('addRadian', () => {
-    test('normal', () => {
-      expect(Angle.fromRadian(0.1).addRadian(0.2).radian).toBe(0.1 + 0.2);
+  assertEquals(
+    Angle.fromDegree(-361).normalize().degree,
+    -1,
+  );
+  assertEquals(
+    Angle.fromDegree(-360).normalize().degree,
+    0,
+  );
+  assertEquals(
+    Angle.fromDegree(-359).normalize().degree,
+    1,
+  );
 
-      const angle = Angle.fromRadian(RAD_42);
+  assertEquals(
+    Angle.fromDegree(-181).normalize().degree,
+    179,
+  );
+  assertEquals(
+    Angle.fromDegree(-180).normalize().degree,
+    180,
+  );
+  assertEquals(
+    Angle.fromDegree(-179).normalize().degree,
+    -179,
+  );
 
-      expect(angle.addRadian(0)).not.toBe(angle);
-    });
+  assertEquals(
+    Angle.fromDegree(-1).normalize().degree,
+    -1,
+  );
+  assertEquals(
+    Angle.fromDegree(0).normalize().degree,
+    0,
+  );
+  assertEquals(
+    Angle.fromDegree(1).normalize().degree,
+    1,
+  );
 
-    test('invalid', () => {
-      expect(Angle.fromRadian(NaN).addRadian(RAD_42).isValid()).toBe(false);
+  assertEquals(
+    Angle.fromDegree(179).normalize().degree,
+    179,
+  );
+  assertEquals(
+    Angle.fromDegree(180).normalize().degree,
+    180,
+  );
+  assertEquals(
+    Angle.fromDegree(181).normalize().degree,
+    -179,
+  );
 
-      expect(Angle.fromRadian(RAD_42).addRadian(NaN).isValid()).toBe(false);
-      expect(Angle.fromRadian(RAD_42).addRadian(Infinity).isValid()).toBe(
-        false
-      );
-      expect(Angle.fromRadian(RAD_42).addRadian(-Infinity).isValid()).toBe(
-        false
-      );
+  assertEquals(
+    Angle.fromDegree(359).normalize().degree,
+    -1,
+  );
+  assertEquals(
+    Angle.fromDegree(360).normalize().degree,
+    0,
+  );
+  assertEquals(
+    Angle.fromDegree(361).normalize().degree,
+    1,
+  );
 
-      expect(Angle.fromRadian(NaN).addRadian(NaN).isValid()).toBe(false);
-      expect(Angle.fromRadian(NaN).addRadian(Infinity).isValid()).toBe(false);
-      expect(Angle.fromRadian(NaN).addRadian(-Infinity).isValid()).toBe(false);
-    });
-  });
+  assertEquals(
+    Angle.fromDegree(539).normalize().degree,
+    179,
+  );
+  assertEquals(
+    Angle.fromDegree(540).normalize().degree,
+    180,
+  );
+  assertEquals(
+    Angle.fromDegree(541).normalize().degree,
+    -179,
+  );
 
-  describe('addDegree', () => {
-    test('normal', () => {
-      expect(Angle.fromDegree(0.1).addDegree(0.2).degree).toBe(0.1 + 0.2);
+  assertEquals(
+    Angle.fromDegree(719).normalize().degree,
+    -1,
+  );
+  assertEquals(
+    Angle.fromDegree(720).normalize().degree,
+    0,
+  );
+  assertEquals(
+    Angle.fromDegree(721).normalize().degree,
+    1,
+  );
+});
 
-      const angle = Angle.fromDegree(DEG_42);
+Deno.test("normalize() - invalid", () => {
+  assertEquals(
+    Angle.fromDegree(NaN).normalize().isValid(),
+    false,
+  );
+});
 
-      expect(angle.addDegree(0)).not.toBe(angle);
-    });
+Deno.test("normalizeIn360()", () => {
+  assertEquals(
+    Angle.fromDegree(-721).normalizeIn360().degree,
+    359,
+  );
+  assertEquals(
+    Angle.fromDegree(-720).normalizeIn360().degree,
+    0,
+  );
+  assertEquals(
+    Angle.fromDegree(-719).normalizeIn360().degree,
+    1,
+  );
 
-    test('invalid', () => {
-      expect(Angle.fromDegree(NaN).addDegree(DEG_42).isValid()).toBe(false);
+  assertEquals(
+    Angle.fromDegree(-361).normalizeIn360().degree,
+    359,
+  );
+  assertEquals(
+    Angle.fromDegree(-360).normalizeIn360().degree,
+    0,
+  );
+  assertEquals(
+    Angle.fromDegree(-359).normalizeIn360().degree,
+    1,
+  );
 
-      expect(Angle.fromDegree(DEG_42).addDegree(NaN).isValid()).toBe(false);
-      expect(Angle.fromDegree(DEG_42).addDegree(Infinity).isValid()).toBe(
-        false
-      );
-      expect(Angle.fromDegree(DEG_42).addDegree(-Infinity).isValid()).toBe(
-        false
-      );
+  assertEquals(
+    Angle.fromDegree(-1).normalizeIn360().degree,
+    359,
+  );
+  assertEquals(
+    Angle.fromDegree(0).normalizeIn360().degree,
+    0,
+  );
+  assertEquals(
+    Angle.fromDegree(1).normalizeIn360().degree,
+    1,
+  );
 
-      expect(Angle.fromDegree(NaN).addDegree(NaN).isValid()).toBe(false);
-      expect(Angle.fromDegree(NaN).addDegree(Infinity).isValid()).toBe(false);
-      expect(Angle.fromDegree(NaN).addDegree(-Infinity).isValid()).toBe(false);
-    });
-  });
+  assertEquals(
+    Angle.fromDegree(359).normalizeIn360().degree,
+    359,
+  );
+  assertEquals(
+    Angle.fromDegree(360).normalizeIn360().degree,
+    0,
+  );
+  assertEquals(
+    Angle.fromDegree(361).normalizeIn360().degree,
+    1,
+  );
 
-  describe('add', () => {
-    test('normal', () => {
-      expect(Angle.fromDegree(0.1).add(Angle.fromDegree(0.2)).degree).toBe(
-        0.1 + 0.2
-      );
+  assertEquals(
+    Angle.fromDegree(719).normalizeIn360().degree,
+    359,
+  );
+  assertEquals(
+    Angle.fromDegree(720).normalizeIn360().degree,
+    0,
+  );
+  assertEquals(
+    Angle.fromDegree(721).normalizeIn360().degree,
+    1,
+  );
+});
 
-      const angle = Angle.fromDegree(DEG_42);
+Deno.test("normalizeIn360() - invalid", () => {
+  assertEquals(
+    Angle.fromDegree(NaN).normalizeIn360().isValid(),
+    false,
+  );
+});
 
-      expect(angle.add(Angle.fromDegree(0))).not.toBe(angle);
-    });
+Deno.test("addRadian(number)", () => {
+  assertEquals(
+    Angle.fromRadian(0.1).addRadian(0.2).radian,
+    0.1 + 0.2,
+  );
 
-    test('invalid', () => {
-      expect(
-        Angle.fromDegree(NaN).add(Angle.fromDegree(DEG_42)).isValid()
-      ).toBe(false);
-      expect(
-        Angle.fromDegree(DEG_42).add(Angle.fromDegree(NaN)).isValid()
-      ).toBe(false);
-      expect(Angle.fromDegree(NaN).add(Angle.fromDegree(NaN)).isValid()).toBe(
-        false
-      );
-    });
-  });
+  const angle = Angle.fromRadian(RAD_42);
 
-  describe('multiple', () => {
-    test('normal', () => {
-      expect(Angle.fromDegree(0.1).multiple(0.2).degree).toBe(0.1 * 0.2);
-      expect(Angle.fromDegree(0.1).multiple(0).degree).toBe(0);
+  assertNotStrictEquals(
+    angle.addRadian(0),
+    angle,
+  );
+});
 
-      const angle = Angle.fromDegree(DEG_42);
+Deno.test("addRadian(number) - invalid", () => {
+  assertEquals(
+    Angle.fromRadian(NaN).addRadian(RAD_42).isValid(),
+    false,
+  );
 
-      expect(angle.multiple(1)).not.toBe(angle);
-    });
+  assertEquals(
+    Angle.fromRadian(RAD_42).addRadian(NaN).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromRadian(RAD_42).addRadian(Infinity).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromRadian(RAD_42).addRadian(-Infinity).isValid(),
+    false,
+  );
 
-    test('invalid', () => {
-      expect(Angle.fromDegree(NaN).multiple(1).isValid()).toBe(false);
+  assertEquals(
+    Angle.fromRadian(NaN).addRadian(NaN).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromRadian(NaN).addRadian(Infinity).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromRadian(NaN).addRadian(-Infinity).isValid(),
+    false,
+  );
+});
 
-      expect(Angle.fromDegree(DEG_42).multiple(NaN).isValid()).toBe(false);
-      expect(Angle.fromDegree(DEG_42).multiple(Infinity).isValid()).toBe(false);
-      expect(Angle.fromDegree(DEG_42).multiple(-Infinity).isValid()).toBe(
-        false
-      );
+Deno.test("addDegree(number)", () => {
+  assertEquals(
+    Angle.fromDegree(0.1).addDegree(0.2).degree,
+    0.1 + 0.2,
+  );
 
-      expect(Angle.fromDegree(NaN).multiple(NaN).isValid()).toBe(false);
-      expect(Angle.fromDegree(NaN).multiple(Infinity).isValid()).toBe(false);
-      expect(Angle.fromDegree(NaN).multiple(-Infinity).isValid()).toBe(false);
-    });
-  });
+  const angle = Angle.fromDegree(DEG_42);
 
-  describe('getCos', () => {
-    test('normal', () => {
-      expect(Angle.fromRadian(RAD_42).getCos()).toBe(Math.cos(RAD_42));
-    });
+  assertNotStrictEquals(
+    angle.addDegree(0),
+    angle,
+  );
+});
 
-    test('call twice (return cached value)', () => {
-      const angle = Angle.fromRadian(RAD_42);
+Deno.test("addDegree(number) - invalid", () => {
+  assertEquals(
+    Angle.fromDegree(NaN).addDegree(DEG_42).isValid(),
+    false,
+  );
 
-      expect(angle.getCos()).toBe(Math.cos(RAD_42));
-      expect(angle.getCos()).toBe(Math.cos(RAD_42));
-    });
+  assertEquals(
+    Angle.fromDegree(DEG_42).addDegree(NaN).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromDegree(DEG_42).addDegree(Infinity).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromDegree(DEG_42).addDegree(-Infinity).isValid(),
+    false,
+  );
 
-    test('invalid', () => {
-      expect(Angle.fromRadian(NaN).getCos()).toBeNaN();
-    });
-  });
+  assertEquals(
+    Angle.fromDegree(NaN).addDegree(NaN).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromDegree(NaN).addDegree(Infinity).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromDegree(NaN).addDegree(-Infinity).isValid(),
+    false,
+  );
+});
 
-  describe('getSin', () => {
-    test('normal', () => {
-      expect(Angle.fromRadian(RAD_42).getSin()).toBe(Math.sin(RAD_42));
-    });
+Deno.test("add(AngleData)", () => {
+  assertEquals(
+    Angle.fromDegree(0.1).add(Angle.fromDegree(0.2)).degree,
+    0.1 + 0.2,
+  );
 
-    test('call twice (return cached value)', () => {
-      const angle = Angle.fromRadian(RAD_42);
+  const angle = Angle.fromDegree(DEG_42);
 
-      expect(angle.getSin()).toBe(Math.sin(RAD_42));
-      expect(angle.getSin()).toBe(Math.sin(RAD_42));
-    });
+  assertNotStrictEquals(
+    angle.add(Angle.fromDegree(0)),
+    angle,
+  );
+});
 
-    test('invalid', () => {
-      expect(Angle.fromRadian(NaN).getSin()).toBeNaN();
-    });
-  });
+Deno.test("add(AngleData) - invalid", () => {
+  assertEquals(
+    Angle.fromDegree(NaN).add(Angle.fromDegree(DEG_42)).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromDegree(DEG_42).add(Angle.fromDegree(NaN)).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromDegree(NaN).add(Angle.fromDegree(NaN)).isValid(),
+    false,
+  );
+});
 
-  describe('getTan', () => {
-    test('normal', () => {
-      expect(Angle.fromRadian(RAD_42).getTan()).toBe(Math.tan(RAD_42));
-    });
+Deno.test("multiple(number)", () => {
+  assertEquals(
+    Angle.fromDegree(0.1).multiple(0.2).degree,
+    0.1 * 0.2,
+  );
+  assertEquals(
+    Angle.fromDegree(0.1).multiple(0).degree,
+    0,
+  );
 
-    test('call twice (return cached value)', () => {
-      const angle = Angle.fromRadian(RAD_42);
+  const angle = Angle.fromDegree(DEG_42);
 
-      expect(angle.getTan()).toBe(Math.tan(RAD_42));
-      expect(angle.getTan()).toBe(Math.tan(RAD_42));
-    });
+  assertNotStrictEquals(
+    angle.multiple(1),
+    angle,
+  );
+});
 
-    test('invalid', () => {
-      expect(Angle.fromRadian(NaN).getTan()).toBeNaN();
-    });
-  });
+Deno.test("multiple(number) - invalid", () => {
+  assertEquals(
+    Angle.fromDegree(NaN).multiple(1).isValid(),
+    false,
+  );
 
-  describe('getPointDelta', () => {
-    test('normal', () => {
-      expect(Angle.fromRadian(RAD_42).getPointDelta(42)).toEqual({
-        x: Math.cos(RAD_42) * 42,
-        y: Math.sin(RAD_42) * 42
-      });
-    });
+  assertEquals(
+    Angle.fromDegree(DEG_42).multiple(NaN).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromDegree(DEG_42).multiple(Infinity).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromDegree(DEG_42).multiple(-Infinity).isValid(),
+    false,
+  );
 
-    test('invalid angle', () => {
-      expect(Angle.fromRadian(NaN).getPointDelta(42).isValid()).toBe(false);
-    });
+  assertEquals(
+    Angle.fromDegree(NaN).multiple(NaN).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromDegree(NaN).multiple(Infinity).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromDegree(NaN).multiple(-Infinity).isValid(),
+    false,
+  );
+});
 
-    test('invalid size', () => {
-      expect(Angle.fromRadian(RAD_42).getPointDelta(NaN).isValid()).toBe(false);
-      expect(Angle.fromRadian(RAD_42).getPointDelta(Infinity).isValid()).toBe(
-        false
-      );
-      expect(Angle.fromRadian(RAD_42).getPointDelta(-Infinity).isValid()).toBe(
-        false
-      );
-    });
-  });
+Deno.test("getCos()", () => {
+  assertEquals(
+    Angle.fromRadian(RAD_42).getCos(),
+    Math.cos(RAD_42),
+  );
+});
+
+Deno.test("getCos() - call twice (return cached value)", () => {
+  assertEquals(
+    Angle.fromRadian(RAD_42).getCos(),
+    Math.cos(RAD_42),
+  );
+  assertEquals(
+    Angle.fromRadian(RAD_42).getCos(),
+    Math.cos(RAD_42),
+  );
+});
+
+Deno.test("getCos() - invalid", () => {
+  assertEquals(
+    Angle.fromRadian(NaN).getCos(),
+    NaN,
+  );
+});
+
+Deno.test("getSin()", () => {
+  assertEquals(
+    Angle.fromRadian(RAD_42).getSin(),
+    Math.sin(RAD_42),
+  );
+});
+
+Deno.test("getSin() - call twice (return cached value)", () => {
+  assertEquals(
+    Angle.fromRadian(RAD_42).getSin(),
+    Math.sin(RAD_42),
+  );
+  assertEquals(
+    Angle.fromRadian(RAD_42).getSin(),
+    Math.sin(RAD_42),
+  );
+});
+
+Deno.test("getSin() - invalid", () => {
+  assertEquals(
+    Angle.fromRadian(NaN).getSin(),
+    NaN,
+  );
+});
+
+Deno.test("getTan()", () => {
+  assertEquals(
+    Angle.fromRadian(RAD_42).getTan(),
+    Math.tan(RAD_42),
+  );
+});
+
+Deno.test("getTan() - call twice (return cached value)", () => {
+  assertEquals(
+    Angle.fromRadian(RAD_42).getTan(),
+    Math.tan(RAD_42),
+  );
+  assertEquals(
+    Angle.fromRadian(RAD_42).getTan(),
+    Math.tan(RAD_42),
+  );
+});
+
+Deno.test("getTan() - invalid", () => {
+  assertEquals(
+    Angle.fromRadian(NaN).getTan(),
+    NaN,
+  );
+});
+
+Deno.test("getPointDelta(number)", () => {
+  assertObjectMatch(
+    Angle.fromRadian(RAD_42).getPointDelta(42),
+    { x: Math.cos(RAD_42) * 42, y: Math.sin(RAD_42) * 42 },
+  );
+});
+
+Deno.test("getPointDelta(number) - invalid", () => {
+  assertEquals(
+    Angle.fromRadian(NaN).getPointDelta(42).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromRadian(RAD_42).getPointDelta(NaN).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromRadian(RAD_42).getPointDelta(Infinity).isValid(),
+    false,
+  );
+  assertEquals(
+    Angle.fromRadian(RAD_42).getPointDelta(-Infinity).isValid(),
+    false,
+  );
 });

@@ -1,4 +1,5 @@
-import { BaseObject } from '../../src/classes/BaseObject';
+import { BaseObject } from "../../deno/classes/BaseObject.ts";
+import { assertEquals } from "../test-deps.ts";
 
 class Foo extends BaseObject<Foo> {
   readonly value: number;
@@ -26,7 +27,13 @@ class Foo extends BaseObject<Foo> {
   }
 }
 
-test('isEqual', () => {
-  expect(Foo.of(42).isEqual(Foo.of(42))).toBe(true);
-  expect(Foo.of(42).isEqual(Foo.of(43))).toBe(false);
+Deno.test("isEqual", () => {
+  assertEquals(
+    Foo.of(42).isEqual(Foo.of(42)),
+    true,
+  );
+  assertEquals(
+    Foo.of(42).isEqual(Foo.of(43)),
+    false,
+  );
 });

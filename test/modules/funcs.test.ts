@@ -1,8 +1,15 @@
-import { funcs } from '../../src/modules/funcs';
+import { noop } from "../../deno/modules/funcs.ts";
+import { assertEquals } from "../test-deps.ts";
 
-describe('funcs', () => {
-  test('noop', () => {
-    expect(funcs.noop()).toBe(undefined);
-    expect(funcs.noop(1, 2, 3)).toBe(undefined);
-  });
+Deno.test("noop()", () => {
+  assertEquals(typeof noop, "function");
+});
+
+Deno.test("noop() - return undefined", () => {
+  assertEquals(noop(), undefined);
+});
+
+Deno.test("noop() - any arguments", () => {
+  assertEquals(noop(1, 2, 3), undefined);
+  assertEquals(noop("foo"), undefined);
 });

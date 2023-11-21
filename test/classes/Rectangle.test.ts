@@ -1,23 +1,24 @@
-import { Rectangle } from '../../src/classes/Rectangle';
+import { Rectangle } from "../../deno/classes/Rectangle.ts";
+import { assertEquals, assertNotStrictEquals, assertObjectMatch } from "../test-deps.ts";
 
 const TEST_PAIRS = [
-  'AA',
-  'AB',
-  'AC',
-  'AD',
-  'AF',
-  'AG',
-  'CC',
-  'CD',
-  'CF',
-  'CG',
-  'DD',
-  'DE',
-  'DF',
-  'DG',
-  'FF',
-  'FG',
-  'GH'
+  "AA",
+  "AB",
+  "AC",
+  "AD",
+  "AF",
+  "AG",
+  "CC",
+  "CD",
+  "CF",
+  "CG",
+  "DD",
+  "DE",
+  "DF",
+  "DG",
+  "FF",
+  "FG",
+  "GH",
 ] as const;
 
 type TestPair = typeof TEST_PAIRS[number];
@@ -32,26 +33,26 @@ const TEST_POINT_MAP: { [key: string]: number } = {
   E: 1.2,
   F: 4.2,
   G: 4.3,
-  H: 4.4
+  H: 4.4,
 };
 
 const makeTestRect = (px: TestPair, py: TestPair): Rectangle =>
   Rectangle.fromPointPair(
     {
       x: TEST_POINT_MAP[px.slice(0, 1)],
-      y: TEST_POINT_MAP[py.slice(0, 1)]
+      y: TEST_POINT_MAP[py.slice(0, 1)],
     },
     {
       x: TEST_POINT_MAP[px.slice(1, 2)],
-      y: TEST_POINT_MAP[py.slice(1, 2)]
-    }
+      y: TEST_POINT_MAP[py.slice(1, 2)],
+    },
   );
 
 const testRect = <T>(
-  callback: (r0: Rectangle, r1: Rectangle) => [boolean, T]
+  callback: (r0: Rectangle, r1: Rectangle) => [boolean, T],
 ): TestResult<T> => {
   const result: TestResult<T> = {};
-  const target = makeTestRect('CF', 'CF');
+  const target = makeTestRect("CF", "CF");
 
   TEST_PAIRS.forEach((px) => {
     const item: TestResultItem<T> = {};
@@ -68,104 +69,9 @@ const testRect = <T>(
   return result;
 };
 
-describe('static methods', () => {
-  describe('of', () => {
-    test('full parameter', () => {
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 5.3,
-          top: -6.4,
-          bottom: 7.5,
-
-          width: 5.3 - 4.2,
-          height: 7.5 - -6.4,
-
-          x: 4.2,
-          y: -6.4
-        })
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 5.3,
-          top: -6.4,
-          bottom: 7.5,
-
-          width: 5.3 - 4.2,
-          height: 7.5 - -6.4,
-
-          x: 4.2,
-          y: -6.4
-        })
-      ).toEqual({
-        left: 4.2,
-        right: 5.3,
-        top: -6.4,
-        bottom: 7.5,
-
-        width: 5.3 - 4.2,
-        height: 7.5 - -6.4,
-
-        x: 4.2,
-        y: -6.4
-      });
-    });
-
-    test('less parameter', () => {
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 5.3,
-          top: -6.4,
-          bottom: 7.5
-        })
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 5.3,
-          top: -6.4,
-          bottom: 7.5
-        })
-      ).toEqual({
-        left: 4.2,
-        right: 5.3,
-        top: -6.4,
-        bottom: 7.5,
-
-        width: 5.3 - 4.2,
-        height: 7.5 - -6.4,
-
-        x: 4.2,
-        y: -6.4
-      });
-    });
-  });
-
-  test('fromXYWH', () => {
-    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)).toBeInstanceOf(Rectangle);
-    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)).toEqual({
-      left: 4.2,
-      right: 4.2 + 6.4,
-      top: -5.3,
-      bottom: -5.3 + 7.5,
-
-      width: 6.4,
-      height: 7.5,
-
-      x: 4.2,
-      y: -5.3
-    });
-  });
-
-  test('fromPointPair', () => {
-    expect(
-      Rectangle.fromPointPair({ x: 4.2, y: -6.4 }, { x: 5.3, y: 7.5 })
-    ).toBeInstanceOf(Rectangle);
-    expect(
-      Rectangle.fromPointPair({ x: 4.2, y: -6.4 }, { x: 5.3, y: 7.5 })
-    ).toEqual({
+Deno.test("Rectangle.of", () => {
+  assertObjectMatch(
+    Rectangle.of({
       left: 4.2,
       right: 5.3,
       top: -6.4,
@@ -175,395 +81,465 @@ describe('static methods', () => {
       height: 7.5 - -6.4,
 
       x: 4.2,
-      y: -6.4
-    });
+      y: -6.4,
+    }),
+    {
+      left: 4.2,
+      right: 5.3,
+      top: -6.4,
+      bottom: 7.5,
 
-    const rect = Rectangle.fromPointPair(
-      { x: 4.2, y: -6.4 },
-      { x: 5.3, y: 7.5 }
-    );
+      width: 5.3 - 4.2,
+      height: 7.5 - -6.4,
 
-    expect(
-      Rectangle.fromPointPair({ x: 5.3, y: -6.4 }, { x: 4.2, y: 7.5 })
-    ).toEqual(rect);
-    expect(
-      Rectangle.fromPointPair({ x: 4.2, y: 7.5 }, { x: 5.3, y: -6.4 })
-    ).toEqual(rect);
-    expect(
-      Rectangle.fromPointPair({ x: 5.3, y: 7.5 }, { x: 4.2, y: -6.4 })
-    ).toEqual(rect);
-  });
+      x: 4.2,
+      y: -6.4,
+    },
+  );
 
-  describe('union', () => {
-    test('valid (single data)', () => {
-      expect(Rectangle.union(makeTestRect('AB', 'AB'))).toBeInstanceOf(
-        Rectangle
-      );
-      expect(Rectangle.union(makeTestRect('AB', 'AB')).isValid()).toBe(true);
-      expect(Rectangle.union(makeTestRect('AB', 'AB'))).toEqual(
-        makeTestRect('AB', 'AB')
-      );
-    });
-    test('valid (multiple data)', () => {
-      expect(
-        Rectangle.union(
-          makeTestRect('AB', 'AB'),
-          makeTestRect('CD', 'CD'),
-          makeTestRect('FG', 'FG')
-        )
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.union(
-          makeTestRect('AB', 'AB'),
-          makeTestRect('CD', 'CD'),
-          makeTestRect('FG', 'FG')
-        ).isValid()
-      ).toBe(true);
-      expect(
-        Rectangle.union(
-          makeTestRect('AB', 'AB'),
-          makeTestRect('CD', 'CD'),
-          makeTestRect('FG', 'FG')
-        )
-      ).toEqual(makeTestRect('AG', 'AG'));
+  assertObjectMatch(
+    Rectangle.of({
+      left: 4.2,
+      right: 5.3,
+      top: -6.4,
+      bottom: 7.5,
+    }),
+    {
+      left: 4.2,
+      right: 5.3,
+      top: -6.4,
+      bottom: 7.5,
 
-      expect(
-        Rectangle.union(
-          makeTestRect('FG', 'FG'),
-          makeTestRect('CD', 'CD'),
-          makeTestRect('AB', 'AB')
-        )
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.union(
-          makeTestRect('FG', 'FG'),
-          makeTestRect('CD', 'CD'),
-          makeTestRect('AB', 'AB')
-        ).isValid()
-      ).toBe(true);
-      expect(
-        Rectangle.union(
-          makeTestRect('FG', 'FG'),
-          makeTestRect('CD', 'CD'),
-          makeTestRect('AB', 'AB')
-        )
-      ).toEqual(makeTestRect('AG', 'AG'));
-    });
-    test('invalid (no data)', () => {
-      expect(Rectangle.union()).toBeInstanceOf(Rectangle);
-      expect(Rectangle.union().isValid()).toBe(false);
-    });
-    test('invalid (include invalid rectangle)', () => {
-      expect(
-        Rectangle.union(
-          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
-        )
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.union(
-          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
-        ).isValid()
-      ).toBe(false);
+      width: 5.3 - 4.2,
+      height: 7.5 - -6.4,
 
-      expect(
-        Rectangle.union(
-          makeTestRect('AB', 'AB'),
-          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
-        )
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.union(
-          makeTestRect('AB', 'AB'),
-          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
-        ).isValid()
-      ).toBe(false);
-
-      expect(
-        Rectangle.union(
-          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
-          makeTestRect('AB', 'AB')
-        )
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.union(
-          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
-          makeTestRect('AB', 'AB')
-        ).isValid()
-      ).toBe(false);
-    });
-  });
-
-  describe('intersection', () => {
-    test('valid (single data)', () => {
-      expect(Rectangle.intersection(makeTestRect('AB', 'AB'))).toBeInstanceOf(
-        Rectangle
-      );
-      expect(Rectangle.intersection(makeTestRect('AB', 'AB')).isValid()).toBe(
-        true
-      );
-      expect(Rectangle.intersection(makeTestRect('AB', 'AB'))).toEqual(
-        makeTestRect('AB', 'AB')
-      );
-    });
-
-    test('valid (multiple data)', () => {
-      expect(
-        Rectangle.intersection(
-          makeTestRect('AG', 'AG'),
-          makeTestRect('CF', 'CF'),
-          makeTestRect('DE', 'DE')
-        )
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.intersection(
-          makeTestRect('AG', 'AG'),
-          makeTestRect('CF', 'CF'),
-          makeTestRect('DE', 'DE')
-        ).isValid()
-      ).toBe(true);
-      expect(
-        Rectangle.intersection(
-          makeTestRect('AG', 'AG'),
-          makeTestRect('CF', 'CF'),
-          makeTestRect('DE', 'DE')
-        )
-      ).toEqual(makeTestRect('DE', 'DE'));
-
-      expect(
-        Rectangle.intersection(
-          makeTestRect('DE', 'DE'),
-          makeTestRect('CF', 'CF'),
-          makeTestRect('AG', 'AG')
-        )
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.intersection(
-          makeTestRect('DE', 'DE'),
-          makeTestRect('CF', 'CF'),
-          makeTestRect('AG', 'AG')
-        ).isValid()
-      ).toBe(true);
-      expect(
-        Rectangle.intersection(
-          makeTestRect('DE', 'DE'),
-          makeTestRect('CF', 'CF'),
-          makeTestRect('AG', 'AG')
-        )
-      ).toEqual(makeTestRect('DE', 'DE'));
-    });
-
-    test('valid (empty)', () => {
-      expect(
-        Rectangle.intersection(
-          makeTestRect('AC', 'AC'),
-          makeTestRect('CD', 'CD')
-        )
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.intersection(
-          makeTestRect('AC', 'AC'),
-          makeTestRect('CD', 'CD')
-        ).isValid()
-      ).toBe(true);
-      expect(
-        Rectangle.intersection(
-          makeTestRect('AC', 'AC'),
-          makeTestRect('CD', 'CD')
-        ).isEmpty()
-      ).toBe(true);
-      expect(
-        Rectangle.intersection(
-          makeTestRect('AC', 'AC'),
-          makeTestRect('CD', 'CD')
-        )
-      ).toEqual(makeTestRect('CC', 'CC'));
-    });
-
-    test('invalid (no data)', () => {
-      expect(Rectangle.intersection()).toBeInstanceOf(Rectangle);
-      expect(Rectangle.intersection().isValid()).toBe(false);
-    });
-
-    test('invalid (include invalid rectangle)', () => {
-      expect(
-        Rectangle.intersection(
-          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
-        )
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.intersection(
-          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
-        ).isValid()
-      ).toBe(false);
-
-      expect(
-        Rectangle.intersection(
-          makeTestRect('AB', 'AB'),
-          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
-        )
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.intersection(
-          makeTestRect('AB', 'AB'),
-          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 })
-        ).isValid()
-      ).toBe(false);
-
-      expect(
-        Rectangle.intersection(
-          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
-          makeTestRect('AB', 'AB')
-        )
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.intersection(
-          Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
-          makeTestRect('AB', 'AB')
-        ).isValid()
-      ).toBe(false);
-    });
-
-    test('invalid (no intersection)', () => {
-      expect(
-        Rectangle.intersection(
-          makeTestRect('AC', 'AG'),
-          makeTestRect('DF', 'AG')
-        )
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.intersection(
-          makeTestRect('AC', 'AG'),
-          makeTestRect('DF', 'AG')
-        ).isValid()
-      ).toBe(false);
-
-      expect(
-        Rectangle.intersection(
-          makeTestRect('AG', 'AC'),
-          makeTestRect('AG', 'DF')
-        )
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.intersection(
-          makeTestRect('AG', 'AC'),
-          makeTestRect('AG', 'DF')
-        ).isValid()
-      ).toBe(false);
-    });
-  });
+      x: 4.2,
+      y: -6.4,
+    },
+  );
 });
 
-describe('properties', () => {
-  test('valid', () => {
-    const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
+Deno.test("Rectangle.fromXYWH", () => {
+  assertObjectMatch(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5),
+    {
+      left: 4.2,
+      right: 4.2 + 6.4,
+      top: -5.3,
+      bottom: -5.3 + 7.5,
 
-    expect(rect.left).toBe(4.2);
-    expect(rect.right).toBe(4.2 + 6.4);
-    expect(rect.top).toBe(-5.3);
-    expect(rect.bottom).toBe(-5.3 + 7.5);
-    expect(rect.width).toBe(6.4);
-    expect(rect.height).toBe(7.5);
-    expect(rect.x).toBe(4.2);
-    expect(rect.y).toBe(-5.3);
-  });
+      width: 6.4,
+      height: 7.5,
 
-  test('invalid', () => {
-    const rect = Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5);
-
-    expect(rect.left).toBeNaN();
-    expect(rect.right).toBeNaN();
-    expect(rect.top).toBeNaN();
-    expect(rect.bottom).toBeNaN();
-    expect(rect.width).toBeNaN();
-    expect(rect.height).toBeNaN();
-    expect(rect.x).toBeNaN();
-    expect(rect.y).toBeNaN();
-  });
+      x: 4.2,
+      y: -5.3,
+    },
+  );
 });
 
-describe('overrides', () => {
-  describe('compare', () => {
-    test('same', () => {
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).compare(
-          Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)
-        )
-      ).toBe(0);
-    });
+Deno.test("Rectangle.fromPointPair", () => {
+  assertObjectMatch(
+    Rectangle.fromPointPair({ x: 4.2, y: -6.4 }, { x: 5.3, y: 7.5 }),
+    {
+      left: 4.2,
+      right: 5.3,
+      top: -6.4,
+      bottom: 7.5,
 
-    test('difference left', () => {
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).compare(
-          Rectangle.fromXYWH(4.3, -5.3, 6.4, 7.5)
-        )
-      ).toBe(-1);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).compare(
-          Rectangle.fromXYWH(4.1, -5.3, 6.4, 7.5)
-        )
-      ).toBe(1);
-    });
+      width: 5.3 - 4.2,
+      height: 7.5 - -6.4,
 
-    test('difference top', () => {
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).compare(
-          Rectangle.fromXYWH(4.2, -5.2, 6.4, 7.5)
-        )
-      ).toBe(-1);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).compare(
-          Rectangle.fromXYWH(4.2, -5.4, 6.4, 7.5)
-        )
-      ).toBe(1);
-    });
+      x: 4.2,
+      y: -6.4,
+    },
+  );
 
-    test('difference width', () => {
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).compare(
-          Rectangle.fromXYWH(4.2, -5.3, 6.5, 7.5)
-        )
-      ).toBe(-1);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).compare(
-          Rectangle.fromXYWH(4.2, -5.3, 6.3, 7.5)
-        )
-      ).toBe(1);
-    });
+  const rect = Rectangle.fromPointPair(
+    { x: 4.2, y: -6.4 },
+    { x: 5.3, y: 7.5 },
+  );
 
-    test('difference height', () => {
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).compare(
-          Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.6)
-        )
-      ).toBe(-1);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).compare(
-          Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.4)
-        )
-      ).toBe(1);
-    });
+  assertEquals(
+    Rectangle.fromPointPair({ x: 5.3, y: -6.4 }, { x: 4.2, y: 7.5 }),
+    rect,
+  );
+  assertEquals(
+    Rectangle.fromPointPair({ x: 4.2, y: 7.5 }, { x: 5.3, y: -6.4 }),
+    rect,
+  );
+  assertEquals(
+    Rectangle.fromPointPair({ x: 5.3, y: 7.5 }, { x: 4.2, y: -6.4 }),
+    rect,
+  );
+});
 
-    test('invalid', () => {
-      expect(
-        Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5).compare(
-          Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)
-        )
-      ).toBe(-1);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).compare(
-          Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5)
-        )
-      ).toBe(1);
-      expect(
-        Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5).compare(
-          Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5)
-        )
-      ).toBe(0);
-    });
-  });
+Deno.test("Rectangle.union", () => {
+  assertEquals(
+    Rectangle.union(makeTestRect("AB", "AB")).isValid(),
+    true,
+  );
+  assertEquals(
+    Rectangle.union(makeTestRect("AB", "AB")),
+    makeTestRect("AB", "AB"),
+  );
+});
+Deno.test("Rectangle.union - multiple data", () => {
+  assertEquals(
+    Rectangle.union(
+      makeTestRect("AB", "AB"),
+      makeTestRect("CD", "CD"),
+      makeTestRect("FG", "FG"),
+    ).isValid(),
+    true,
+  );
+  assertEquals(
+    Rectangle.union(
+      makeTestRect("AB", "AB"),
+      makeTestRect("CD", "CD"),
+      makeTestRect("FG", "FG"),
+    ),
+    makeTestRect("AG", "AG"),
+  );
 
-  test('valueOf', () => {
-    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).valueOf()).toEqual({
+  assertEquals(
+    Rectangle.union(
+      makeTestRect("FG", "FG"),
+      makeTestRect("CD", "CD"),
+      makeTestRect("AB", "AB"),
+    ).isValid(),
+    true,
+  );
+  assertEquals(
+    Rectangle.union(
+      makeTestRect("FG", "FG"),
+      makeTestRect("CD", "CD"),
+      makeTestRect("AB", "AB"),
+    ),
+    makeTestRect("AG", "AG"),
+  );
+});
+
+Deno.test("Rectangle.union - no args", () => {
+  assertEquals(
+    Rectangle.union().isValid(),
+    false,
+  );
+});
+
+Deno.test("Rectangle.union - invalid data", () => {
+  assertEquals(
+    Rectangle.union(
+      Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
+    ).isValid(),
+    false,
+  );
+
+  assertEquals(
+    Rectangle.union(
+      makeTestRect("AB", "AB"),
+      Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
+    ).isValid(),
+    false,
+  );
+
+  assertEquals(
+    Rectangle.union(
+      Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
+      makeTestRect("AB", "AB"),
+    ).isValid(),
+    false,
+  );
+});
+
+Deno.test("Rectangle.intersection", () => {
+  assertEquals(
+    Rectangle.intersection(makeTestRect("AB", "AB")).isValid(),
+    true,
+  );
+  assertEquals(
+    Rectangle.intersection(makeTestRect("AB", "AB")),
+    makeTestRect("AB", "AB"),
+  );
+});
+
+Deno.test("Rectangle.intersection - multiple data", () => {
+  assertEquals(
+    Rectangle.intersection(
+      makeTestRect("AG", "AG"),
+      makeTestRect("CF", "CF"),
+      makeTestRect("DE", "DE"),
+    ).isValid(),
+    true,
+  );
+  assertEquals(
+    Rectangle.intersection(
+      makeTestRect("AG", "AG"),
+      makeTestRect("CF", "CF"),
+      makeTestRect("DE", "DE"),
+    ),
+    makeTestRect("DE", "DE"),
+  );
+
+  assertEquals(
+    Rectangle.intersection(
+      makeTestRect("DE", "DE"),
+      makeTestRect("CF", "CF"),
+      makeTestRect("AG", "AG"),
+    ).isValid(),
+    true,
+  );
+  assertEquals(
+    Rectangle.intersection(
+      makeTestRect("DE", "DE"),
+      makeTestRect("CF", "CF"),
+      makeTestRect("AG", "AG"),
+    ),
+    makeTestRect("DE", "DE"),
+  );
+});
+
+Deno.test("Rectangle.intersection - empty", () => {
+  assertEquals(
+    Rectangle.intersection(
+      makeTestRect("AC", "AC"),
+      makeTestRect("CD", "CD"),
+    ).isValid(),
+    true,
+  );
+  assertEquals(
+    Rectangle.intersection(
+      makeTestRect("AC", "AC"),
+      makeTestRect("CD", "CD"),
+    ).isEmpty(),
+    true,
+  );
+  assertEquals(
+    Rectangle.intersection(
+      makeTestRect("AC", "AC"),
+      makeTestRect("CD", "CD"),
+    ),
+    makeTestRect("CC", "CC"),
+  );
+});
+
+Deno.test("Rectangle.intersection - no args", () => {
+  assertEquals(
+    Rectangle.intersection().isValid(),
+    false,
+  );
+});
+
+Deno.test("Rectangle.intersection - include invalid rectangle", () => {
+  assertEquals(
+    Rectangle.intersection(
+      Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
+    ).isValid(),
+    false,
+  );
+
+  assertEquals(
+    Rectangle.intersection(
+      makeTestRect("AB", "AB"),
+      Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
+    ).isValid(),
+    false,
+  );
+
+  assertEquals(
+    Rectangle.intersection(
+      Rectangle.of({ left: NaN, right: 0, top: 0, bottom: 0 }),
+      makeTestRect("AB", "AB"),
+    ).isValid(),
+    false,
+  );
+});
+
+Deno.test("Rectangle.intersection - no intersection", () => {
+  assertEquals(
+    Rectangle.intersection(
+      makeTestRect("AC", "AG"),
+      makeTestRect("DF", "AG"),
+    ).isValid(),
+    false,
+  );
+
+  assertEquals(
+    Rectangle.intersection(
+      makeTestRect("AG", "AC"),
+      makeTestRect("AG", "DF"),
+    ).isValid(),
+    false,
+  );
+});
+
+Deno.test("properties", () => {
+  const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
+
+  assertEquals(
+    rect.left,
+    4.2,
+  );
+  assertEquals(
+    rect.right,
+    4.2 + 6.4,
+  );
+  assertEquals(
+    rect.top,
+    -5.3,
+  );
+  assertEquals(
+    rect.bottom,
+    -5.3 + 7.5,
+  );
+  assertEquals(
+    rect.width,
+    6.4,
+  );
+  assertEquals(
+    rect.height,
+    7.5,
+  );
+  assertEquals(
+    rect.x,
+    4.2,
+  );
+  assertEquals(
+    rect.y,
+    -5.3,
+  );
+});
+
+Deno.test("properties - invalid", () => {
+  const rect = Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5);
+
+  assertEquals(
+    rect.left,
+    NaN,
+  );
+  assertEquals(
+    rect.right,
+    NaN,
+  );
+  assertEquals(
+    rect.top,
+    NaN,
+  );
+  assertEquals(
+    rect.bottom,
+    NaN,
+  );
+  assertEquals(
+    rect.width,
+    NaN,
+  );
+  assertEquals(
+    rect.height,
+    NaN,
+  );
+  assertEquals(
+    rect.x,
+    NaN,
+  );
+  assertEquals(
+    rect.y,
+    NaN,
+  );
+});
+
+Deno.test("compare - same", () => {
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .compare(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)),
+    0,
+  );
+});
+
+Deno.test("compare - difference left", () => {
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .compare(Rectangle.fromXYWH(4.3, -5.3, 6.4, 7.5)),
+    -1,
+  );
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .compare(Rectangle.fromXYWH(4.1, -5.3, 6.4, 7.5)),
+    1,
+  );
+});
+
+Deno.test("compare - difference top", () => {
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .compare(Rectangle.fromXYWH(4.2, -5.2, 6.4, 7.5)),
+    -1,
+  );
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .compare(Rectangle.fromXYWH(4.2, -5.4, 6.4, 7.5)),
+    1,
+  );
+});
+
+Deno.test("compare - difference width", () => {
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .compare(Rectangle.fromXYWH(4.2, -5.3, 6.5, 7.5)),
+    -1,
+  );
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .compare(Rectangle.fromXYWH(4.2, -5.3, 6.3, 7.5)),
+    1,
+  );
+});
+
+Deno.test("compare - difference height", () => {
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .compare(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.6)),
+    -1,
+  );
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .compare(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.4)),
+    1,
+  );
+});
+
+Deno.test("compare - invalid", () => {
+  assertEquals(
+    Rectangle
+      .fromXYWH(NaN, -5.3, 6.4, 7.5)
+      .compare(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)),
+    -1,
+  );
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .compare(Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5)),
+    1,
+  );
+  assertEquals(
+    Rectangle
+      .fromXYWH(NaN, -5.3, 6.4, 7.5)
+      .compare(Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5)),
+    0,
+  );
+});
+
+Deno.test("valueOf", () => {
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).valueOf(),
+    {
       left: 4.2,
       right: 4.2 + 6.4,
       top: -5.3,
@@ -571,600 +547,791 @@ describe('overrides', () => {
       width: 6.4,
       height: 7.5,
       x: 4.2,
-      y: -5.3
-    });
-  });
+      y: -5.3,
+    },
+  );
+});
 
-  describe('invalid', () => {
-    test('normal', () => {
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 5.3,
-          top: -6.4,
-          bottom: 7.5
-        }).isValid()
-      ).toBe(true);
-    });
+Deno.test("isValid", () => {
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: 5.3, top: -6.4, bottom: 7.5 })
+      .isValid(),
+    true,
+  );
+});
 
-    test('empty', () => {
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 4.2,
-          top: -6.4,
-          bottom: 7.5
-        }).isValid()
-      ).toBe(true);
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 5.3,
-          top: -6.4,
-          bottom: -6.4
-        }).isValid()
-      ).toBe(true);
-    });
+Deno.test("isValid - empty", () => {
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: 4.2, top: -6.4, bottom: 7.5 })
+      .isValid(),
+    true,
+  );
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: 5.3, top: -6.4, bottom: -6.4 })
+      .isValid(),
+    true,
+  );
+});
 
-    test('width < 0', () => {
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: -5.3,
-          top: -6.4,
-          bottom: 7.5
-        }).isValid()
-      ).toBe(false);
-    });
+Deno.test("isValid - width < 0", () => {
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: -5.3, top: -6.4, bottom: 7.5 })
+      .isValid(),
+    false,
+  );
+});
 
-    test('height < 0', () => {
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 5.3,
-          top: 6.4,
-          bottom: -7.5
-        }).isValid()
-      ).toBe(false);
-    });
+Deno.test("isValid - height < 0", () => {
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: 5.3, top: 6.4, bottom: -7.5 })
+      .isValid(),
+    false,
+  );
+});
 
-    test('NaN', () => {
-      expect(
-        Rectangle.of({
-          left: NaN,
-          right: 5.3,
-          top: -6.4,
-          bottom: 7.5
-        }).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: NaN,
-          top: -6.4,
-          bottom: 7.5
-        }).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 5.3,
-          top: NaN,
-          bottom: 7.5
-        }).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 5.3,
-          top: -6.4,
-          bottom: NaN
-        }).isValid()
-      ).toBe(false);
-    });
+Deno.test("isValid - NaN", () => {
+  assertEquals(
+    Rectangle
+      .of({ left: NaN, right: 5.3, top: -6.4, bottom: 7.5 })
+      .isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: NaN, top: -6.4, bottom: 7.5 })
+      .isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: 5.3, top: NaN, bottom: 7.5 })
+      .isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: 5.3, top: -6.4, bottom: NaN })
+      .isValid(),
+    false,
+  );
+});
 
-    test('Infinity', () => {
-      expect(
-        Rectangle.of({
-          left: Infinity,
-          right: 5.3,
-          top: -6.4,
-          bottom: 7.5
-        }).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: Infinity,
-          top: -6.4,
-          bottom: 7.5
-        }).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 5.3,
-          top: Infinity,
-          bottom: 7.5
-        }).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 5.3,
-          top: -6.4,
-          bottom: Infinity
-        }).isValid()
-      ).toBe(false);
-    });
+Deno.test("isValid - Infinity", () => {
+  assertEquals(
+    Rectangle
+      .of({ left: Infinity, right: 5.3, top: -6.4, bottom: 7.5 })
+      .isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: Infinity, top: -6.4, bottom: 7.5 })
+      .isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: 5.3, top: Infinity, bottom: 7.5 })
+      .isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: 5.3, top: -6.4, bottom: Infinity })
+      .isValid(),
+    false,
+  );
+});
 
-    test('-Infinity', () => {
-      expect(
-        Rectangle.of({
-          left: -Infinity,
-          right: 5.3,
-          top: -6.4,
-          bottom: 7.5
-        }).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: -Infinity,
-          top: -6.4,
-          bottom: 7.5
-        }).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 5.3,
-          top: -Infinity,
-          bottom: 7.5
-        }).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.of({
-          left: 4.2,
-          right: 5.3,
-          top: -6.4,
-          bottom: -Infinity
-        }).isValid()
-      ).toBe(false);
-    });
+Deno.test("isValid - -Infinity", () => {
+  assertEquals(
+    Rectangle
+      .of({ left: -Infinity, right: 5.3, top: -6.4, bottom: 7.5 })
+      .isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: -Infinity, top: -6.4, bottom: 7.5 })
+      .isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: 5.3, top: -Infinity, bottom: 7.5 })
+      .isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle
+      .of({ left: 4.2, right: 5.3, top: -6.4, bottom: -Infinity })
+      .isValid(),
+    false,
+  );
+});
+
+Deno.test("origin", () => {
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).origin,
+    { x: 4.2, y: -5.3 },
+  );
+});
+
+Deno.test("topLeft", () => {
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).topLeft,
+    { x: 4.2, y: -5.3 },
+  );
+});
+
+Deno.test("topRight", () => {
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).topRight,
+    { x: 4.2 + 6.4, y: -5.3 },
+  );
+});
+
+Deno.test("bottomLeft", () => {
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).bottomLeft,
+    { x: 4.2, y: -5.3 + 7.5 },
+  );
+});
+
+Deno.test("bottomRight", () => {
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).bottomRight,
+    { x: 4.2 + 6.4, y: -5.3 + 7.5 },
+  );
+});
+
+Deno.test("size", () => {
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).size,
+    { width: 6.4, height: 7.5 },
+  );
+});
+
+Deno.test("isEmpty", () => {
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).isEmpty(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 0, 7.5).isEmpty(),
+    true,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 0).isEmpty(),
+    true,
+  );
+});
+
+Deno.test("isEmpty - invalid", () => {
+  assertEquals(
+    Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5).isEmpty(),
+    false,
+  );
+});
+
+Deno.test("isPointContains", () => {
+  const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.4 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.4 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.4 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.4 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.4 }),
+    false,
+  );
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.3 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.3 }),
+    true,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.3 }),
+    true,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 }),
+    true,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 }),
+    false,
+  );
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.2 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.2 }),
+    true,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.2 }),
+    true,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.2 }),
+    true,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.2 }),
+    false,
+  );
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.3 + 7.5 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.3 + 7.5 }),
+    true,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.3 + 7.5 }),
+    true,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 + 7.5 }),
+    true,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 + 7.5 }),
+    false,
+  );
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.3 + 7.6 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.3 + 7.6 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.3 + 7.6 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 + 7.6 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 + 7.6 }),
+    false,
+  );
+});
+
+Deno.test("isPointContains - exclude edge", () => {
+  const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.4 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.4 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.4 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.4 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.4 }, true),
+    false,
+  );
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.3 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.3 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.3 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 }, true),
+    false,
+  );
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.2 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.2 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.2 }, true),
+    true,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.2 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.2 }, true),
+    false,
+  );
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.3 + 7.5 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.3 + 7.5 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.3 + 7.5 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 + 7.5 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 + 7.5 }, true),
+    false,
+  );
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.3 + 7.6 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.3 + 7.6 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.3 + 7.6 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 + 7.6 }, true),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 + 7.6 }, true),
+    false,
+  );
+});
+
+Deno.test("isPointContains - invalid", () => {
+  const rect = Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5);
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.4 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.4 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.4 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.4 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.4 }),
+    false,
+  );
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.3 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.3 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.3 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 }),
+    false,
+  );
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.2 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.2 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.2 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.2 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.2 }),
+    false,
+  );
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.3 + 7.5 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.3 + 7.5 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.3 + 7.5 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 + 7.5 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 + 7.5 }),
+    false,
+  );
+
+  assertEquals(
+    rect.isPointContains({ x: 4.1, y: -5.3 + 7.6 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2, y: -5.3 + 7.6 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.3, y: -5.3 + 7.6 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 + 7.6 }),
+    false,
+  );
+  assertEquals(
+    rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 + 7.6 }),
+    false,
+  );
+});
+
+Deno.test("isPointContains - invalid point", () => {
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .isPointContains({ x: NaN, y: -5.3 }),
+    false,
+  );
+});
+
+Deno.test("isContains", () => {
+  assertEquals(
+    testRect((r0, r1) => [r0.isContains(r1), 1]),
+    {
+      CC: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 },
+      CD: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 },
+      CF: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 },
+      DD: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 },
+      DE: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 },
+      DF: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 },
+      FF: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 },
+    },
+  );
+});
+
+Deno.test("isContains - exclude edge", () => {
+  assertEquals(
+    testRect((r0, r1) => [r0.isContains(r1, true), 1]),
+    {
+      DD: { DD: 1, DE: 1 },
+      DE: { DD: 1, DE: 1 },
+    },
+  );
+});
+
+Deno.test("isContains - invalid", () => {
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .isContains(
+        Rectangle.fromXYWH(4.2 + 0.1, -5.3 + 0.1, 6.4 - 0.2, 7.5 - 0.2),
+      ),
+    true,
+  );
+  assertEquals(
+    Rectangle
+      .fromXYWH(NaN, -5.3, 6.4, 7.5)
+      .isContains(
+        Rectangle.fromXYWH(4.2 + 0.1, -5.3 + 0.1, 6.4 - 0.2, 7.5 - 0.2),
+      ),
+    false,
+  );
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .isContains(
+        Rectangle.fromXYWH(NaN, -5.3 + 0.1, 6.4 - 0.2, 7.5 - 0.2),
+      ),
+    false,
+  );
+});
+
+Deno.test("isIntersects", () => {
+  assertEquals(testRect((r0, r1) => [r0.isIntersects(r1), 1]), {
+    AC: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
+    AD: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
+    AF: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
+    AG: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
+    CC: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
+    CD: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
+    CF: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
+    CG: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
+    DD: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
+    DE: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
+    DF: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
+    DG: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
+    FF: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
+    FG: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
   });
 });
 
-describe('porperties', () => {
-  test('origin', () => {
-    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).origin).toEqual({
-      x: 4.2,
-      y: -5.3
-    });
-  });
-  test('topLeft', () => {
-    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).topLeft).toEqual({
-      x: 4.2,
-      y: -5.3
-    });
-  });
-  test('topRight', () => {
-    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).topRight).toEqual({
-      x: 4.2 + 6.4,
-      y: -5.3
-    });
-  });
-  test('bottomLeft', () => {
-    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).bottomLeft).toEqual({
-      x: 4.2,
-      y: -5.3 + 7.5
-    });
-  });
-  test('bottomRight', () => {
-    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).bottomRight).toEqual({
-      x: 4.2 + 6.4,
-      y: -5.3 + 7.5
-    });
-  });
-  test('size', () => {
-    expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).size).toEqual({
-      width: 6.4,
-      height: 7.5
-    });
+Deno.test("isIntersects - exclude edge", () => {
+  assertEquals(testRect((r0, r1) => [r0.isIntersects(r1, true), 1]), {
+    AD: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1 },
+    AF: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1 },
+    AG: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1 },
+    CD: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1 },
+    CF: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1 },
+    CG: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1 },
+    DD: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1 },
+    DE: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1 },
+    DF: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1 },
+    DG: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1 },
   });
 });
 
-describe('methods', () => {
-  describe('isEmpty', () => {
-    test('normal', () => {
-      expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).isEmpty()).toBe(false);
-      expect(Rectangle.fromXYWH(4.2, -5.3, 0, 7.5).isEmpty()).toBe(true);
-      expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 0).isEmpty()).toBe(true);
-    });
+Deno.test("isIntersects - invalid", () => {
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .isIntersects(
+        Rectangle.fromXYWH(4.2 + 0.1, -5.3 + 0.1, 6.4 - 0.2, 7.5 - 0.2),
+      ),
+    true,
+  );
+  assertEquals(
+    Rectangle
+      .fromXYWH(NaN, -5.3, 6.4, 7.5)
+      .isIntersects(
+        Rectangle.fromXYWH(4.2 + 0.1, -5.3 + 0.1, 6.4 - 0.2, 7.5 - 0.2),
+      ),
+    false,
+  );
+  assertEquals(
+    Rectangle
+      .fromXYWH(4.2, -5.3, 6.4, 7.5)
+      .isIntersects(
+        Rectangle.fromXYWH(NaN, -5.3 + 0.1, 6.4 - 0.2, 7.5 - 0.2),
+      ),
+    false,
+  );
+});
 
-    test('invalid', () => {
-      expect(Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5).isEmpty()).toBe(false);
-    });
+Deno.test("moveBy(number, number)", () => {
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(1, -1),
+    Rectangle.fromXYWH(4.2 + 1, -5.3 + -1, 6.4, 7.5),
+  );
+
+  const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
+
+  assertNotStrictEquals(rect.moveBy(0, 0), rect);
+});
+
+Deno.test("moveBy(number, number) - for invalid", () => {
+  assertEquals(
+    Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5).moveBy(1, -1).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, NaN, 6.4, 7.5).moveBy(1, -1).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(NaN, -1).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(1, NaN).isValid(),
+    false,
+  );
+
+  assertEquals(
+    Rectangle.fromXYWH(Infinity, -5.3, 6.4, 7.5).moveBy(1, -1).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, Infinity, 6.4, 7.5).moveBy(1, -1).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(Infinity, -1).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(1, Infinity).isValid(),
+    false,
+  );
+
+  assertEquals(
+    Rectangle.fromXYWH(-Infinity, -5.3, 6.4, 7.5).moveBy(1, -1).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -Infinity, 6.4, 7.5).moveBy(1, -1).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(-Infinity, -1).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(1, -Infinity).isValid(),
+    false,
+  );
+});
+
+Deno.test("moveBy(PointData)", () => {
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy({ x: 1, y: -1 }),
+    Rectangle.fromXYWH(4.2 + 1, -5.3 + -1, 6.4, 7.5),
+  );
+
+  const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
+
+  assertNotStrictEquals(rect.moveBy({ x: 0, y: 0 }), rect);
+});
+
+Deno.test("moveBy(Point) 0 for invalid", () => {
+  assertEquals(
+    Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5).moveBy({ x: 1, y: -1 }).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, NaN, 6.4, 7.5).moveBy({ x: 1, y: -1 }).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy({ x: NaN, y: -1 }).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy({ x: 1, y: NaN }).isValid(),
+    false,
+  );
+
+  assertEquals(
+    Rectangle.fromXYWH(Infinity, -5.3, 6.4, 7.5).moveBy({ x: 1, y: -1 }).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, Infinity, 6.4, 7.5).moveBy({ x: 1, y: -1 }).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy({ x: Infinity, y: -1 }).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy({ x: 1, y: Infinity }).isValid(),
+    false,
+  );
+
+  assertEquals(
+    Rectangle.fromXYWH(-Infinity, -5.3, 6.4, 7.5).moveBy({ x: 1, y: -1 }).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -Infinity, 6.4, 7.5).moveBy({ x: 1, y: -1 }).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy({ x: -Infinity, y: -1 }).isValid(),
+    false,
+  );
+  assertEquals(
+    Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy({ x: 1, y: -Infinity }).isValid(),
+    false,
+  );
+});
+/*
+describe("methods", () => {
+
+
+
+  describe("moveBy(point)", () => {
+
   });
 
-  describe('isPointContains', () => {
-    test('normal', () => {
-      const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.4 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.4 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.3, y: -5.4 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.4 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.4 })).toBe(false);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.3 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.3 })).toBe(true);
-      expect(rect.isPointContains({ x: 4.3, y: -5.3 })).toBe(true);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 })).toBe(true);
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 })).toBe(false);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.2 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.2 })).toBe(true);
-      expect(rect.isPointContains({ x: 4.3, y: -5.2 })).toBe(true);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.2 })).toBe(true);
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.2 })).toBe(false);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.3 + 7.5 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.3 + 7.5 })).toBe(true);
-      expect(rect.isPointContains({ x: 4.3, y: -5.3 + 7.5 })).toBe(true);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 + 7.5 })).toBe(true);
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 + 7.5 })).toBe(false);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.3 + 7.6 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.3 + 7.6 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.3, y: -5.3 + 7.6 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 + 7.6 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 + 7.6 })).toBe(false);
-    });
-
-    test('exclude edge', () => {
-      const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.4 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.4 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.3, y: -5.4 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.4 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.4 }, true)).toBe(false);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.3 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.3 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.3, y: -5.3 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 }, true)).toBe(false);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.2 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.2 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.3, y: -5.2 }, true)).toBe(true);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.2 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.2 }, true)).toBe(false);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.3 + 7.5 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.3 + 7.5 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.3, y: -5.3 + 7.5 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 + 7.5 }, true)).toBe(
-        false
-      );
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 + 7.5 }, true)).toBe(
-        false
-      );
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.3 + 7.6 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.3 + 7.6 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.3, y: -5.3 + 7.6 }, true)).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 + 7.6 }, true)).toBe(
-        false
-      );
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 + 7.6 }, true)).toBe(
-        false
-      );
-    });
-
-    test('invalid', () => {
-      const rect = Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.4 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.4 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.3, y: -5.4 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.4 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.4 })).toBe(false);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.3 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.3 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.3, y: -5.3 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 })).toBe(false);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.2 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.2 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.3, y: -5.2 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.2 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.2 })).toBe(false);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.3 + 7.5 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.3 + 7.5 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.3, y: -5.3 + 7.5 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 + 7.5 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 + 7.5 })).toBe(false);
-
-      expect(rect.isPointContains({ x: 4.1, y: -5.3 + 7.6 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2, y: -5.3 + 7.6 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.3, y: -5.3 + 7.6 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.4, y: -5.3 + 7.6 })).toBe(false);
-      expect(rect.isPointContains({ x: 4.2 + 6.5, y: -5.3 + 7.6 })).toBe(false);
-    });
-
-    test('invalid point', () => {
+  describe("resizeBy(number, number)", () => {
+    test("for valid", () => {
       expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).isPointContains({
-          x: NaN,
-          y: -5.3
-        })
-      ).toBe(false);
-    });
-  });
-
-  describe('isContains', () => {
-    test('normal', () => {
-      expect(testRect((r0, r1) => [r0.isContains(r1), 1])).toEqual({
-        CC: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 },
-        CD: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 },
-        CF: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 },
-        DD: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 },
-        DE: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 },
-        DF: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 },
-        FF: { CC: 1, CD: 1, CF: 1, DD: 1, DE: 1, DF: 1, FF: 1 }
-      });
-    });
-
-    test('exclude edge', () => {
-      expect(testRect((r0, r1) => [r0.isContains(r1, true), 1])).toEqual({
-        DD: { DD: 1, DE: 1 },
-        DE: { DD: 1, DE: 1 }
-      });
-    });
-
-    test('invalid', () => {
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).isContains(
-          Rectangle.fromXYWH(4.2 + 0.1, -5.3 + 0.1, 6.4 - 0.2, 7.5 - 0.2)
-        )
-      ).toBe(true);
-      expect(
-        Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5).isContains(
-          Rectangle.fromXYWH(4.2 + 0.1, -5.3 + 0.1, 6.4 - 0.2, 7.5 - 0.2)
-        )
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).isContains(
-          Rectangle.fromXYWH(NaN, -5.3 + 0.1, 6.4 - 0.2, 7.5 - 0.2)
-        )
-      ).toBe(false);
-    });
-  });
-
-  describe('isIntersects', () => {
-    test('normal', () => {
-      expect(testRect((r0, r1) => [r0.isIntersects(r1), 1])).toEqual(
-        // prettier-ignore
-        {
-          AC: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-          AD: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-          AF: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-          AG: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-          CC: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-          CD: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-          CF: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-          CG: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-          DD: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-          DE: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-          DF: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-          DG: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-          FF: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-          FG: { AC: 1, AD: 1, AF: 1, AG: 1, CC: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, FF: 1, FG: 1 },
-        }
-      );
-    });
-
-    test('exclude edge', () => {
-      expect(testRect((r0, r1) => [r0.isIntersects(r1, true), 1])).toEqual(
-        // prettier-ignore
-        {
-          AD: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, },
-          AF: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, },
-          AG: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, },
-          CD: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, },
-          CF: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, },
-          CG: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, },
-          DD: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, },
-          DE: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, },
-          DF: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, },
-          DG: { AD: 1, AF: 1, AG: 1, CD: 1, CF: 1, CG: 1, DD: 1, DE: 1, DF: 1, DG: 1, },
-        }
-      );
-    });
-
-    test('invalid', () => {
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).isIntersects(
-          Rectangle.fromXYWH(4.2 + 0.1, -5.3 + 0.1, 6.4 - 0.2, 7.5 - 0.2)
-        )
-      ).toBe(true);
-      expect(
-        Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5).isIntersects(
-          Rectangle.fromXYWH(4.2 + 0.1, -5.3 + 0.1, 6.4 - 0.2, 7.5 - 0.2)
-        )
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).isIntersects(
-          Rectangle.fromXYWH(NaN, -5.3 + 0.1, 6.4 - 0.2, 7.5 - 0.2)
-        )
-      ).toBe(false);
-    });
-  });
-
-  describe('moveBy(x, y)', () => {
-    test('for valid', () => {
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(1, -1)
-      ).toBeInstanceOf(Rectangle);
-      expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(1, -1)).toEqual({
-        left: 4.2 + 1,
-        right: 4.2 + 6.4 + 1,
-        top: -5.3 + -1,
-        bottom: -5.3 + 7.5 + -1,
-        width: 6.4,
-        height: 7.5,
-        x: 4.2 + 1,
-        y: -5.3 + -1
-      });
-
-      const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
-
-      expect(rect.moveBy(0, 0)).not.toBe(rect);
-    });
-
-    test('for invalid', () => {
-      expect(
-        Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5).moveBy(1, -1).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, NaN, 6.4, 7.5).moveBy(1, -1).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(NaN, -1).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(1, NaN).isValid()
-      ).toBe(false);
-
-      expect(
-        Rectangle.fromXYWH(Infinity, -5.3, 6.4, 7.5).moveBy(1, -1).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, Infinity, 6.4, 7.5).moveBy(1, -1).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(Infinity, -1).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(1, Infinity).isValid()
-      ).toBe(false);
-
-      expect(
-        Rectangle.fromXYWH(-Infinity, -5.3, 6.4, 7.5).moveBy(1, -1).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -Infinity, 6.4, 7.5).moveBy(1, -1).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(-Infinity, -1).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy(1, -Infinity).isValid()
-      ).toBe(false);
-    });
-  });
-
-  describe('moveBy(point)', () => {
-    test('for valid', () => {
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy({ x: 1, y: -1 })
+        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).resizeBy(0.1, -0.2),
       ).toBeInstanceOf(Rectangle);
       expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).moveBy({ x: 1, y: -1 })
-      ).toEqual({
-        left: 4.2 + 1,
-        right: 4.2 + 6.4 + 1,
-        top: -5.3 + -1,
-        bottom: -5.3 + 7.5 + -1,
-        width: 6.4,
-        height: 7.5,
-        x: 4.2 + 1,
-        y: -5.3 + -1
-      });
-
-      const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
-
-      expect(rect.moveBy({ x: 0, y: 0 })).not.toBe(rect);
-    });
-
-    test('for invalid', () => {
-      expect(
-        Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5)
-          .moveBy({ x: 1, y: -1 })
-          .isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, NaN, 6.4, 7.5).moveBy({ x: 1, y: -1 }).isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)
-          .moveBy({ x: NaN, y: -1 })
-          .isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)
-          .moveBy({ x: 1, y: NaN })
-          .isValid()
-      ).toBe(false);
-
-      expect(
-        Rectangle.fromXYWH(Infinity, -5.3, 6.4, 7.5)
-          .moveBy({ x: 1, y: -1 })
-          .isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, Infinity, 6.4, 7.5)
-          .moveBy({ x: 1, y: -1 })
-          .isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)
-          .moveBy({ x: Infinity, y: -1 })
-          .isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)
-          .moveBy({ x: 1, y: Infinity })
-          .isValid()
-      ).toBe(false);
-
-      expect(
-        Rectangle.fromXYWH(-Infinity, -5.3, 6.4, 7.5)
-          .moveBy({ x: 1, y: -1 })
-          .isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -Infinity, 6.4, 7.5)
-          .moveBy({ x: 1, y: -1 })
-          .isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)
-          .moveBy({ x: -Infinity, y: -1 })
-          .isValid()
-      ).toBe(false);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)
-          .moveBy({ x: 1, y: -Infinity })
-          .isValid()
-      ).toBe(false);
-    });
-  });
-
-  describe('resizeBy(number, number)', () => {
-    test('for valid', () => {
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).resizeBy(0.1, -0.2)
-      ).toBeInstanceOf(Rectangle);
-      expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).resizeBy(0.1, -0.2)
-      ).toEqual({
+        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).resizeBy(0.1, -0.2),
+      {
         left: 4.2,
         right: 4.2 + (6.4 + 0.1),
         top: -5.3,
@@ -1172,7 +1339,7 @@ describe('methods', () => {
         width: 6.4 + 0.1,
         height: 7.5 + -0.2,
         x: 4.2,
-        y: -5.3
+        y: -5.3,
       });
 
       const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
@@ -1180,24 +1347,24 @@ describe('methods', () => {
       expect(rect.resizeBy(0, 0)).not.toBe(rect);
     });
 
-    test('for invalid', () => {
+    test("for invalid", () => {
       expect(
-        Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.4).resizeBy(1, -1).isValid()
-      ).toBe(false);
+        Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.4).resizeBy(1, -1).isValid(),
+      false);
       expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).resizeBy(NaN, -1).isValid()
-      ).toBe(false);
+        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).resizeBy(NaN, -1).isValid(),
+      false);
     });
   });
 
-  describe('resizeBy(Point)', () => {
-    test('for valid', () => {
+  describe("resizeBy(Point)", () => {
+    test("for valid", () => {
       expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).resizeBy({ x: 0.1, y: -0.2 })
+        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).resizeBy({ x: 0.1, y: -0.2 }),
       ).toBeInstanceOf(Rectangle);
       expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).resizeBy({ x: 0.1, y: -0.2 })
-      ).toEqual({
+        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).resizeBy({ x: 0.1, y: -0.2 }),
+      {
         left: 4.2,
         right: 4.2 + (6.4 + 0.1),
         top: -5.3,
@@ -1205,7 +1372,7 @@ describe('methods', () => {
         width: 6.4 + 0.1,
         height: 7.5 + -0.2,
         x: 4.2,
-        y: -5.3
+        y: -5.3,
       });
 
       const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
@@ -1213,34 +1380,34 @@ describe('methods', () => {
       expect(rect.resizeBy({ x: 0, y: 0 })).not.toBe(rect);
     });
 
-    test('for invalid', () => {
+    test("for invalid", () => {
       expect(
         Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5)
           .resizeBy({ x: 1, y: -1 })
-          .isValid()
-      ).toBe(false);
+          .isValid(),
+      false);
       expect(
         Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)
           .resizeBy({ x: NaN, y: -1 })
-          .isValid()
-      ).toBe(false);
+          .isValid(),
+      false);
     });
   });
 
-  describe('resizeBy(Size)', () => {
-    test('for valid', () => {
+  describe("resizeBy(Size)", () => {
+    test("for valid", () => {
       expect(
         Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).resizeBy({
           width: 0.1,
-          height: 0.2
-        })
+          height: 0.2,
+        }),
       ).toBeInstanceOf(Rectangle);
       expect(
         Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).resizeBy({
           width: 0.1,
-          height: 0.2
-        })
-      ).toEqual({
+          height: 0.2,
+        }),
+      {
         left: 4.2,
         right: 4.2 + (6.4 + 0.1),
         top: -5.3,
@@ -1248,7 +1415,7 @@ describe('methods', () => {
         width: 6.4 + 0.1,
         height: 7.5 + 0.2,
         x: 4.2,
-        y: -5.3
+        y: -5.3,
       });
 
       const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
@@ -1256,26 +1423,26 @@ describe('methods', () => {
       expect(rect.resizeBy({ width: 0, height: 0 })).not.toBe(rect);
     });
 
-    test('for invalid', () => {
+    test("for invalid", () => {
       expect(
         Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5)
           .resizeBy({ width: 0.1, height: 0.2 })
-          .isValid()
-      ).toBe(false);
+          .isValid(),
+      false);
       expect(
         Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)
           .resizeBy({ width: NaN, height: 0.2 })
-          .isValid()
-      ).toBe(false);
+          .isValid(),
+      false);
     });
   });
 
-  describe('inset(number, number)', () => {
-    test('for valid', () => {
+  describe("inset(number, number)", () => {
+    test("for valid", () => {
       expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).inset(0.1, -0.2)
+        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).inset(0.1, -0.2),
       ).toBeInstanceOf(Rectangle);
-      expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).inset(0.1, -0.2)).toEqual({
+      expect(Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).inset(0.1, -0.2){
         left: 4.2 + 0.1 / 2,
         right: 4.2 + 0.1 / 2 + (6.4 - 0.1),
         top: -5.3 + -0.2 / 2,
@@ -1283,7 +1450,7 @@ describe('methods', () => {
         width: 6.4 - 0.1,
         height: 7.5 - -0.2,
         x: 4.2 + 0.1 / 2,
-        y: -5.3 + -0.2 / 2
+        y: -5.3 + -0.2 / 2,
       });
 
       const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
@@ -1291,24 +1458,24 @@ describe('methods', () => {
       expect(rect.inset(0, 0)).not.toBe(rect);
     });
 
-    test('for invalid', () => {
+    test("for invalid", () => {
       expect(
-        Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.4).inset(1, -1).isValid()
-      ).toBe(false);
+        Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.4).inset(1, -1).isValid(),
+      false);
       expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).inset(NaN, -1).isValid()
-      ).toBe(false);
+        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).inset(NaN, -1).isValid(),
+      false);
     });
   });
 
-  describe('inset(Point)', () => {
-    test('for valid', () => {
+  describe("inset(Point)", () => {
+    test("for valid", () => {
       expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).inset({ x: 0.1, y: -0.2 })
+        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).inset({ x: 0.1, y: -0.2 }),
       ).toBeInstanceOf(Rectangle);
       expect(
-        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).inset({ x: 0.1, y: -0.2 })
-      ).toEqual({
+        Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).inset({ x: 0.1, y: -0.2 }),
+      {
         left: 4.2 + 0.1 / 2,
         right: 4.2 + 0.1 / 2 + (6.4 - 0.1),
         top: -5.3 + -0.2 / 2,
@@ -1316,7 +1483,7 @@ describe('methods', () => {
         width: 6.4 - 0.1,
         height: 7.5 - -0.2,
         x: 4.2 + 0.1 / 2,
-        y: -5.3 + -0.2 / 2
+        y: -5.3 + -0.2 / 2,
       });
 
       const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
@@ -1324,32 +1491,33 @@ describe('methods', () => {
       expect(rect.inset({ x: 0, y: 0 })).not.toBe(rect);
     });
 
-    test('for invalid', () => {
+    test("for invalid", () => {
       expect(
-        Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5).inset({ x: 1, y: -1 }).isValid()
-      ).toBe(false);
+        Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5).inset({ x: 1, y: -1 })
+          .isValid(),
+      false);
       expect(
         Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)
           .inset({ x: NaN, y: -1 })
-          .isValid()
-      ).toBe(false);
+          .isValid(),
+      false);
     });
   });
 
-  describe('inset(Size)', () => {
-    test('for valid', () => {
+  describe("inset(Size)", () => {
+    test("for valid", () => {
       expect(
         Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).inset({
           width: 0.1,
-          height: 0.2
-        })
+          height: 0.2,
+        }),
       ).toBeInstanceOf(Rectangle);
       expect(
         Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5).inset({
           width: 0.1,
-          height: 0.2
-        })
-      ).toEqual({
+          height: 0.2,
+        }),
+      {
         left: 4.2 + 0.1 / 2,
         right: 4.2 + 0.1 / 2 + (6.4 - 0.1),
         top: -5.3 + 0.2 / 2,
@@ -1357,7 +1525,7 @@ describe('methods', () => {
         width: 6.4 - 0.1,
         height: 7.5 - 0.2,
         x: 4.2 + 0.1 / 2,
-        y: -5.3 + 0.2 / 2
+        y: -5.3 + 0.2 / 2,
       });
 
       const rect = Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5);
@@ -1365,17 +1533,18 @@ describe('methods', () => {
       expect(rect.inset({ width: 0, height: 0 })).not.toBe(rect);
     });
 
-    test('for invalid', () => {
+    test("for invalid", () => {
       expect(
         Rectangle.fromXYWH(NaN, -5.3, 6.4, 7.5)
           .inset({ width: 0.1, height: 0.2 })
-          .isValid()
-      ).toBe(false);
+          .isValid(),
+      false);
       expect(
         Rectangle.fromXYWH(4.2, -5.3, 6.4, 7.5)
           .inset({ width: NaN, height: 0.2 })
-          .isValid()
-      ).toBe(false);
+          .isValid(),
+      false);
     });
   });
 });
+*/

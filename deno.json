@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "test": "deno test test",
+    "coverage": "rm -rf coverage && deno test --coverage=coverage test && deno coverage coverage"
+  }
+}
