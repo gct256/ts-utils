@@ -6,7 +6,6 @@ class Foo extends BaseObject<Foo> {
 
   constructor(value: number) {
     super(Number.isFinite(value));
-
     this.value = value;
   }
 
@@ -27,13 +26,7 @@ class Foo extends BaseObject<Foo> {
   }
 }
 
-Deno.test("isEqual", () => {
-  assertEquals(
-    Foo.of(42).isEqual(Foo.of(42)),
-    true,
-  );
-  assertEquals(
-    Foo.of(42).isEqual(Foo.of(43)),
-    false,
-  );
+Deno.test("isEqual(BaseObject)", () => {
+  assertEquals(Foo.of(42).isEqual(Foo.of(42)), true);
+  assertEquals(Foo.of(42).isEqual(Foo.of(43)), false);
 });

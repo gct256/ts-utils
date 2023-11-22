@@ -49,7 +49,6 @@ Deno.test("compareFloat(number, number) - not float", () => {
 Deno.test("compareFloat(number, number) - default precision (1e-8)", () => {
   assertEquals(compareFloat(42, 42 + 1e-9), 0);
   assertEquals(compareFloat(42, 42 - 1e-9), 0);
-
   assertEquals(compareFloat(42, 42 + 1e-7), -1);
   assertEquals(compareFloat(42, 42 - 1e-7), 1);
 });
@@ -57,7 +56,6 @@ Deno.test("compareFloat(number, number) - default precision (1e-8)", () => {
 Deno.test("compareFloat(number, number) - set precision (1e-8)", () => {
   assertEquals(compareFloat(42, 42 + 1e-5, 4), 0);
   assertEquals(compareFloat(42, 42 - 1e-5, 4), 0);
-
   assertEquals(compareFloat(42, 42 + 1e-3, 4), -1);
   assertEquals(compareFloat(42, 42 - 1e-3, 4), 1);
 });
@@ -90,7 +88,6 @@ Deno.test("compareAll(...number)", () => {
   assertEquals(compareAll(0), 0);
   assertEquals(compareAll(0, 1), 1);
   assertEquals(compareAll(0, 1, -1), 1);
-
   assertEquals(compareAll(NaN, Infinity, -Infinity, 1), 0);
   assertEquals(compareAll(Infinity, -Infinity, 1), 1);
 });

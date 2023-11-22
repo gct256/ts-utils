@@ -60,7 +60,6 @@ Deno.test("randFloatRange(number, number)", () => {
 
 Deno.test("shuffle(number)", () => {
   const array: number[] = [5, 1, 3, 2, 0, 4];
-
   assertNotEquals(shuffle(array, min), array);
   assertEquals(shuffle(array, max), array);
 
@@ -76,6 +75,5 @@ Deno.test("use(number) defaultRandomGenerator", () => {
   assertEquals(Number.isFinite(randFloatRange(0, 1)), true);
 
   const array: number[] = [5, 1, 3, 2, 0, 4];
-
   assertNotEquals(shuffle(array), array);
 });

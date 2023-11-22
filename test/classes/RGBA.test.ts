@@ -1,51 +1,91 @@
 import { RGBA } from "../../deno/classes/RGBA.ts";
 import { assertEquals, assertObjectMatch, assertThrows } from "../test-deps.ts";
 
-Deno.test("RGBA..of", () => {
+Deno.test("RGBA.of(RGBAData)", () => {
   assertObjectMatch(
     RGBA.of({ red: 42, green: 53, blue: 64, alpha: 75 }),
-    { red: 42, green: 53, blue: 64, alpha: 75 },
+    {
+      red: 42,
+      green: 53,
+      blue: 64,
+      alpha: 75,
+    },
   );
 });
 
-Deno.test("RGBA.fromRGB", () => {
+Deno.test("RGBA.fromRGB(number, number, number)", () => {
   assertObjectMatch(
     RGBA.fromRGB(42, 53, 64),
-    { red: 42, green: 53, blue: 64, alpha: 255 },
+    {
+      red: 42,
+      green: 53,
+      blue: 64,
+      alpha: 255,
+    },
   );
 });
 
-Deno.test("RGBA.fromRGB - out of range (clamped)", () => {
+Deno.test("RGBA.fromRGB(number, number, number) - out of range (clamped)", () => {
   assertObjectMatch(
     RGBA.fromRGB(-1, -1, -1),
-    { red: 0, green: 0, blue: 0, alpha: 255 },
+    {
+      red: 0,
+      green: 0,
+      blue: 0,
+      alpha: 255,
+    },
   );
   assertObjectMatch(
     RGBA.fromRGB(256, 256, 256),
-    { red: 255, green: 255, blue: 255, alpha: 255 },
+    {
+      red: 255,
+      green: 255,
+      blue: 255,
+      alpha: 255,
+    },
   );
 });
 
-Deno.test("RGBA.fromRGB 0 float (use rounded value)", () => {
+Deno.test("RGBA.fromRGB(number, number, number) - float (use rounded value)", () => {
   assertObjectMatch(
     RGBA.fromRGB(1.1, 1.1, 1.1),
-    { red: 1, green: 1, blue: 1, alpha: 255 },
+    {
+      red: 1,
+      green: 1,
+      blue: 1,
+      alpha: 255,
+    },
   );
   assertObjectMatch(
     RGBA.fromRGB(1.4, 1.4, 1.4),
-    { red: 1, green: 1, blue: 1, alpha: 255 },
+    {
+      red: 1,
+      green: 1,
+      blue: 1,
+      alpha: 255,
+    },
   );
   assertObjectMatch(
     RGBA.fromRGB(1.5, 1.5, 1.5),
-    { red: 2, green: 2, blue: 2, alpha: 255 },
+    {
+      red: 2,
+      green: 2,
+      blue: 2,
+      alpha: 255,
+    },
   );
   assertObjectMatch(
     RGBA.fromRGB(1.9, 1.9, 1.9),
-    { red: 2, green: 2, blue: 2, alpha: 255 },
+    {
+      red: 2,
+      green: 2,
+      blue: 2,
+      alpha: 255,
+    },
   );
 });
 
-Deno.test("RGBA.fromRGBByFloat", () => {
+Deno.test("RGBA.fromRGBByFloat(number, number, number)", () => {
   assertObjectMatch(
     RGBA.fromRGBByFloat(0.42, 0.53, 0.64),
     {
@@ -57,55 +97,100 @@ Deno.test("RGBA.fromRGBByFloat", () => {
   );
 });
 
-Deno.test("RGBA.fromRGBByFloat - out of range (clamped)", () => {
+Deno.test("RGBA.fromRGBByFloat(number, number, number) - out of range (clamped)", () => {
   assertObjectMatch(
     RGBA.fromRGBByFloat(-0.1, -0.1, -0.1),
-    { red: 0, green: 0, blue: 0, alpha: 255 },
+    {
+      red: 0,
+      green: 0,
+      blue: 0,
+      alpha: 255,
+    },
   );
   assertObjectMatch(
     RGBA.fromRGBByFloat(1.1, 1.1, 1.1),
-    { red: 255, green: 255, blue: 255, alpha: 255 },
+    {
+      red: 255,
+      green: 255,
+      blue: 255,
+      alpha: 255,
+    },
   );
 });
 
-Deno.test("RGBA.fromRGBA", () => {
+Deno.test("RGBA.fromRGBA(number, number, number, number)", () => {
   assertObjectMatch(
     RGBA.fromRGBA(42, 53, 64, 75),
-    { red: 42, green: 53, blue: 64, alpha: 75 },
+    {
+      red: 42,
+      green: 53,
+      blue: 64,
+      alpha: 75,
+    },
   );
 });
 
-Deno.test("RGBA.fromRGBA - out of range (clamped)", () => {
+Deno.test("RGBA.fromRGBA(number, number, number, number) - out of range (clamped)", () => {
   assertObjectMatch(
     RGBA.fromRGBA(-1, -1, -1, -1),
-    { red: 0, green: 0, blue: 0, alpha: 0 },
+    {
+      red: 0,
+      green: 0,
+      blue: 0,
+      alpha: 0,
+    },
   );
   assertObjectMatch(
     RGBA.fromRGBA(256, 256, 256, 256),
-    { red: 255, green: 255, blue: 255, alpha: 255 },
+    {
+      red: 255,
+      green: 255,
+      blue: 255,
+      alpha: 255,
+    },
   );
 });
 
-Deno.test("RGBA.fromRGBA - float (use rounded value)", () => {
+Deno.test("RGBA.fromRGBA(number, number, number, number) - float (use rounded value)", () => {
   assertObjectMatch(
     RGBA.fromRGBA(1.1, 1.1, 1.1, 1.1),
-    { red: 1, green: 1, blue: 1, alpha: 1 },
+    {
+      red: 1,
+      green: 1,
+      blue: 1,
+      alpha: 1,
+    },
   );
   assertObjectMatch(
     RGBA.fromRGBA(1.4, 1.4, 1.4, 1.4),
-    { red: 1, green: 1, blue: 1, alpha: 1 },
+    {
+      red: 1,
+      green: 1,
+      blue: 1,
+      alpha: 1,
+    },
   );
   assertObjectMatch(
     RGBA.fromRGBA(1.5, 1.5, 1.5, 1.5),
-    { red: 2, green: 2, blue: 2, alpha: 2 },
+    {
+      red: 2,
+      green: 2,
+      blue: 2,
+      alpha: 2,
+    },
   );
   assertObjectMatch(
     RGBA.fromRGBA(1.9, 1.9, 1.9, 1.9),
-    { red: 2, green: 2, blue: 2, alpha: 2 },
+    {
+      red: 2,
+      green: 2,
+      blue: 2,
+      alpha: 2,
+    },
   );
 });
 
-Deno.test("RGBA.fromRGBAByFloat", () => {
+Deno.test("RGBA.fromRGBAByFloat(number, number, number, number)", () => {
   assertObjectMatch(
     RGBA.fromRGBAByFloat(0.42, 0.53, 0.64, 0.75),
     {
@@ -117,187 +202,226 @@ Deno.test("RGBA.fromRGBAByFloat", () => {
   );
 });
 
-Deno.test("RGBA.fromRGBAByFloat - out of range (clamped)", () => {
+Deno.test("RGBA.fromRGBAByFloat(number, number, number, number) - out of range (clamped)", () => {
   assertObjectMatch(
     RGBA.fromRGBAByFloat(-0.1, -0.1, -0.1, -0.1),
-    { red: 0, green: 0, blue: 0, alpha: 0 },
+    {
+      red: 0,
+      green: 0,
+      blue: 0,
+      alpha: 0,
+    },
   );
   assertObjectMatch(
     RGBA.fromRGBAByFloat(1.1, 1.1, 1.1, 1.1),
-    { red: 255, green: 255, blue: 255, alpha: 255 },
+    {
+      red: 255,
+      green: 255,
+      blue: 255,
+      alpha: 255,
+    },
   );
 });
 
-Deno.test("RGBA.fromHexString - #rrggbb", () => {
+Deno.test("RGBA.fromHexString(string) - #rrggbb", () => {
   assertObjectMatch(
     RGBA.fromHexString("#1a009f"),
-    { red: 0x1a, green: 0x00, blue: 0x9f, alpha: 0xff },
+    {
+      red: 0x1a,
+      green: 0x00,
+      blue: 0x9f,
+      alpha: 0xff,
+    },
   );
 });
 
-Deno.test("RGBA.fromHexString - #rrggbbaa", () => {
+Deno.test("RGBA.fromHexString(string) - #rrggbbaa", () => {
   assertObjectMatch(
     RGBA.fromHexString("#1a009faa"),
-    { red: 0x1a, green: 0x00, blue: 0x9f, alpha: 0xaa },
+    {
+      red: 0x1a,
+      green: 0x00,
+      blue: 0x9f,
+      alpha: 0xaa,
+    },
   );
 });
 
-Deno.test("RGBA.fromHexString - not strict", () => {
+Deno.test("RGBA.fromHexString(string) - not strict", () => {
   assertObjectMatch(
     RGBA.fromHexString("#1a009fa"),
-    { red: 0, green: 0, blue: 0, alpha: 255 },
+    {
+      red: 0,
+      green: 0,
+      blue: 0,
+      alpha: 255,
+    },
   );
 });
 
-Deno.test("RGBA.fromHexString - strict", () => {
+Deno.test("RGBA.fromHexString(string) - strict", () => {
   assertThrows(() => RGBA.fromHexString("#1a009fa", true));
 });
 
-Deno.test("properties", () => {
+Deno.test("properties (red, green, blue, alpha)", () => {
   const color = RGBA.fromRGBA(42, 53, 64, 75);
-
-  assertEquals(
-    color.red,
-    42,
-  );
-  assertEquals(
-    color.green,
-    53,
-  );
-  assertEquals(
-    color.blue,
-    64,
-  );
-  assertEquals(
-    color.alpha,
-    75,
-  );
+  assertEquals(color.red, 42);
+  assertEquals(color.green, 53);
+  assertEquals(color.blue, 64);
+  assertEquals(color.alpha, 75);
 });
 
-Deno.test("properties - invalid data", () => {
+Deno.test("properties (red, green, blue, alpha) - invalid data", () => {
   const color = RGBA.fromRGBA(NaN, 53, 64, 75);
-
-  assertEquals(
-    color.red,
-    NaN,
-  );
-  assertEquals(
-    color.green,
-    NaN,
-  );
-  assertEquals(
-    color.blue,
-    NaN,
-  );
-  assertEquals(
-    color.alpha,
-    NaN,
-  );
+  assertEquals(color.red, NaN);
+  assertEquals(color.green, NaN);
+  assertEquals(color.blue, NaN);
+  assertEquals(color.alpha, NaN);
 });
 
-Deno.test("compare - same parameter", () => {
+Deno.test("compare(RGBAData) - same parameter", () => {
   assertEquals(
-    RGBA
-      .fromRGBA(42, 53, 64, 75)
-      .compare({ red: 42, green: 53, blue: 64, alpha: 75 }),
+    RGBA.fromRGBA(42, 53, 64, 75).compare({
+      red: 42,
+      green: 53,
+      blue: 64,
+      alpha: 75,
+    }),
     0,
   );
 });
 
-Deno.test("compare - different red", () => {
+Deno.test("compare(RGBAData) - different red", () => {
   assertEquals(
-    RGBA
-      .fromRGBA(42, 53, 64, 75)
-      .compare({ red: 43, green: 53, blue: 64, alpha: 75 }),
+    RGBA.fromRGBA(42, 53, 64, 75).compare({
+      red: 43,
+      green: 53,
+      blue: 64,
+      alpha: 75,
+    }),
     -1,
   );
   assertEquals(
-    RGBA
-      .fromRGBA(42, 53, 64, 75)
-      .compare({ red: 41, green: 53, blue: 64, alpha: 75 }),
+    RGBA.fromRGBA(42, 53, 64, 75).compare({
+      red: 41,
+      green: 53,
+      blue: 64,
+      alpha: 75,
+    }),
     1,
   );
 });
 
-Deno.test("compare - different green", () => {
+Deno.test("compare(RGBAData) - different green", () => {
   assertEquals(
-    RGBA
-      .fromRGBA(42, 53, 64, 75)
-      .compare({ red: 42, green: 54, blue: 64, alpha: 75 }),
+    RGBA.fromRGBA(42, 53, 64, 75).compare({
+      red: 42,
+      green: 54,
+      blue: 64,
+      alpha: 75,
+    }),
     -1,
   );
   assertEquals(
-    RGBA
-      .fromRGBA(42, 53, 64, 75)
-      .compare({ red: 42, green: 52, blue: 64, alpha: 75 }),
+    RGBA.fromRGBA(42, 53, 64, 75).compare({
+      red: 42,
+      green: 52,
+      blue: 64,
+      alpha: 75,
+    }),
     1,
   );
 });
 
-Deno.test("compare - different blue", () => {
+Deno.test("compare(RGBAData) - different blue", () => {
   assertEquals(
-    RGBA
-      .fromRGBA(42, 53, 64, 75)
-      .compare({ red: 42, green: 53, blue: 65, alpha: 75 }),
+    RGBA.fromRGBA(42, 53, 64, 75).compare({
+      red: 42,
+      green: 53,
+      blue: 65,
+      alpha: 75,
+    }),
     -1,
   );
   assertEquals(
-    RGBA
-      .fromRGBA(42, 53, 64, 75)
-      .compare({ red: 42, green: 53, blue: 63, alpha: 75 }),
+    RGBA.fromRGBA(42, 53, 64, 75).compare({
+      red: 42,
+      green: 53,
+      blue: 63,
+      alpha: 75,
+    }),
     1,
   );
 });
 
-Deno.test("compare - different alpha", () => {
+Deno.test("compare(RGBAData) - different alpha", () => {
   assertEquals(
-    RGBA
-      .fromRGBA(42, 53, 64, 75)
-      .compare({ red: 42, green: 53, blue: 64, alpha: 76 }),
+    RGBA.fromRGBA(42, 53, 64, 75).compare({
+      red: 42,
+      green: 53,
+      blue: 64,
+      alpha: 76,
+    }),
     -1,
   );
   assertEquals(
-    RGBA
-      .fromRGBA(42, 53, 64, 75)
-      .compare({ red: 42, green: 53, blue: 64, alpha: 74 }),
+    RGBA.fromRGBA(42, 53, 64, 75).compare({
+      red: 42,
+      green: 53,
+      blue: 64,
+      alpha: 74,
+    }),
     1,
   );
 });
 
-Deno.test("compare - invalid data", () => {
+Deno.test("compare(RGBAData) - invalid data", () => {
   assertEquals(
-    RGBA
-      .of({ red: NaN, green: 53, blue: 64, alpha: 75 })
-      .compare({ red: 42, green: 53, blue: 64, alpha: 75 }),
+    RGBA.of({ red: NaN, green: 53, blue: 64, alpha: 75 }).compare({
+      red: 42,
+      green: 53,
+      blue: 64,
+      alpha: 75,
+    }),
     -1,
   );
   assertEquals(
-    RGBA
-      .of({ red: 42, green: 53, blue: 64, alpha: 75 })
-      .compare({ red: NaN, green: 53, blue: 64, alpha: 75 }),
+    RGBA.of({ red: 42, green: 53, blue: 64, alpha: 75 }).compare({
+      red: NaN,
+      green: 53,
+      blue: 64,
+      alpha: 75,
+    }),
     1,
   );
   assertEquals(
-    RGBA
-      .of({ red: NaN, green: 53, blue: 64, alpha: 75 })
-      .compare({ red: NaN, green: 53, blue: 64, alpha: 75 }),
+    RGBA.of({ red: NaN, green: 53, blue: 64, alpha: 75 }).compare({
+      red: NaN,
+      green: 53,
+      blue: 64,
+      alpha: 75,
+    }),
     0,
   );
 });
 
-Deno.test("valueOf", () => {
+Deno.test("valueOf()", () => {
   assertObjectMatch(
     RGBA.fromRGBA(42, 53, 64, 75).valueOf(),
-    { red: 42, green: 53, blue: 64, alpha: 75 },
+    {
+      red: 42,
+      green: 53,
+      blue: 64,
+      alpha: 75,
+    },
   );
 });
 
-Deno.test("isValid", () => {
+Deno.test("isValid()", () => {
   assertEquals(
     RGBA.of({ red: 42, green: 53, blue: 64, alpha: 75 }).isValid(),
     true,
   );
-
   assertEquals(
     RGBA.of({ red: 256, green: 53, blue: 64, alpha: 75 }).isValid(),
     false,
@@ -314,7 +438,6 @@ Deno.test("isValid", () => {
     RGBA.of({ red: 42, green: 53, blue: 64, alpha: 256 }).isValid(),
     false,
   );
-
   assertEquals(
     RGBA.of({ red: -1, green: 53, blue: 64, alpha: 75 }).isValid(),
     false,
@@ -331,7 +454,6 @@ Deno.test("isValid", () => {
     RGBA.of({ red: 42, green: 53, blue: 64, alpha: -1 }).isValid(),
     false,
   );
-
   assertEquals(
     RGBA.of({ red: 4.2, green: 53, blue: 64, alpha: 75 }).isValid(),
     false,
@@ -348,7 +470,6 @@ Deno.test("isValid", () => {
     RGBA.of({ red: 42, green: 53, blue: 64, alpha: 7.5 }).isValid(),
     false,
   );
-
   assertEquals(
     RGBA.of({ red: NaN, green: 53, blue: 64, alpha: 75 }).isValid(),
     false,
@@ -365,7 +486,6 @@ Deno.test("isValid", () => {
     RGBA.of({ red: 42, green: 53, blue: 64, alpha: NaN }).isValid(),
     false,
   );
-
   assertEquals(
     RGBA.of({ red: Infinity, green: 53, blue: 64, alpha: 75 }).isValid(),
     false,
@@ -382,7 +502,6 @@ Deno.test("isValid", () => {
     RGBA.of({ red: 42, green: 53, blue: 64, alpha: Infinity }).isValid(),
     false,
   );
-
   assertEquals(
     RGBA.of({ red: -Infinity, green: 53, blue: 64, alpha: 75 }).isValid(),
     false,
@@ -401,14 +520,14 @@ Deno.test("isValid", () => {
   );
 });
 
-Deno.test("toString", () => {
+Deno.test("toString([boolean])", () => {
   assertEquals(
     RGBA.fromRGBA(42, 53, 64, 75).toString(),
     `rgba(42,53,64,${75 / 255})`,
   );
 });
 
-Deno.test("toString - omit alpha", () => {
+Deno.test("toString([boolean]) - omit alpha", () => {
   assertEquals(
     RGBA.fromRGBA(42, 53, 64, 75).toString(true),
     `rgba(42,53,64,${75 / 255})`,
@@ -419,21 +538,21 @@ Deno.test("toString - omit alpha", () => {
   );
 });
 
-Deno.test("toString - invalid data", () => {
+Deno.test("toString([boolean]) - invalid data", () => {
   assertEquals(
     RGBA.fromRGBA(NaN, 53, 64, 75).toString(),
     `rgb(0,0,0)`,
   );
 });
 
-Deno.test("toHexString", () => {
+Deno.test("toHexString([boolean])", () => {
   assertEquals(
     RGBA.fromRGBA(0x4a, 0x5b, 0x6c, 0xd).toHexString(),
     "#4a5b6c0d",
   );
 });
 
-Deno.test("toHexString - omit alpha", () => {
+Deno.test("toHexString([boolean]) - omit alpha", () => {
   assertEquals(
     RGBA.fromRGBA(0x4a, 0x5b, 0x6c, 0xd).toHexString(true),
     "#4a5b6c0d",
@@ -444,7 +563,7 @@ Deno.test("toHexString - omit alpha", () => {
   );
 });
 
-Deno.test("toHexString - invalid data", () => {
+Deno.test("toHexString([boolean]) - invalid data", () => {
   assertEquals(
     RGBA.fromRGBA(NaN, 53, 64, 75).toHexString(),
     "#000000",
